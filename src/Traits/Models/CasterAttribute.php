@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Php\Support\Laravel\Traits;
+namespace Php\Support\Laravel\Traits\Models;
 
 /**
  * Trait CasterAttribute

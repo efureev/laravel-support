@@ -10,8 +10,48 @@
 
 ## Install
 ```bash
-composer require efureev/laravel-support "^0.0.1"
+composer require efureev/laravel-support "^0.0.2"
 ```
+
+
+## Usage
+
+### Traits\Database\UUID
+
+Use UUID type for primary key
+```php
+Schema::create(
+    'table_name',
+    static function (Blueprint $table) {
+        static::columnUUID($table)->primary();
+        $table->string('title');
+        $table->timestamps();
+    }
+);
+```
+Use UUID type for foreign keys
+```php
+Schema::create(
+    'table_name',
+    static function (Blueprint $table) {
+        //...
+        static::columnUUID($table, 'source_id', false)->nullable()->index();
+        //...
+    }
+);
+```
+Types of `$default`:
+- string: `NOW()`
+- callable: needs return param of `Illuminate\Database\Query\Expression` class 
+- class `Illuminate\Database\Query\Expression`
+
+
+### Traits\Models\CasterAttribute
+Trait for casts model to custom class. 
+
+
+### Traits\Models\PostgresArray
+Trait for working with PG arrays. 
 
 ## Test
 ```bash
