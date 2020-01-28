@@ -1,13 +1,28 @@
 # Changelog
-
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog][keepachangelog] and this project adheres to [Semantic Versioning][semver].
-## v0.0.1
+The format is based on [Keep a Changelog][keepachangelog]
+and this project adheres to [Semantic Versioning][semver].
 
+
+## [Unreleased]
+
+## [0.0.2] - 2020-01-38
 ### Added
-- Add global function `classNamespace`. 
+- Trait for Model `PostgresArray`.
 
+### Changed
+- Refactor: changed namespaces
 
-[keepachangelog]:https://keepachangelog.com/en/1.0.0/
+## [0.0.1] - 2020-01-38
+### Added
+- Trait `Caster`: for custom class casts. 
+- Trait `CasterAttribute`: for custom class casts. 
+- Trait for DB/Migration `UUID`. 
+
+[Unreleased]: https://github.com/efureev/laravel-support/compare/v0.0.2...HEAD
+[0.0.2]: https://github.com/efureev/laravel-support/compare/v0.0.1...v0.0.2
+[0.0.1]: https://github.com/efureev/laravel-support/releases/tag/v0.0.1
+
+[keepachangelog]:https://keepachangelog.com/en/1.1.0/
 [semver]:https://semver.org/spec/v2.0.0.html
