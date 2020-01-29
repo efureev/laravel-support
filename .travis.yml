@@ -37,8 +37,6 @@ matrix:
 #      env: setup=lowest
     - php: 7.2
       env: setup=stable
-    - php: 7.2
-      env: coverage=true
 
 #    - php: 7.3
 #      env: setup=lowest
@@ -51,6 +49,8 @@ matrix:
 #      env: setup=lowest
     - php: 7.4
       env: setup=stable
+    - php: 7.4
+      env: coverage=true
 
     - php: nightly
 

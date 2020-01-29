@@ -42,13 +42,12 @@
     "cs-fix": "@php ./vendor/bin/phpcbf",
     "phpunit": "@php ./vendor/bin/phpunit --no-coverage --testdox --colors=always",
     "phpunit-cover": "@php ./vendor/bin/phpunit --coverage-text",
-    "phpstan": "@php ./vendor/bin/phpstan analyze -c ./phpstan.neon.dist --no-progress --ansi",
     "test": [
-      "@phpstan",
+      "@phpcs",
       "@phpunit"
     ],
     "test-cover": [
-      "@phpstan",
+      "@phpcs",
       "@phpunit-cover"
     ]
   }
