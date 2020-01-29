@@ -46,12 +46,52 @@ Types of `$default`:
 - class `Illuminate\Database\Query\Expression`
 
 
-### Traits\Models\CasterAttribute
-Trait for casts model to custom class. 
-
-
 ### Traits\Models\PostgresArray
-Trait for working with PG arrays. 
+Scope for searching into PG arrays.
+@see: `\Php\Support\Laravel\Tests\Models\PgArrayModel::scopeByTag`
+
+### Custom Casting
+Use it for custom casting model's attributes. Even based on classes.
+@see: `\Php\Support\Laravel\Tests\Models\PgArrayModel::36`
+@see: `\Php\Support\Laravel\Tests\Models\TestModel::33`
+@example:
+Cast class:
+```php
+use Php\Support\Laravel\Caster\AbstractCasting;
+
+class Params extends AbstractCasting
+{
+    protected $key;
+    
+    public function toArray(): array
+    {
+        return [
+            'key'       => $this->key,
+        ];
+    }
+}
+```
+
+Model:
+```php
+use Php\Support\Laravel\Caster\HasCasts;
+class TestModel extends Model
+{
+    use HasCasts;
+
+    protected $table = 'test_table';
+
+    protected $fillable = ['params'];
+
+    protected $casts = [
+        'params'    => Params::class,
+    ];
+}
+```
+It's enough for use attribute `params` as class `Params`: `$model->params->key`!
+
+Now, mutators are not needed. But they will work. 
+
 
 ## Test
 ```bash

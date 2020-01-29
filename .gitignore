@@ -10,3 +10,4 @@ composer.lock
 clover.xml
 
 /.git-hooks
+phpunit.xml.dist
