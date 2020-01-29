@@ -1,0 +1,33 @@
+name: PHP Composer
+
+on: [push]
+
+jobs:
+  testing:
+    name: Test on node ${{ matrix.php_version }}
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php_version: ['7.2', '7.3', '7.4']
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Use PHP ${{ matrix.php_version }}
+      uses: actions/setup-php@v1
+      with:
+        php-version: ${{ matrix.php_version }}
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
+    # Docs: https://getcomposer.org/doc/articles/scripts.md
+
+    - name: Run test suite
+      run: composer test
