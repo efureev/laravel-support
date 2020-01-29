@@ -9,31 +9,31 @@ and this project adheres to [Semantic Versioning][semver].
 ## [0.1.0] - 2020-01-29
 ### Changed
   - Refactor `Caster` functionality.
-  - Remove from trait `PostgresArray` methods: `mutateToPgArray`, `accessPgArray`.
+  - Remove from the trait `PostgresArray` methods: `mutateToPgArray`, `accessPgArray`.
 
 ### Added
   - Written tests.
 
 ### Removed
-  - Trait `CasterAttribute`.
+  - The trait `CasterAttribute`.
 
 
 ## [0.0.3] - 2020-01-28
 ### Changed
-  - Move Trait `CasterAttribute` to different namespace: `Php\Support\Laravel\Traits\Models`.
+  - Move the Trait `CasterAttribute` to different namespace: `Php\Support\Laravel\Traits\Models`.
 
 ## [0.0.2] - 2020-01-28
 ### Added
-  - Trait for Model `PostgresArray`.
+  - The trait for Model `PostgresArray`.
 
 ### Changed
   - Refactor: changed namespaces
 
 ## [0.0.1] - 2020-01-28
 ### Added
-  - Trait `Caster`: for custom class casts. 
-  - Trait `CasterAttribute`: for custom class casts. 
-  - Trait for DB/Migration `UUID`. 
+  - The trait `Caster`: for custom class casts. 
+  - The trait `CasterAttribute`: for custom class casts. 
+  - The trait for DB/Migration `UUID`. 
 
 [unreleased]: https://github.com/efureev/laravel-support/compare/v0.0.2...HEAD
 [0.1.0]: https://github.com/efureev/laravel-support/compare/v0.0.3...v0.1.0
