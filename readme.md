@@ -13,7 +13,6 @@
 composer require efureev/laravel-support "^0.1"
 ```
 
-
 ## Usage
 
 ### Traits\Database\UUID
@@ -41,10 +40,9 @@ Schema::create(
 );
 ```
 Types of `$default`:
-- string: `NOW()`
-- callable: needs return param of `Illuminate\Database\Query\Expression` class 
-- class `Illuminate\Database\Query\Expression`
-
+  - string: `NOW()`
+  - callable: needs return param of `Illuminate\Database\Query\Expression` class 
+  - class `Illuminate\Database\Query\Expression`
 
 ### Traits\Models\PostgresArray
 Scope for searching into PG arrays.
@@ -91,7 +89,6 @@ class TestModel extends Model
 It's enough for use attribute `params` as class `Params`: `$model->params->key`!
 
 Now, mutators are not needed. But they will work. 
-
 
 ## Test
 ```bash
