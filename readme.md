@@ -1,5 +1,6 @@
 # PHP Laravel Support
 ![](https://img.shields.io/badge/php->=7.2-blue.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5c8b9e85897f4c65b5a017d16f6af6cb)](https://app.codacy.com/manual/efureev/laravel-support?utm_source=github.com&utm_medium=referral&utm_content=efureev/laravel-support&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.com/efureev/laravel-support.svg?branch=master)](https://travis-ci.com/efureev/laravel-support)
 ![PHP Composer](https://github.com/efureev/laravel-support/workflows/PHP%20Composer/badge.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a53fb85fd1ab46169758e10dd2d818cb)](https://app.codacy.com/app/efureev/laravel-support?utm_source=github.com&utm_medium=referral&utm_content=efureev/laravel-support&utm_campaign=Badge_Grade_Settings)
