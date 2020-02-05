@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Php\Support\Laravel\Sorting\Model;
-
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Schema\Blueprint;
@@ -30,9 +28,12 @@ trait Sortable
     {
         parent::boot();
 
-        static::addGlobalScope(static::$sortingScopeName, function (Builder $builder) {
-            $builder->orderBy((new static())->getSortingPositionColumn());
-        });
+        static::addGlobalScope(
+            static::$sortingScopeName,
+            function (Builder $builder) {
+                $builder->orderBy((new static())->getSortingPositionColumn());
+            }
+        );
     }
 
     /**
@@ -61,7 +62,8 @@ trait Sortable
             $sortingPosition = $oldSortingPosition;
 
             if ($sortingPosition === null) {
-                $sortingPosition = DB::raw(<<<SQL
+                $sortingPosition = DB::raw(
+                    <<<SQL
 (SELECT
       CASE
         WHEN MAX({$this->sortingPositionColumn}) IS NOT NULL 
@@ -72,7 +74,7 @@ FROM {$this->getTable()})
 SQL
                 );
             }
-        } elseif($oldSortingPosition !== null) {
+        } elseif ($oldSortingPosition !== null) {
             $this->reorderBySortingPosition($oldSortingPosition, $sortingPosition);
         }
 
@@ -86,16 +88,26 @@ SQL
      */
     protected function reorderBySortingPosition(int $oldPosition, int $newPosition): void
     {
-        Schema::table($this->getTable(), function (Blueprint $blueprint) {
-            $blueprint->dropUnique("{$this->getTable()}_{$this->sortingPositionColumn}_unique");
-        });
+        Schema::table(
+            $this->getTable(),
+            function (Blueprint $blueprint) {
+                $blueprint->dropIndex("{$this->getTable()}_{$this->sortingPositionColumn}_index");
+            }
+        );
         if ($oldPosition > $newPosition) {
-            static::where($this->sortingPositionColumn, '>=', $newPosition)->where($this->sortingPositionColumn, '<', $oldPosition)->increment($this->sortingPositionColumn);
+            static::where($this->sortingPositionColumn, '>=', $newPosition)
+                ->where($this->sortingPositionColumn, '<', $oldPosition)
+                ->increment($this->sortingPositionColumn);
         } elseif ($oldPosition < $newPosition) {
-            static::where($this->sortingPositionColumn, '<=', $newPosition)->where($this->sortingPositionColumn, '>', $oldPosition)->decrement($this->sortingPositionColumn);
+            static::where($this->sortingPositionColumn, '<=', $newPosition)
+                ->where($this->sortingPositionColumn, '>', $oldPosition)
+                ->decrement($this->sortingPositionColumn);
         }
-//        Schema::table($this->getTable(), function (Blueprint $blueprint) {
-//            $blueprint->unique($this->sortingPositionColumn);
-//        });
+        Schema::table(
+            $this->getTable(),
+            function (Blueprint $blueprint) {
+                $blueprint->index($this->sortingPositionColumn);
+            }
+        );
     }
 }

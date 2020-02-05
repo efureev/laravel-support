@@ -22,7 +22,7 @@ class SortableTest extends AbstractTestCase
         $this->assertEquals('test_sortable', $attributes['name']);
         $this->assertFalse($attributes['autoIncrement']);
         $this->assertFalse($attributes['unsigned']);
-        $this->assertTrue($attributes['unique']);
+        $this->assertTrue($attributes['index']);
     }
 
     public function testColumnSortingPosition_hasNotName_addColumnWithNeedleAttributes(): void
@@ -38,6 +38,6 @@ class SortableTest extends AbstractTestCase
         $this->assertEquals('sorting_position', $attributes['name']);
         $this->assertFalse($attributes['autoIncrement']);
         $this->assertFalse($attributes['unsigned']);
-        $this->assertTrue($attributes['unique']);
+        $this->assertTrue($attributes['index']);
     }
 }

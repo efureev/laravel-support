@@ -200,7 +200,7 @@ class SortableTest extends AbstractTestCase
         $sortEntity3->refresh();
 
         $actualEntities = SortEntity::all();
-        
+
         $this->assertEquals($sortEntity1->id, $actualEntities[0]->id);
         $this->assertEquals($sortEntity2->id, $actualEntities[2]->id);
         $this->assertEquals($sortEntity3->id, $actualEntities[1]->id);

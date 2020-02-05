@@ -22,6 +22,6 @@ trait Sortable
         Blueprint $table,
         string $name = 'sorting_position'
     ): ColumnDefinition {
-        return $table->integer($name)->unique();
+        return $table->integer($name)->index();
     }
 }
