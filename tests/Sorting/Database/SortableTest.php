@@ -21,7 +21,7 @@ class SortableTest extends AbstractTestCase
         $this->assertEquals('integer', $attributes['type']);
         $this->assertEquals('test_sortable', $attributes['name']);
         $this->assertFalse($attributes['autoIncrement']);
-        $this->assertFalse($attributes['unsigned']);
+        $this->assertTrue($attributes['unsigned']);
         $this->assertTrue($attributes['index']);
     }
 
@@ -37,7 +37,7 @@ class SortableTest extends AbstractTestCase
         $this->assertEquals('integer', $attributes['type']);
         $this->assertEquals('sorting_position', $attributes['name']);
         $this->assertFalse($attributes['autoIncrement']);
-        $this->assertFalse($attributes['unsigned']);
+        $this->assertTrue($attributes['unsigned']);
         $this->assertTrue($attributes['index']);
     }
 }
