@@ -100,7 +100,7 @@ SQL
      */
     public function upInSorting(int $steps)
     {
-        $currentPosition = (int) $this->{$this->sortingPositionColumn};
+        $currentPosition = $this->sortingPositionColumnValue();
         if ($steps > $currentPosition) {
             throw new \InvalidArgumentException('Current position is less than possible');
         }
@@ -123,6 +123,14 @@ SQL
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function sortingPositionColumnValue(): int
+    {
+        return (int) $this->{$this->sortingPositionColumn};
+    }
+    
     /**
      * @param int $oldPosition
      * @param int $newPosition
