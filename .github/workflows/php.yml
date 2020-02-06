@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   testing:
-    name: Test on node ${{ matrix.php }}
+    name: Test on PHP ${{ matrix.php }}
 
     runs-on: ubuntu-latest
 
@@ -23,9 +23,9 @@ jobs:
         extensions: mbstring
 
     - name: Get Composer Cache Directory # Docs: <https://github.com/actions/cache/blob/master/examples.md#php---composer>
-        id: composer-cache
-        run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      id: composer-cache
+      run: |
+        echo "::set-output name=dir::$(composer config cache-files-dir)"
 
     - name: Cache dependencies
       uses: actions/cache@v1
@@ -39,18 +39,18 @@ jobs:
       run: composer validate
 
     - name: Install Composer 'hirak/prestissimo' package
-        run: composer global require hirak/prestissimo --update-no-dev
+      run: composer global require hirak/prestissimo --update-no-dev
 
     - name: Install [LOWEST] Composer dependencies
-        if: matrix.setup == 'lowest'
-        run: composer update --prefer-dist --no-interaction --no-suggest --prefer-lowest
+      if: matrix.setup == 'lowest'
+      run: composer update --prefer-dist --no-interaction --no-suggest --prefer-lowest
 
     - name: Install [BASIC] Composer dependencies
-        if: matrix.setup == 'basic'
-        run: composer update --prefer-dist --no-interaction --no-suggest
+      if: matrix.setup == 'basic'
+      run: composer update --prefer-dist --no-interaction --no-suggest
 
     - name: Show most important packages' versions
-        run: composer info | grep -e efureev -e laravel/framework -e phpunit/phpunit
+      run: composer info | grep -e efureev -e laravel/framework -e phpunit/phpunit
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
