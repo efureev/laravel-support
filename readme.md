@@ -2,7 +2,7 @@
 ![](https://img.shields.io/badge/php->=7.2-blue.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5c8b9e85897f4c65b5a017d16f6af6cb)](https://app.codacy.com/manual/efureev/laravel-support?utm_source=github.com&utm_medium=referral&utm_content=efureev/laravel-support&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.com/efureev/laravel-support.svg?branch=master)](https://travis-ci.com/efureev/laravel-support)
-![PHP Composer](https://github.com/efureev/laravel-support/workflows/PHP%20Composer/badge.svg)
+![PHP Laravel Package](https://github.com/efureev/laravel-support/workflows/PHP%20Laravel%20Package/badge.svg?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/efureev/laravel-support/v/stable?format=flat)](https://packagist.org/packages/efureev/laravel-support)
 [![Total Downloads](https://poser.pugx.org/efureev/laravel-support/downloads)](https://packagist.org/packages/efureev/laravel-support)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5c2f433a24871b1f12e3/maintainability)](https://codeclimate.com/github/efureev/laravel-support/maintainability)
@@ -10,7 +10,7 @@
 
 ## Install
 ```bash
-composer require efureev/laravel-support "^0.1"
+composer require efureev/laravel-support "^0.2"
 ```
 
 ## Usage
