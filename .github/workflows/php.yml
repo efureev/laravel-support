@@ -10,6 +10,7 @@ jobs:
     timeout-minutes: 10
 
     strategy:
+      fail-fast: false
       matrix:
         setup: ['basic', 'lowest']
         php: ['7.2', '7.3', '7.4']
