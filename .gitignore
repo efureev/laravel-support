@@ -11,3 +11,4 @@ clover.xml
 
 /.git-hooks
 phpunit.xml.dist
+/coverage
