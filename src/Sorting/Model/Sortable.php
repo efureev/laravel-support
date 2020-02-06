@@ -130,7 +130,7 @@ SQL
     {
         return (int) $this->{$this->sortingPositionColumn};
     }
-    
+
     /**
      * @param int $oldPosition
      * @param int $newPosition
@@ -138,28 +138,30 @@ SQL
      */
     protected function reorderBySortingPosition(int $oldPosition, int $newPosition): void
     {
-        DB::transaction(function () use ($oldPosition, $newPosition) {
-            Schema::table(
-                $this->getTable(),
-                function (Blueprint $blueprint) {
-                    $blueprint->dropIndex("{$this->getTable()}_{$this->sortingPositionColumn}_index");
-                }
-            );
-            if ($oldPosition > $newPosition) {
-                static::where($this->sortingPositionColumn, '>=', $newPosition)
+        DB::transaction(
+            function () use ($oldPosition, $newPosition) {
+                Schema::table(
+                    $this->getTable(),
+                    function (Blueprint $blueprint) {
+                        $blueprint->dropIndex("{$this->getTable()}_{$this->sortingPositionColumn}_index");
+                    }
+                );
+                if ($oldPosition > $newPosition) {
+                    static::where($this->sortingPositionColumn, '>=', $newPosition)
                     ->where($this->sortingPositionColumn, '<', $oldPosition)
                     ->increment($this->sortingPositionColumn);
-            } elseif ($oldPosition < $newPosition) {
-                static::where($this->sortingPositionColumn, '<=', $newPosition)
+                } elseif ($oldPosition < $newPosition) {
+                    static::where($this->sortingPositionColumn, '<=', $newPosition)
                     ->where($this->sortingPositionColumn, '>', $oldPosition)
                     ->decrement($this->sortingPositionColumn);
-            }
-            Schema::table(
-                $this->getTable(),
-                function (Blueprint $blueprint) {
-                    $blueprint->index($this->sortingPositionColumn);
                 }
-            );
-        });
+                Schema::table(
+                    $this->getTable(),
+                    function (Blueprint $blueprint) {
+                        $blueprint->index($this->sortingPositionColumn);
+                    }
+                );
+            }
+        );
     }
 }
