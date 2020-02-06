@@ -4,9 +4,10 @@ on: [push]
 
 jobs:
   testing:
-    name: Test on PHP ${{ matrix.php }}
+    name: Test on PHP ${{ matrix.php }} with ${{ matrix.setup }} dependencies
 
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     strategy:
       matrix:
