@@ -241,4 +241,130 @@ class SortableTest extends AbstractTestCase
         $this->assertEquals($sortEntity3->id, $actualEntities[1]->id);
         $this->assertEquals($sortEntity4->id, $actualEntities[2]->id);
     }
+
+    public function testUpInSorting_getEntitiesWithReorder(): void
+    {
+        $sortEntity2 = new SortEntity();
+        $sortEntity2->title = 'test2';
+        $sortEntity2->sorting_position = 2;
+        $sortEntity2->save();
+
+        $sortEntity3 = new SortEntity();
+        $sortEntity3->title = 'test3';
+        $sortEntity3->sorting_position = 3;
+        $sortEntity3->save();
+
+        $sortEntity4 = new SortEntity();
+        $sortEntity4->title = 'test4';
+        $sortEntity4->sorting_position = 4;
+        $sortEntity4->save();
+
+        $sortEntity1 = new SortEntity();
+        $sortEntity1->title = 'test1';
+        $sortEntity1->sorting_position = 1;
+        $sortEntity1->save();
+
+        //reorder
+        $sortEntity3->upInSorting(1);
+        $sortEntity3->save();
+        $sortEntity3->refresh();
+
+        $actualEntities = SortEntity::all();
+
+        $this->assertEquals($sortEntity1->id, $actualEntities[0]->id);
+        $this->assertEquals($sortEntity2->id, $actualEntities[2]->id);
+        $this->assertEquals($sortEntity3->id, $actualEntities[1]->id);
+        $this->assertEquals($sortEntity4->id, $actualEntities[3]->id);
+    }
+
+    public function testUpInSorting_hasCurrentPositionLessThanPossible_throwsInvalidArgumentException(): void
+    {
+        $sortEntity2 = new SortEntity();
+        $sortEntity2->title = 'test2';
+        $sortEntity2->sorting_position = 2;
+        $sortEntity2->save();
+
+        $sortEntity3 = new SortEntity();
+        $sortEntity3->title = 'test3';
+        $sortEntity3->sorting_position = 3;
+        $sortEntity3->save();
+
+        $sortEntity4 = new SortEntity();
+        $sortEntity4->title = 'test4';
+        $sortEntity4->sorting_position = 4;
+        $sortEntity4->save();
+
+        $sortEntity1 = new SortEntity();
+        $sortEntity1->title = 'test1';
+        $sortEntity1->sorting_position = 1;
+        $sortEntity1->save();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Current position is less than possible');
+
+        $sortEntity3->upInSorting(4);
+    }
+    
+    public function testDownInSorting_getEntitiesWithReorder(): void
+    {
+        $sortEntity2 = new SortEntity();
+        $sortEntity2->title = 'test2';
+        $sortEntity2->sorting_position = 2;
+        $sortEntity2->save();
+
+        $sortEntity3 = new SortEntity();
+        $sortEntity3->title = 'test3';
+        $sortEntity3->sorting_position = 3;
+        $sortEntity3->save();
+
+        $sortEntity4 = new SortEntity();
+        $sortEntity4->title = 'test4';
+        $sortEntity4->sorting_position = 4;
+        $sortEntity4->save();
+
+        $sortEntity1 = new SortEntity();
+        $sortEntity1->title = 'test1';
+        $sortEntity1->sorting_position = 1;
+        $sortEntity1->save();
+
+        //reorder
+        $sortEntity1->downInSorting(3);
+        $sortEntity1->save();
+        $sortEntity1->refresh();
+
+        $actualEntities = SortEntity::all();
+
+        $this->assertEquals($sortEntity1->id, $actualEntities[3]->id);
+        $this->assertEquals($sortEntity2->id, $actualEntities[0]->id);
+        $this->assertEquals($sortEntity3->id, $actualEntities[1]->id);
+        $this->assertEquals($sortEntity4->id, $actualEntities[2]->id);
+    }
+
+    public function testDownInSorting_hasCurrentPositionLessThanZero_throwsInvalidArgumentException(): void
+    {
+        $sortEntity2 = new SortEntity();
+        $sortEntity2->title = 'test2';
+        $sortEntity2->sorting_position = 2;
+        $sortEntity2->save();
+
+        $sortEntity3 = new SortEntity();
+        $sortEntity3->title = 'test3';
+        $sortEntity3->sorting_position = 3;
+        $sortEntity3->save();
+
+        $sortEntity4 = new SortEntity();
+        $sortEntity4->title = 'test4';
+        $sortEntity4->sorting_position = 4;
+        $sortEntity4->save();
+
+        $sortEntity1 = new SortEntity();
+        $sortEntity1->title = 'test1';
+        $sortEntity1->sorting_position = 1;
+        $sortEntity1->save();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Please, use upInSorting if you want to up Sortable in sorting');
+        
+        $sortEntity1->downInSorting(-5);
+    }
 }

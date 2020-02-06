@@ -95,6 +95,35 @@ SQL
     }
 
     /**
+     * @param int $steps
+     * @return $this
+     */
+    public function upInSorting(int $steps)
+    {
+        $currentPosition = (int) $this->{$this->sortingPositionColumn};
+        if ($steps > $currentPosition) {
+            throw new \InvalidArgumentException('Current position is less than possible');
+        }
+        $this->{$this->sortingPositionColumn} -= $steps;
+
+        return $this;
+    }
+
+    /**
+     * @param int $steps
+     * @return $this
+     */
+    public function downInSorting(int $steps)
+    {
+        if ($steps < 0) {
+            throw new \InvalidArgumentException('Please, use upInSorting if you want to up Sortable in sorting');
+        }
+        $this->{$this->sortingPositionColumn} += $steps;
+
+        return $this;
+    }
+
+    /**
      * @param int $oldPosition
      * @param int $newPosition
      * @return void
