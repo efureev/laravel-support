@@ -3,6 +3,29 @@ name: PHP Laravel Package
 on: [push]
 
 jobs:
+  phpcs:
+    name: PHPCS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: PHPCS check
+        uses: chekalsky/phpcs-action@v1
+          with:
+            enable_warnings: true
+
+  lint-changelog:
+    name: Lint changelog file
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Lint changelog file
+        uses: avto-dev/markdown-lint@v1
+        with:
+          rules: '/lint/rules/changelog.js'
+          config: '/lint/config/changelog.yml'
+          args: './CHANGELOG.md'
+
   testing:
     name: Test on PHP ${{ matrix.php }} with ${{ matrix.setup }} dependencies
 
@@ -35,6 +58,7 @@ jobs:
       with:
         php-version: ${{ matrix.php }}
         extensions: mbstring
+        coverage: xdebug
 
     - name: Get Composer Cache Directory # Docs: <https://github.com/actions/cache/blob/master/examples.md#php---composer>
       id: composer-cache
