@@ -1,4 +1,5 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog][keepachangelog]
@@ -6,39 +7,58 @@ and this project adheres to [Semantic Versioning][semver].
 
 ## [unreleased]
 
+## [0.2.1] - 2020-02-11
+
+### Changed
+- Sortable: refactor
+
+
 ## [0.2.0] - 2020-02-06
+
 ### Added
-  - Sortable traits: Sorting models in list.
+- Sortable traits: Sorting models in list
 
 ## [0.1.0] - 2020-01-29
+
 ### Changed
-  - Refactor `Caster` functionality.
-  - Remove from the trait `PostgresArray` methods: `mutateToPgArray`, `accessPgArray`.
+
+- Refactor `Caster` functionality
+- Remove from the trait `PostgresArray` methods: `mutateToPgArray`, `accessPgArray`
 
 ### Added
-  - Written tests.
+
+- Written tests
 
 ### Removed
-  - The trait `CasterAttribute`.
+
+- The trait `CasterAttribute`
 
 ## [0.0.3] - 2020-01-28
+
 ### Changed
-  - Move the Trait `CasterAttribute` to different namespace: `Php\Support\Laravel\Traits\Models`.
+ 
+- Move the Trait `CasterAttribute` to different namespace: `Php\Support\Laravel\Traits\Models`
 
 ## [0.0.2] - 2020-01-28
+
 ### Added
-  - The trait for Model `PostgresArray`.
+
+- The trait for Model `PostgresArray`
 
 ### Changed
-  - Refactor: changed namespaces
+
+- Refactor: changed namespaces
 
 ## [0.0.1] - 2020-01-28
-### Added
-  - The trait `Caster`: for custom class casts. 
-  - The trait `CasterAttribute`: for custom class casts. 
-  - The trait for DB/Migration `UUID`. 
 
-[unreleased]: https://github.com/efureev/laravel-support/compare/v0.2.0...HEAD
+### Added
+
+- The trait `Caster`: for custom class casts
+- The trait `CasterAttribute`: for custom class casts 
+- The trait for DB/Migration `UUID`
+
+[unreleased]: https://github.com/efureev/laravel-support/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/efureev/laravel-support/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/efureev/laravel-support/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/efureev/laravel-support/compare/v0.0.3...v0.1.0
 [0.0.3]: https://github.com/efureev/laravel-support/compare/v0.0.2...v0.0.3
