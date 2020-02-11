@@ -18,7 +18,7 @@
   "require": {
     "php": ">=7.2",
     "ext-json": "*",
-    "efureev/support": "^2.4",
+    "efureev/support": "^2.5",
     "illuminate/database": "^6.11 | ^7.0"
   },
   "require-dev": {
