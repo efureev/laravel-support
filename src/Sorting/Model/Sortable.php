@@ -84,6 +84,9 @@ trait Sortable
         $this->attributes[$this->sortingPositionColumn] = $sortingPosition;
     }
 
+    /**
+     * @return string
+     */
     protected function formDefaultSQL(): string
     {
         return <<<SQL
@@ -164,6 +167,10 @@ SQL;
         );
     }
 
+    /**
+     * @param int $oldPosition
+     * @param int $newPosition
+     */
     protected function incrementInReorder(int $oldPosition, int $newPosition): void
     {
         static::where($this->sortingPositionColumn, '>=', $newPosition)
@@ -171,6 +178,10 @@ SQL;
             ->increment($this->sortingPositionColumn);
     }
 
+    /**
+     * @param int $oldPosition
+     * @param int $newPosition
+     */
     protected function decrementInReorder(int $oldPosition, int $newPosition): void
     {
         static::where($this->sortingPositionColumn, '<=', $newPosition)
