@@ -5,17 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog][keepachangelog]
 and this project adheres to [Semantic Versioning][semver].
 
+Check MD [online][check-online].
+
 ## [unreleased]
 
 ## [0.2.1] - 2020-02-11
 
 ### Changed
-- Sortable: refactor
 
+- Sortable: refactor
 
 ## [0.2.0] - 2020-02-06
 
 ### Added
+
 - Sortable traits: Sorting models in list
 
 ## [0.1.0] - 2020-01-29
@@ -36,7 +39,7 @@ and this project adheres to [Semantic Versioning][semver].
 ## [0.0.3] - 2020-01-28
 
 ### Changed
- 
+
 - Move the Trait `CasterAttribute` to different namespace: `Php\Support\Laravel\Traits\Models`
 
 ## [0.0.2] - 2020-01-28
@@ -54,7 +57,7 @@ and this project adheres to [Semantic Versioning][semver].
 ### Added
 
 - The trait `Caster`: for custom class casts
-- The trait `CasterAttribute`: for custom class casts 
+- The trait `CasterAttribute`: for custom class casts
 - The trait for DB/Migration `UUID`
 
 [unreleased]: https://github.com/efureev/laravel-support/compare/v0.2.1...HEAD
@@ -67,3 +70,4 @@ and this project adheres to [Semantic Versioning][semver].
 
 [keepachangelog]:https://keepachangelog.com/en/1.1.0/
 [semver]:https://semver.org/spec/v2.0.0.html
+[check-online]:https://dlaa.me/markdownlint
