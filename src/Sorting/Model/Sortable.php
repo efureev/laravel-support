@@ -102,6 +102,7 @@ SQL;
 
     /**
      * @param int $steps
+     *
      * @return $this
      */
     public function upInSorting(int $steps)
@@ -117,6 +118,7 @@ SQL;
 
     /**
      * @param int $steps
+     *
      * @return $this
      */
     public function downInSorting(int $steps)
@@ -124,7 +126,10 @@ SQL;
         if ($steps < 0) {
             throw new \InvalidArgumentException('Please, use upInSorting if you want to up Sortable in sorting');
         }
-        $this->{$this->sortingPositionColumn} += $steps;
+
+        if ($steps > 0) {
+            $this->{$this->sortingPositionColumn} += $steps;
+        }
 
         return $this;
     }
@@ -134,12 +139,13 @@ SQL;
      */
     public function sortingPositionColumnValue(): int
     {
-        return (int) $this->{$this->sortingPositionColumn};
+        return (int)$this->{$this->sortingPositionColumn};
     }
 
     /**
      * @param int $oldPosition
      * @param int $newPosition
+     *
      * @return void
      */
     protected function reorderBySortingPosition(int $oldPosition, int $newPosition): void
