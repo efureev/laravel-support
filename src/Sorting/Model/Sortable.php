@@ -75,8 +75,21 @@ trait Sortable
             $sortingPosition = $oldSortingPosition;
 
             if ($sortingPosition === null) {
-                $sortingPosition = DB::raw(
-                    <<<SQL
+                $sortingPosition = DB::raw($this->formDefaultSQL());
+            }
+        } elseif ($oldSortingPosition !== null) {
+            $this->reorderBySortingPosition($oldSortingPosition, $sortingPosition);
+        }
+
+        $this->attributes[$this->sortingPositionColumn] = $sortingPosition;
+    }
+
+    /**
+     * @return string
+     */
+    protected function formDefaultSQL(): string
+    {
+        return <<<SQL
 (SELECT
       CASE
         WHEN MAX({$this->sortingPositionColumn}) IS NOT NULL 
@@ -84,14 +97,7 @@ trait Sortable
         ELSE 1
       END
 FROM {$this->getTable()})
-SQL
-                );
-            }
-        } elseif ($oldSortingPosition !== null) {
-            $this->reorderBySortingPosition($oldSortingPosition, $sortingPosition);
-        }
-
-        $this->attributes[$this->sortingPositionColumn] = $sortingPosition;
+SQL;
     }
 
     /**
@@ -147,13 +153,9 @@ SQL
                     }
                 );
                 if ($oldPosition > $newPosition) {
-                    static::where($this->sortingPositionColumn, '>=', $newPosition)
-                    ->where($this->sortingPositionColumn, '<', $oldPosition)
-                    ->increment($this->sortingPositionColumn);
+                    $this->incrementInReorder($oldPosition, $newPosition);
                 } elseif ($oldPosition < $newPosition) {
-                    static::where($this->sortingPositionColumn, '<=', $newPosition)
-                    ->where($this->sortingPositionColumn, '>', $oldPosition)
-                    ->decrement($this->sortingPositionColumn);
+                    $this->decrementInReorder($oldPosition, $newPosition);
                 }
                 Schema::table(
                     $this->getTable(),
@@ -163,5 +165,27 @@ SQL
                 );
             }
         );
+    }
+
+    /**
+     * @param int $oldPosition
+     * @param int $newPosition
+     */
+    protected function incrementInReorder(int $oldPosition, int $newPosition): void
+    {
+        static::where($this->sortingPositionColumn, '>=', $newPosition)
+            ->where($this->sortingPositionColumn, '<', $oldPosition)
+            ->increment($this->sortingPositionColumn);
+    }
+
+    /**
+     * @param int $oldPosition
+     * @param int $newPosition
+     */
+    protected function decrementInReorder(int $oldPosition, int $newPosition): void
+    {
+        static::where($this->sortingPositionColumn, '<=', $newPosition)
+            ->where($this->sortingPositionColumn, '>', $oldPosition)
+            ->decrement($this->sortingPositionColumn);
     }
 }
