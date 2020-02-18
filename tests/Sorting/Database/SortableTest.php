@@ -14,7 +14,7 @@ class SortableTest extends AbstractTestCase
     {
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations_sortable');
         $table = new Blueprint('test');
-        
+
         static::columnSortingPosition($table, 'test_sortable');
 
         $attributes = $table->getColumns()[0]->getAttributes();

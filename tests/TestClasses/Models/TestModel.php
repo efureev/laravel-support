@@ -1,10 +1,13 @@
 <?php
 
-namespace Php\Support\Laravel\Tests\Models;
+namespace Php\Support\Laravel\Tests\TestClasses\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Foundation\Auth\User;
 use Php\Support\Laravel\Caster\HasCasts;
+use Php\Support\Laravel\Tests\TestClasses\Entity\Params;
 
 /**
  * Class TestModel
@@ -16,6 +19,7 @@ use Php\Support\Laravel\Caster\HasCasts;
  * @property string $str
  * @property string $str_empty
  * @property int $int
+ * @property User $user
  * @mixin Builder
  */
 class TestModel extends Model
@@ -36,5 +40,10 @@ class TestModel extends Model
         'str_empty' => null,
         'int'       => 'int',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
 }

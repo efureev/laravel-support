@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel\Tests\Functional;
 
-use Php\Support\Laravel\Tests\Models\PgArrayModel;
+
+use Php\Support\Laravel\Tests\TestClasses\Models\PgArrayModel;
 
 class PgArrayTraitTest extends AbstractFunctionalTestCase
 {

@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [0.3.0] - 2020-02-18
+
+### Added
+
+- Rules: `Authorized`, `Delimited`
+
 ## [0.2.1] - 2020-02-11
 
 ### Changed
@@ -60,7 +66,8 @@ Check MD [online][check-online].
 - The trait `CasterAttribute`: for custom class casts
 - The trait for DB/Migration `UUID`
 
-[unreleased]: https://github.com/efureev/laravel-support/compare/v0.2.1...HEAD
+[unreleased]: https://github.com/efureev/laravel-support/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/efureev/laravel-support/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/efureev/laravel-support/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/efureev/laravel-support/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/efureev/laravel-support/compare/v0.0.3...v0.1.0

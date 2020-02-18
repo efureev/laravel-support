@@ -33,7 +33,7 @@ class CreateUuidTable extends Migration
             static function (Blueprint $table) {
                 static::columnUUID($table)->primary();
                 static::columnUUID($table, 'table_id', null)->index();
-                $table->foreign('table_id')->references('id')->on('uuid_table')->onDelete('cascade');
+               // $table->foreign('table_id')->references('id')->on('uuid_table')->onDelete('cascade');
             }
         );
 
@@ -56,7 +56,7 @@ class CreateUuidTable extends Migration
             static function (Blueprint $table) use ($expression) {
                 static::columnUUID($table)->primary();
                 static::columnUUID($table, 'table_id', new Expression($expression))->index();
-                $table->foreign('table_id')->references('id')->on('uuid_table');
+                //$table->foreign('table_id')->references('id')->on('uuid_table');
             }
         );
     }

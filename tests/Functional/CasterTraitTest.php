@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Php\Support\Laravel\Tests\Functional;
 
 use Illuminate\Database\Eloquent\Collection;
-use Php\Support\Laravel\Tests\Models\Params;
-use Php\Support\Laravel\Tests\Models\TestModel;
+use Php\Support\Laravel\Tests\TestClasses\Entity\Params;
+use Php\Support\Laravel\Tests\TestClasses\Models\TestModel;
 
 class CasterTraitTest extends AbstractFunctionalTestCase
 {

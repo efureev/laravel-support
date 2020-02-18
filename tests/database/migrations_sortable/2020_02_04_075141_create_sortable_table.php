@@ -2,10 +2,10 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Php\Support\Laravel\Traits\Database\UUID;
 use Illuminate\Support\Facades\Schema;
 use Php\Support\Laravel\Sorting\Database\Sortable;
-use Php\Support\Laravel\Tests\Models\SortEntity;
+use Php\Support\Laravel\Tests\TestClasses\Models\SortEntity;
+use Php\Support\Laravel\Traits\Database\UUID;
 
 class CreateSortableTable extends Migration
 {
@@ -22,7 +22,9 @@ class CreateSortableTable extends Migration
             'sort_entities',
             static function (Blueprint $table) {
                 static::columnUUID($table)->primary();
-                static::columnSortingPosition($table, (new SortEntity())->getSortingPositionColumn());
+                static::columnSortingPosition($table,
+                                              (new SortEntity())->getSortingPositionColumn()
+                );
                 $table->string('title')->nullable();
             }
         );

@@ -1,12 +1,10 @@
 <?php
 
 
-namespace Php\Support\Laravel\Tests\Models;
+namespace Php\Support\Laravel\Tests\TestClasses\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Php\Support\Laravel\Sorting\Model\Sortable;
 
 class SortEntity extends Model
@@ -22,5 +20,5 @@ class SortEntity extends Model
      * @var string
      */
     protected $keyType = 'uuid';
-    
+
 }

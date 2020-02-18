@@ -7,6 +7,7 @@ namespace Php\Support\Laravel\Tests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Orchestra\Testbench\TestCase;
+use Php\Support\Laravel\ServiceProvider;
 
 /**
  * Class AbstractTestCase
@@ -14,16 +15,6 @@ use Orchestra\Testbench\TestCase;
 abstract class AbstractTestCase extends TestCase
 {
     use InteractsWithDatabase;
-
-    /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-//        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-    }
-
 
     /**
      * Define environment setup.
@@ -53,5 +44,21 @@ abstract class AbstractTestCase extends TestCase
                 'sslmode'        => 'prefer',
             ]
         );
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [
+            ServiceProvider::class,
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->artisan('db:wipe');
     }
 }

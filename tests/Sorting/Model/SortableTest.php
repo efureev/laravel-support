@@ -2,9 +2,8 @@
 
 namespace Php\Support\Laravel\Tests\Sorting\Model;
 
-use Php\Support\Laravel\Sorting\Model\Sortable;
 use Php\Support\Laravel\Tests\AbstractTestCase;
-use Php\Support\Laravel\Tests\Models\SortEntity;
+use Php\Support\Laravel\Tests\TestClasses\Models\SortEntity;
 
 class SortableTest extends AbstractTestCase
 {
@@ -16,8 +15,8 @@ class SortableTest extends AbstractTestCase
 
     public function testInsertZeroSortingPosition_incrementSortingPosition(): void
     {
-        $sortEntity = new SortEntity();
-        $sortEntity->title = 'test';
+        $sortEntity                   = new SortEntity();
+        $sortEntity->title            = 'test';
         $sortEntity->sorting_position = 0;
         $sortEntity->save();
         $sortEntity->refresh();
@@ -27,8 +26,8 @@ class SortableTest extends AbstractTestCase
 
     public function testInsertEmptyStringSortingPosition_incrementSortingPosition(): void
     {
-        $sortEntity = new SortEntity();
-        $sortEntity->title = 'test';
+        $sortEntity                   = new SortEntity();
+        $sortEntity->title            = 'test';
         $sortEntity->sorting_position = '';
         $sortEntity->save();
         $sortEntity->refresh();
@@ -38,8 +37,8 @@ class SortableTest extends AbstractTestCase
 
     public function testInsertNullSortingPosition_incrementSortingPosition(): void
     {
-        $sortEntity = new SortEntity();
-        $sortEntity->title = 'test';
+        $sortEntity                   = new SortEntity();
+        $sortEntity->title            = 'test';
         $sortEntity->sorting_position = null;
         $sortEntity->save();
         $sortEntity->refresh();
@@ -51,15 +50,15 @@ class SortableTest extends AbstractTestCase
     {
         $this->expectException(\PDOException::class);
 
-        $sortEntity = new SortEntity();
+        $sortEntity        = new SortEntity();
         $sortEntity->title = 'test';
         $sortEntity->save();
     }
 
     public function testUpdateZeroSortingPositionAfterNormal_setOldSortingPosition(): void
     {
-        $sortEntity = new SortEntity();
-        $sortEntity->title = 'test';
+        $sortEntity                   = new SortEntity();
+        $sortEntity->title            = 'test';
         $sortEntity->sorting_position = 4;
         $sortEntity->save();
         $sortEntity->refresh();
@@ -72,8 +71,8 @@ class SortableTest extends AbstractTestCase
 
     public function testUpdateEmptyStringSortingPositionAfterNormal_setOldSortingPosition(): void
     {
-        $sortEntity = new SortEntity();
-        $sortEntity->title = 'test';
+        $sortEntity                   = new SortEntity();
+        $sortEntity->title            = 'test';
         $sortEntity->sorting_position = 4;
         $sortEntity->save();
         $sortEntity->refresh();
@@ -86,8 +85,8 @@ class SortableTest extends AbstractTestCase
 
     public function testUpdateNullSortingPositionAfterNormal_setOldSortingPosition(): void
     {
-        $sortEntity = new SortEntity();
-        $sortEntity->title = 'test';
+        $sortEntity                   = new SortEntity();
+        $sortEntity->title            = 'test';
         $sortEntity->sorting_position = 4;
         $sortEntity->save();
         $sortEntity->refresh();
@@ -100,8 +99,8 @@ class SortableTest extends AbstractTestCase
 
     public function testUpdateWithoutSortingPositionAfterNormal_setOldSortingPosition(): void
     {
-        $sortEntity = new SortEntity();
-        $sortEntity->title = 'test';
+        $sortEntity                   = new SortEntity();
+        $sortEntity->title            = 'test';
         $sortEntity->sorting_position = 4;
         $sortEntity->save();
         $sortEntity->refresh();
@@ -114,23 +113,23 @@ class SortableTest extends AbstractTestCase
 
     public function testGlobalScope_hasEntities_getTheirWithScopeOrder(): void
     {
-        $sortEntity2 = new SortEntity();
-        $sortEntity2->title = 'test';
+        $sortEntity2                   = new SortEntity();
+        $sortEntity2->title            = 'test';
         $sortEntity2->sorting_position = 2;
         $sortEntity2->save();
 
-        $sortEntity3 = new SortEntity();
-        $sortEntity3->title = 'test';
+        $sortEntity3                   = new SortEntity();
+        $sortEntity3->title            = 'test';
         $sortEntity3->sorting_position = 3;
         $sortEntity3->save();
 
-        $sortEntity1 = new SortEntity();
-        $sortEntity1->title = 'test';
+        $sortEntity1                   = new SortEntity();
+        $sortEntity1->title            = 'test';
         $sortEntity1->sorting_position = 1;
         $sortEntity1->save();
 
-        $sortEntity4 = new SortEntity();
-        $sortEntity4->title = 'test';
+        $sortEntity4                   = new SortEntity();
+        $sortEntity4->title            = 'test';
         $sortEntity4->sorting_position = 4;
         $sortEntity4->save();
 
@@ -144,23 +143,23 @@ class SortableTest extends AbstractTestCase
 
     public function testGlobalScope_hasEntities_getTheirWithoutScopeOrder(): void
     {
-        $sortEntity2 = new SortEntity();
-        $sortEntity2->title = 'test';
+        $sortEntity2                   = new SortEntity();
+        $sortEntity2->title            = 'test';
         $sortEntity2->sorting_position = 2;
         $sortEntity2->save();
 
-        $sortEntity3 = new SortEntity();
-        $sortEntity3->title = 'test';
+        $sortEntity3                   = new SortEntity();
+        $sortEntity3->title            = 'test';
         $sortEntity3->sorting_position = 3;
         $sortEntity3->save();
 
-        $sortEntity4 = new SortEntity();
-        $sortEntity4->title = 'test';
+        $sortEntity4                   = new SortEntity();
+        $sortEntity4->title            = 'test';
         $sortEntity4->sorting_position = 4;
         $sortEntity4->save();
 
-        $sortEntity1 = new SortEntity();
-        $sortEntity1->title = 'test';
+        $sortEntity1                   = new SortEntity();
+        $sortEntity1->title            = 'test';
         $sortEntity1->sorting_position = 1;
         $sortEntity1->save();
 
@@ -174,23 +173,23 @@ class SortableTest extends AbstractTestCase
 
     public function testReorderBySortingPosition_hasOldPositionMoreThanNew_getEntitiesWithReorder(): void
     {
-        $sortEntity2 = new SortEntity();
-        $sortEntity2->title = 'test2';
+        $sortEntity2                   = new SortEntity();
+        $sortEntity2->title            = 'test2';
         $sortEntity2->sorting_position = 2;
         $sortEntity2->save();
 
-        $sortEntity3 = new SortEntity();
-        $sortEntity3->title = 'test3';
+        $sortEntity3                   = new SortEntity();
+        $sortEntity3->title            = 'test3';
         $sortEntity3->sorting_position = 3;
         $sortEntity3->save();
 
-        $sortEntity4 = new SortEntity();
-        $sortEntity4->title = 'test4';
+        $sortEntity4                   = new SortEntity();
+        $sortEntity4->title            = 'test4';
         $sortEntity4->sorting_position = 4;
         $sortEntity4->save();
 
-        $sortEntity1 = new SortEntity();
-        $sortEntity1->title = 'test1';
+        $sortEntity1                   = new SortEntity();
+        $sortEntity1->title            = 'test1';
         $sortEntity1->sorting_position = 1;
         $sortEntity1->save();
 
@@ -209,23 +208,23 @@ class SortableTest extends AbstractTestCase
 
     public function testReorderBySortingPosition_hasOldPositionLessThanNew_getEntitiesWithReorder(): void
     {
-        $sortEntity2 = new SortEntity();
-        $sortEntity2->title = 'test2';
+        $sortEntity2                   = new SortEntity();
+        $sortEntity2->title            = 'test2';
         $sortEntity2->sorting_position = 2;
         $sortEntity2->save();
 
-        $sortEntity3 = new SortEntity();
-        $sortEntity3->title = 'test3';
+        $sortEntity3                   = new SortEntity();
+        $sortEntity3->title            = 'test3';
         $sortEntity3->sorting_position = 3;
         $sortEntity3->save();
 
-        $sortEntity4 = new SortEntity();
-        $sortEntity4->title = 'test4';
+        $sortEntity4                   = new SortEntity();
+        $sortEntity4->title            = 'test4';
         $sortEntity4->sorting_position = 4;
         $sortEntity4->save();
 
-        $sortEntity1 = new SortEntity();
-        $sortEntity1->title = 'test1';
+        $sortEntity1                   = new SortEntity();
+        $sortEntity1->title            = 'test1';
         $sortEntity1->sorting_position = 1;
         $sortEntity1->save();
 
@@ -235,7 +234,7 @@ class SortableTest extends AbstractTestCase
         $sortEntity1->refresh();
 
         $actualEntities = SortEntity::all();
-        
+
         $this->assertEquals($sortEntity1->id, $actualEntities[3]->id);
         $this->assertEquals($sortEntity2->id, $actualEntities[0]->id);
         $this->assertEquals($sortEntity3->id, $actualEntities[1]->id);
@@ -244,23 +243,23 @@ class SortableTest extends AbstractTestCase
 
     public function testUpInSorting_getEntitiesWithReorder(): void
     {
-        $sortEntity2 = new SortEntity();
-        $sortEntity2->title = 'test2';
+        $sortEntity2                   = new SortEntity();
+        $sortEntity2->title            = 'test2';
         $sortEntity2->sorting_position = 2;
         $sortEntity2->save();
 
-        $sortEntity3 = new SortEntity();
-        $sortEntity3->title = 'test3';
+        $sortEntity3                   = new SortEntity();
+        $sortEntity3->title            = 'test3';
         $sortEntity3->sorting_position = 3;
         $sortEntity3->save();
 
-        $sortEntity4 = new SortEntity();
-        $sortEntity4->title = 'test4';
+        $sortEntity4                   = new SortEntity();
+        $sortEntity4->title            = 'test4';
         $sortEntity4->sorting_position = 4;
         $sortEntity4->save();
 
-        $sortEntity1 = new SortEntity();
-        $sortEntity1->title = 'test1';
+        $sortEntity1                   = new SortEntity();
+        $sortEntity1->title            = 'test1';
         $sortEntity1->sorting_position = 1;
         $sortEntity1->save();
 
@@ -279,23 +278,23 @@ class SortableTest extends AbstractTestCase
 
     public function testUpInSorting_hasCurrentPositionLessThanPossible_throwsInvalidArgumentException(): void
     {
-        $sortEntity2 = new SortEntity();
-        $sortEntity2->title = 'test2';
+        $sortEntity2                   = new SortEntity();
+        $sortEntity2->title            = 'test2';
         $sortEntity2->sorting_position = 2;
         $sortEntity2->save();
 
-        $sortEntity3 = new SortEntity();
-        $sortEntity3->title = 'test3';
+        $sortEntity3                   = new SortEntity();
+        $sortEntity3->title            = 'test3';
         $sortEntity3->sorting_position = 3;
         $sortEntity3->save();
 
-        $sortEntity4 = new SortEntity();
-        $sortEntity4->title = 'test4';
+        $sortEntity4                   = new SortEntity();
+        $sortEntity4->title            = 'test4';
         $sortEntity4->sorting_position = 4;
         $sortEntity4->save();
 
-        $sortEntity1 = new SortEntity();
-        $sortEntity1->title = 'test1';
+        $sortEntity1                   = new SortEntity();
+        $sortEntity1->title            = 'test1';
         $sortEntity1->sorting_position = 1;
         $sortEntity1->save();
 
@@ -304,26 +303,26 @@ class SortableTest extends AbstractTestCase
 
         $sortEntity3->upInSorting(4);
     }
-    
+
     public function testDownInSorting_getEntitiesWithReorder(): void
     {
-        $sortEntity2 = new SortEntity();
-        $sortEntity2->title = 'test2';
+        $sortEntity2                   = new SortEntity();
+        $sortEntity2->title            = 'test2';
         $sortEntity2->sorting_position = 2;
         $sortEntity2->save();
 
-        $sortEntity3 = new SortEntity();
-        $sortEntity3->title = 'test3';
+        $sortEntity3                   = new SortEntity();
+        $sortEntity3->title            = 'test3';
         $sortEntity3->sorting_position = 3;
         $sortEntity3->save();
 
-        $sortEntity4 = new SortEntity();
-        $sortEntity4->title = 'test4';
+        $sortEntity4                   = new SortEntity();
+        $sortEntity4->title            = 'test4';
         $sortEntity4->sorting_position = 4;
         $sortEntity4->save();
 
-        $sortEntity1 = new SortEntity();
-        $sortEntity1->title = 'test1';
+        $sortEntity1                   = new SortEntity();
+        $sortEntity1->title            = 'test1';
         $sortEntity1->sorting_position = 1;
         $sortEntity1->save();
 
@@ -342,29 +341,29 @@ class SortableTest extends AbstractTestCase
 
     public function testDownInSorting_hasCurrentPositionLessThanZero_throwsInvalidArgumentException(): void
     {
-        $sortEntity2 = new SortEntity();
-        $sortEntity2->title = 'test2';
+        $sortEntity2                   = new SortEntity();
+        $sortEntity2->title            = 'test2';
         $sortEntity2->sorting_position = 2;
         $sortEntity2->save();
 
-        $sortEntity3 = new SortEntity();
-        $sortEntity3->title = 'test3';
+        $sortEntity3                   = new SortEntity();
+        $sortEntity3->title            = 'test3';
         $sortEntity3->sorting_position = 3;
         $sortEntity3->save();
 
-        $sortEntity4 = new SortEntity();
-        $sortEntity4->title = 'test4';
+        $sortEntity4                   = new SortEntity();
+        $sortEntity4->title            = 'test4';
         $sortEntity4->sorting_position = 4;
         $sortEntity4->save();
 
-        $sortEntity1 = new SortEntity();
-        $sortEntity1->title = 'test1';
+        $sortEntity1                   = new SortEntity();
+        $sortEntity1->title            = 'test1';
         $sortEntity1->sorting_position = 1;
         $sortEntity1->save();
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Please, use upInSorting if you want to up Sortable in sorting');
-        
+
         $sortEntity1->downInSorting(-5);
     }
 }

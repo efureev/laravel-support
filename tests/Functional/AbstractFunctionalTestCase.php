@@ -11,19 +11,5 @@ use Php\Support\Laravel\Tests\AbstractTestCase;
  */
 abstract class AbstractFunctionalTestCase extends AbstractTestCase
 {
-    /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
 
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        $this->artisan('db:wipe');
-    }
 }

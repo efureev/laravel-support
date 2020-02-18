@@ -4,10 +4,9 @@
 
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
-use Php\Support\Laravel\Tests\Models\TestModel;
 
 $factory->define(
-    TestModel::class,
+    \Php\Support\Laravel\Tests\TestClasses\Models\TestModel::class,
     static function (Faker $faker) {
         return [
             'title'   => $faker->sentence,

@@ -37,6 +37,13 @@
       "Php\\Support\\Laravel\\Tests\\": "tests/"
     }
   },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Php\\Support\\Laravel\\ServiceProvider"
+      ]
+    }
+  },
   "scripts": {
     "phpcs": "@php ./vendor/bin/phpcs",
     "cs-fix": "@php ./vendor/bin/phpcbf",

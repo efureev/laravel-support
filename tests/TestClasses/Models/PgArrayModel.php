@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Php\Support\Laravel\Tests\Models;
+namespace Php\Support\Laravel\Tests\TestClasses\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +34,7 @@ class PgArrayModel extends Model
 
     protected $casts = [
         'tags' => PgArray::class,
-//        'tag_ids' => PgArray::class,
+        //        'tag_ids' => PgArray::class,
     ];
 
     public function scopeByTag(Builder $query, string $value)

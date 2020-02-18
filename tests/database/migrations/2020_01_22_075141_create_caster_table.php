@@ -17,6 +17,17 @@ class CreateCasterTable extends Migration
      */
     public function up()
     {
+        Schema::create('users',
+            static function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->string('email');
+                $table->string('password');
+                $table->string('remember_token');
+                $table->timestamps();
+            }
+        );
+
         Schema::create(
             'test_table',
             static function (Blueprint $table) {
@@ -29,6 +40,7 @@ class CreateCasterTable extends Migration
                 $table->string('str');
                 $table->string('str_empty')->nullable();
                 $table->integer('int')->default(0);
+                $table->integer('user_id')->nullable();
             }
         );
 
@@ -51,7 +63,9 @@ class CreateCasterTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('pg_table');
         Schema::dropIfExists('test_table');
+        Schema::dropIfExists('users');
     }
 
 }
