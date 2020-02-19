@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User;
 use Php\Support\Laravel\Caster\HasCasts;
 use Php\Support\Laravel\Tests\TestClasses\Entity\Params;
+use Php\Support\Laravel\Tests\TestClasses\Entity\Status;
 
 /**
  * Class TestModel
@@ -35,6 +36,7 @@ class TestModel extends Model
     protected $casts = [
         'enabled'   => 'bool',
         'params'    => Params::class,
+        'status'    => Status::class,
         'config'    => 'array',
         'str'       => 'string',
         'str_empty' => null,

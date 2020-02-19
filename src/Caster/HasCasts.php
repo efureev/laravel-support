@@ -12,6 +12,12 @@ trait HasCasts
 {
     public function setAttribute($key, $value)
     {
+        if ($value instanceof Caster) {
+            $this->attributes[$key] = $value::castToDatabase($value);
+
+            return $this;
+        }
+
         $type = $this->getCastType($key);
 
         if ($this->typeIsClass($type) && method_exists($type, 'castToDatabase')) {

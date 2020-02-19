@@ -19,6 +19,9 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
      * AbstractCasting constructor.
      *
      * @param string|array|static $value
+     *
+     * @throws Exception
+     * @throws JsonException
      */
     public function __construct($value = null)
     {
@@ -68,6 +71,11 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
         return $value;
     }
 
+    /**
+     * @param mixed $value
+     *
+     * @throws Exception
+     */
     public function validate($value)
     {
         if (!is_array($value)) {
