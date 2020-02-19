@@ -40,6 +40,23 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
             return $this;
         }
 
+        $value = $this->convert($value);
+
+        $this->validate($value);
+
+        return $this->configurable($value);
+    }
+
+    /**
+     * Convert value data
+     *
+     * @param mixed $value
+     *
+     * @return array|string
+     * @throws JsonException
+     */
+    public function convert($value)
+    {
         if (is_string($value)) {
             $value = static::dataFromJson($value);
         }
@@ -48,11 +65,14 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
             $value = $value->toArray();
         }
 
+        return $value;
+    }
+
+    public function validate($value)
+    {
         if (!is_array($value)) {
             throw new Exception('type of value must be Array');
         }
-
-        return $this->configurable($value);
     }
 
     /**
