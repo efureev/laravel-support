@@ -39,6 +39,8 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
      */
     public function fill($value): self
     {
+        $value = $this->preFormat($value);
+
         if (empty($value)) {
             return $this;
         }
@@ -48,6 +50,18 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
         $this->validate($value);
 
         return $this->configurable($value);
+    }
+
+    /**
+     * Prepend formatting
+     *
+     * @param string|array|static $value
+     *
+     * @return string|array|static
+     */
+    public function preFormat($value)
+    {
+        return $value;
     }
 
     /**
@@ -156,7 +170,7 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
      * @throws Exception
      * @throws JsonException
      */
-    public function castFromDatabase(?string $value)
+    public function castFromDatabase(?string $value): self
     {
         return $this->fill($value);
     }
