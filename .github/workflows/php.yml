@@ -38,6 +38,11 @@ jobs:
         setup: ['basic', 'lowest']
         php: ['7.2', '7.3', '7.4']
 
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ''
+      POSTGRES_DB: testing
+
     services:
       postgres:
         image: postgres:11
