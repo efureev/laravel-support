@@ -47,6 +47,14 @@ trait Sortable
                 }
             );
         }
+
+        parent::creating(function ($model) {
+            $sortingPositionColumn = $model->getSortingPositionColumn();
+
+            if (empty($model->{$sortingPositionColumn})) {
+                $model->{$sortingPositionColumn} = 0;
+            }
+        });
     }
 
     /**
