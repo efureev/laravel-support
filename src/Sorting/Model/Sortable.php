@@ -47,7 +47,7 @@ trait Sortable
             );
         }
 
-        parent::creating(
+        static::creating(
             function ($model) {
                 $sortingPositionColumn = $model->getSortingPositionColumn();
 
