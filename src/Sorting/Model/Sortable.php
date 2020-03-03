@@ -52,7 +52,7 @@ trait Sortable
                 $sortingPositionColumn = $model->getSortingPositionColumn();
 
                 if (empty($model->{$sortingPositionColumn})) {
-                    $model->{$sortingPositionColumn} = 0;
+                    $model->{$sortingPositionColumn} = null;
                 }
             }
         );
