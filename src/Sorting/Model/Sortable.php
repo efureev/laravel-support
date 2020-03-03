@@ -30,15 +30,14 @@ trait Sortable
      */
     protected static $sortingGlobalScope = true;
 
+
     /**
-     * The "booting" method of the model.
+     * Call it in boot method of your Eloquent model
      *
      * @return void
      */
-    protected static function boot()
+    protected static function defaultSortableBooting()
     {
-        parent::boot();
-
         if (static::$sortingGlobalScope) {
             static::addGlobalScope(
                 static::$sortingScopeName,
@@ -48,13 +47,15 @@ trait Sortable
             );
         }
 
-        parent::creating(function ($model) {
-            $sortingPositionColumn = $model->getSortingPositionColumn();
+        parent::creating(
+            function ($model) {
+                $sortingPositionColumn = $model->getSortingPositionColumn();
 
-            if (empty($model->{$sortingPositionColumn})) {
-                $model->{$sortingPositionColumn} = 0;
+                if (empty($model->{$sortingPositionColumn})) {
+                    $model->{$sortingPositionColumn} = 0;
+                }
             }
-        });
+        );
     }
 
     /**
