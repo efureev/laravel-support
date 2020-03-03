@@ -50,7 +50,7 @@ trait Sortable
             }
         );
     }
-    
+
     /**
      * @return string
      */
@@ -92,12 +92,12 @@ trait Sortable
      */
     protected function formDefaultSQL(): string
     {
-        $sortingPositionColumn = Enum::SORTING_POSITION_COLUMN;
+        $sortingPosition = Enum::SORTING_POSITION_COLUMN;
         return <<<SQL
 (SELECT
       CASE
-        WHEN MAX({$sortingPositionColumn}) IS NOT NULL 
-            THEN MAX({$sortingPositionColumn}) + 1
+        WHEN MAX({$sortingPosition}) IS NOT NULL 
+            THEN MAX({$sortingPosition}) + 1
         ELSE 1
       END
 FROM {$this->getTable()})
