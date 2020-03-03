@@ -22,9 +22,7 @@ class CreateSortableTable extends Migration
             'sort_entities',
             static function (Blueprint $table) {
                 static::columnUUID($table)->primary();
-                static::columnSortingPosition($table,
-                                              (new SortEntity())->getSortingPositionColumn()
-                );
+                static::columnSortingPosition($table);
                 $table->string('title')->nullable();
             }
         );

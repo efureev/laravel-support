@@ -5,24 +5,21 @@ declare(strict_types=1);
 namespace Php\Support\Laravel\Sorting\Database;
 
 use Exception;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\ColumnDefinition;
+use Php\Support\Laravel\Sorting\Enum;
 
 trait Sortable
 {
     /**
      * @param Blueprint $table
-     * @param string $name
-     * @param bool|callable|Expression $default
      *
      * @return ColumnDefinition
      * @throws Exception
      */
     protected static function columnSortingPosition(
-        Blueprint $table,
-        string $name = 'sorting_position'
+        Blueprint $table
     ): ColumnDefinition {
-        return $table->unsignedInteger($name)->nullable(false)->index();
+        return $table->unsignedInteger(Enum::SORTING_POSITION_COLUMN)->nullable(false)->index();
     }
 }

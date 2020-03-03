@@ -3,9 +3,11 @@
 namespace Php\Support\Laravel\Sorting\Model;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Php\Support\Laravel\Sorting\Enum;
 
 /**
  * Trait Sortable
@@ -15,11 +17,6 @@ use Illuminate\Support\Facades\Schema;
  */
 trait Sortable
 {
-    /**
-     * @var string Name of the column in sortingPosition scope
-     */
-    protected $sortingPositionColumn = 'sorting_position';
-
     /**
      * @var string Name of the global sorting scope
      */
@@ -42,30 +39,18 @@ trait Sortable
             static::addGlobalScope(
                 static::$sortingScopeName,
                 function (Builder $builder) {
-                    $builder->orderBy((new static())->getSortingPositionColumn());
+                    $builder->orderBy(Enum::SORTING_POSITION_COLUMN);
                 }
             );
         }
 
         static::creating(
             function ($model) {
-                $sortingPositionColumn = $model->getSortingPositionColumn();
-
-                if (empty($model->{$sortingPositionColumn})) {
-                    $model->{$sortingPositionColumn} = null;
-                }
+                $model->sorting_position = $model->sorting_position ?? 0;
             }
         );
     }
-
-    /**
-     * @return string
-     */
-    public function getSortingPositionColumn(): string
-    {
-        return $this->sortingPositionColumn;
-    }
-
+    
     /**
      * @return string
      */
@@ -79,7 +64,16 @@ trait Sortable
      */
     public function setSortingPositionAttribute($sortingPosition)
     {
-        $oldSortingPosition = $this->getOriginal($this->sortingPositionColumn);
+        $this->attributes[Enum::SORTING_POSITION_COLUMN] = $this->normalizeSortingPosition($sortingPosition);
+    }
+
+    /**
+     * @param $sortingPosition
+     * @return Expression
+     */
+    protected function normalizeSortingPosition($sortingPosition)
+    {
+        $oldSortingPosition = $this->getOriginal(Enum::SORTING_POSITION_COLUMN);
         if (empty($sortingPosition)) {
             $sortingPosition = $oldSortingPosition;
 
@@ -90,7 +84,7 @@ trait Sortable
             $this->reorderBySortingPosition($oldSortingPosition, $sortingPosition);
         }
 
-        $this->attributes[$this->sortingPositionColumn] = $sortingPosition;
+        return $sortingPosition;
     }
 
     /**
@@ -98,11 +92,12 @@ trait Sortable
      */
     protected function formDefaultSQL(): string
     {
+        $sortingPositionColumn = Enum::SORTING_POSITION_COLUMN;
         return <<<SQL
 (SELECT
       CASE
-        WHEN MAX({$this->sortingPositionColumn}) IS NOT NULL 
-            THEN MAX({$this->sortingPositionColumn}) + 1
+        WHEN MAX({$sortingPositionColumn}) IS NOT NULL 
+            THEN MAX({$sortingPositionColumn}) + 1
         ELSE 1
       END
 FROM {$this->getTable()})
@@ -116,11 +111,11 @@ SQL;
      */
     public function upInSorting(int $steps)
     {
-        $currentPosition = $this->sortingPositionColumnValue();
+        $currentPosition = (int) $this->sorting_position;
         if ($steps > $currentPosition) {
             throw new \InvalidArgumentException('Current position is less than possible');
         }
-        $this->{$this->sortingPositionColumn} -= $steps;
+        $this->sorting_position -= $steps;
 
         return $this;
     }
@@ -137,18 +132,10 @@ SQL;
         }
 
         if ($steps > 0) {
-            $this->{$this->sortingPositionColumn} += $steps;
+            $this->sorting_position += $steps;
         }
 
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function sortingPositionColumnValue(): int
-    {
-        return (int)$this->{$this->sortingPositionColumn};
     }
 
     /**
@@ -164,7 +151,7 @@ SQL;
                 Schema::table(
                     $this->getTable(),
                     function (Blueprint $blueprint) {
-                        $blueprint->dropIndex("{$this->getTable()}_{$this->sortingPositionColumn}_index");
+                        $blueprint->dropIndex("{$this->getTable()}_sorting_position_index");
                     }
                 );
                 if ($oldPosition > $newPosition) {
@@ -175,7 +162,7 @@ SQL;
                 Schema::table(
                     $this->getTable(),
                     function (Blueprint $blueprint) {
-                        $blueprint->index($this->sortingPositionColumn);
+                        $blueprint->index('sorting_position');
                     }
                 );
             }
@@ -188,9 +175,9 @@ SQL;
      */
     protected function incrementInReorder(int $oldPosition, int $newPosition): void
     {
-        static::where($this->sortingPositionColumn, '>=', $newPosition)
-            ->where($this->sortingPositionColumn, '<', $oldPosition)
-            ->increment($this->sortingPositionColumn);
+        static::where(Enum::SORTING_POSITION_COLUMN, '>=', $newPosition)
+            ->where(Enum::SORTING_POSITION_COLUMN, '<', $oldPosition)
+            ->increment(Enum::SORTING_POSITION_COLUMN);
     }
 
     /**
@@ -199,8 +186,8 @@ SQL;
      */
     protected function decrementInReorder(int $oldPosition, int $newPosition): void
     {
-        static::where($this->sortingPositionColumn, '<=', $newPosition)
-            ->where($this->sortingPositionColumn, '>', $oldPosition)
-            ->decrement($this->sortingPositionColumn);
+        static::where(Enum::SORTING_POSITION_COLUMN, '<=', $newPosition)
+            ->where(Enum::SORTING_POSITION_COLUMN, '>', $oldPosition)
+            ->decrement(Enum::SORTING_POSITION_COLUMN);
     }
 }
