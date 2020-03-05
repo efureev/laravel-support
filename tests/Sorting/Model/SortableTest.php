@@ -46,13 +46,22 @@ class SortableTest extends AbstractTestCase
         $this->assertEquals(1, $sortEntity->sorting_position);
     }
 
-    public function testInsertModelWithoutSortingPosition_throwsPDOException(): void
+    public function testInsertModelWithoutSortingPosition_incrementSortingPosition(): void
     {
-        $this->expectException(\PDOException::class);
+        $sortEntity        = new SortEntity();
+        $sortEntity->title = 'test';
+        $sortEntity->save();
 
         $sortEntity        = new SortEntity();
         $sortEntity->title = 'test';
         $sortEntity->save();
+
+        $sortEntity        = new SortEntity();
+        $sortEntity->title = 'test';
+        $sortEntity->save();
+        $sortEntity->refresh();
+
+        $this->assertEquals(3, $sortEntity->sorting_position);
     }
 
     public function testUpdateZeroSortingPositionAfterNormal_setOldSortingPosition(): void
