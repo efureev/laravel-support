@@ -7,7 +7,6 @@ use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Php\Support\Laravel\Sorting\Enum;
 
 /**
  * Trait Sortable
@@ -39,7 +38,7 @@ trait Sortable
             static::addGlobalScope(
                 static::$sortingScopeName,
                 function (Builder $builder) {
-                    $builder->orderBy(Enum::SORTING_POSITION_COLUMN);
+                    $builder->orderBy('sorting_position');
                 }
             );
         }
@@ -64,7 +63,7 @@ trait Sortable
      */
     public function setSortingPositionAttribute($sortingPosition)
     {
-        $this->attributes[Enum::SORTING_POSITION_COLUMN] = $this->normalizeSortingPosition($sortingPosition);
+        $this->attributes['sorting_position'] = $this->normalizeSortingPosition($sortingPosition);
     }
 
     /**
@@ -73,7 +72,7 @@ trait Sortable
      */
     protected function normalizeSortingPosition($sortingPosition)
     {
-        $oldSortingPosition = $this->getOriginal(Enum::SORTING_POSITION_COLUMN);
+        $oldSortingPosition = $this->getOriginal('sorting_position');
         if (empty($sortingPosition)) {
             $sortingPosition = $oldSortingPosition;
 
@@ -92,12 +91,11 @@ trait Sortable
      */
     protected function formDefaultSQL(): string
     {
-        $sortingPosition = Enum::SORTING_POSITION_COLUMN;
         return <<<SQL
 (SELECT
       CASE
-        WHEN MAX({$sortingPosition}) IS NOT NULL 
-            THEN MAX({$sortingPosition}) + 1
+        WHEN MAX(sorting_position) IS NOT NULL 
+            THEN MAX(sorting_position) + 1
         ELSE 1
       END
 FROM {$this->getTable()})
@@ -175,9 +173,9 @@ SQL;
      */
     protected function incrementInReorder(int $oldPosition, int $newPosition): void
     {
-        static::where(Enum::SORTING_POSITION_COLUMN, '>=', $newPosition)
-            ->where(Enum::SORTING_POSITION_COLUMN, '<', $oldPosition)
-            ->increment(Enum::SORTING_POSITION_COLUMN);
+        static::where('sorting_position', '>=', $newPosition)
+            ->where('sorting_position', '<', $oldPosition)
+            ->increment('sorting_position');
     }
 
     /**
@@ -186,8 +184,8 @@ SQL;
      */
     protected function decrementInReorder(int $oldPosition, int $newPosition): void
     {
-        static::where(Enum::SORTING_POSITION_COLUMN, '<=', $newPosition)
-            ->where(Enum::SORTING_POSITION_COLUMN, '>', $oldPosition)
-            ->decrement(Enum::SORTING_POSITION_COLUMN);
+        static::where('sorting_position', '<=', $newPosition)
+            ->where('sorting_position', '>', $oldPosition)
+            ->decrement('sorting_position');
     }
 }

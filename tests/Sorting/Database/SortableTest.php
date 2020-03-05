@@ -21,7 +21,7 @@ class SortableTest extends AbstractTestCase
         $attributes = $table->getColumns()[0]->getAttributes();
 
         $this->assertEquals('integer', $attributes['type']);
-        $this->assertEquals(Enum::SORTING_POSITION_COLUMN, $attributes['name']);
+        $this->assertEquals('sorting_position', $attributes['name']);
         $this->assertFalse($attributes['autoIncrement']);
         $this->assertTrue($attributes['unsigned']);
         $this->assertTrue($attributes['index']);
