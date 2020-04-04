@@ -28,9 +28,13 @@ class PgArrayModel extends Model
 
     public $timestamps = false;
     protected $keyType = 'uuid';
-    protected $table = 'pg_table';
+    protected $table   = 'pg_table';
 
-    protected $fillable = ['title', 'tags', 'tag_ids'];
+    protected $fillable = [
+        'title',
+        'tags',
+        'tag_ids',
+    ];
 
     protected $casts = [
         'tags' => PgArray::class,

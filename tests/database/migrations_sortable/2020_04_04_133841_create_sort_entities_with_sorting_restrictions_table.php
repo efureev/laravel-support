@@ -7,7 +7,7 @@ use Php\Support\Laravel\Sorting\Database\Sortable;
 use Php\Support\Laravel\Tests\TestClasses\Models\SortEntity;
 use Php\Support\Laravel\Traits\Database\UUID;
 
-class CreateSortableTable extends Migration
+class CreateSortEntitiesWithSortingRestrictionsTable extends Migration
 {
     use Sortable, UUID;
 
@@ -19,10 +19,12 @@ class CreateSortableTable extends Migration
     public function up()
     {
         Schema::create(
-            'sort_entities',
+            'sort_entities_with_sorting_restrictions',
             static function (Blueprint $table) {
                 static::columnUUID($table)->primary();
                 static::columnSortingPosition($table);
+                $table->string('model_type');
+                $table->string('model_id');
                 $table->string('title')->nullable();
             }
         );
@@ -35,7 +37,7 @@ class CreateSortableTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sort_entities');
+        Schema::dropIfExists('sort_entities_with_sorting_restrictions');
     }
 
 }
