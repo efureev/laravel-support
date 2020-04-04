@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Php\Support\Laravel\Tests\TestClasses\Models;
-
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

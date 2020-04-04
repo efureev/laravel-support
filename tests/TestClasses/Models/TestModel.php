@@ -29,9 +29,15 @@ class TestModel extends Model
 
     public $timestamps = false;
     protected $keyType = 'uuid';
-    protected $table = 'test_table';
+    protected $table   = 'test_table';
 
-    protected $fillable = ['params', 'config', 'str', 'str_empty', 'int'];
+    protected $fillable = [
+        'params',
+        'config',
+        'str',
+        'str_empty',
+        'int',
+    ];
 
     protected $casts = [
         'enabled'   => 'bool',
@@ -47,5 +53,4 @@ class TestModel extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }

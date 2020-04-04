@@ -89,9 +89,7 @@ class CasterTraitTest extends AbstractFunctionalTestCase
                 'str'       => 'string',
                 'str_empty' => 'string empty',
                 'int'       => 7,
-                'config'    => [
-                    'key' => 2,
-                ],
+                'config'    => ['key' => 2],
                 'params'    => [
                     'key'       => 1,
                     'config'    => ['test' => 'value'],
@@ -140,9 +138,7 @@ class CasterTraitTest extends AbstractFunctionalTestCase
             [
                 'str_empty' => null,
                 'config'    => [
-                    'key' => [
-                        'key' => 2,
-                    ],
+                    'key' => ['key' => 2],
                 ],
                 'params'    => new Params(
                     [
