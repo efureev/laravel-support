@@ -21,9 +21,5 @@ class SortEntity extends Model
      */
     protected $keyType = 'uuid';
 
-    protected static function boot()
-    {
-        parent::boot();
-        self::defaultSortableBooting();
-    }
+
 }

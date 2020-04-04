@@ -32,7 +32,7 @@ trait Sortable
      *
      * @return void
      */
-    protected static function defaultSortableBooting()
+    protected static function bootSortable()
     {
         if (static::$sortingGlobalScope) {
             static::addGlobalScope(
@@ -91,6 +91,12 @@ trait Sortable
      */
     protected function formDefaultSQL(): string
     {
+        $where = '';
+        $defaultSortingRestrictions = $this->getDefaultSortingRestrictionsSql();
+        if ($defaultSortingRestrictions) {
+            $where .= "WHERE {$defaultSortingRestrictions}";
+        }
+
         return <<<SQL
 (SELECT
       CASE
@@ -98,7 +104,7 @@ trait Sortable
             THEN MAX(sorting_position) + 1
         ELSE 1
       END
-FROM {$this->getTable()})
+FROM {$this->getTable()} {$where})
 SQL;
     }
 
@@ -134,6 +140,15 @@ SQL;
         }
 
         return $this;
+    }
+
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    protected function forSortingRestrictions(Builder $query): Builder
+    {
+        return $query;
     }
 
     /**
@@ -173,8 +188,10 @@ SQL;
      */
     protected function incrementInReorder(int $oldPosition, int $newPosition): void
     {
-        static::where('sorting_position', '>=', $newPosition)
-            ->where('sorting_position', '<', $oldPosition)
+        $this->forSortingRestrictions(
+            static::where('sorting_position', '>=', $newPosition)
+                ->where('sorting_position', '<', $oldPosition)
+        )
             ->increment('sorting_position');
     }
 
@@ -184,8 +201,18 @@ SQL;
      */
     protected function decrementInReorder(int $oldPosition, int $newPosition): void
     {
-        static::where('sorting_position', '<=', $newPosition)
-            ->where('sorting_position', '>', $oldPosition)
+        $this->forSortingRestrictions(
+            static::where('sorting_position', '<=', $newPosition)
+                ->where('sorting_position', '>', $oldPosition)
+        )
             ->decrement('sorting_position');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDefaultSortingRestrictionsSql(): string
+    {
+        return '';
     }
 }

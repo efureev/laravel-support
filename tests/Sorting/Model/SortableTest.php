@@ -2,8 +2,10 @@
 
 namespace Php\Support\Laravel\Tests\Sorting\Model;
 
+use Illuminate\Support\Str;
 use Php\Support\Laravel\Tests\AbstractTestCase;
 use Php\Support\Laravel\Tests\TestClasses\Models\SortEntity;
+use Php\Support\Laravel\Tests\TestClasses\Models\SortEntityWithSortingRestrictions;
 
 class SortableTest extends AbstractTestCase
 {
@@ -375,4 +377,167 @@ class SortableTest extends AbstractTestCase
 
         $sortEntity1->downInSorting(-5);
     }
+
+    public function testInsertZeroSortingPositionWithRestrictions_incrementNeedleSortingPosition(): void
+    {
+        $sortEntity                   = new SortEntityWithSortingRestrictions();
+        $sortEntity->title            = 'test';
+        $sortEntity->model_type = SortEntity::class;
+        $sortEntity->model_id = Str::uuid();
+        $sortEntity->sorting_position = 0;
+        $sortEntity->save();
+        $sortEntity->refresh();
+
+        $sortEntity1                   = new SortEntityWithSortingRestrictions();
+        $sortEntity1->title            = 'test';
+        $sortEntity1->model_type = $sortEntity->model_type;
+        $sortEntity1->model_id = $sortEntity->model_id;
+        $sortEntity1->sorting_position = 0;
+        $sortEntity1->save();
+        $sortEntity1->refresh();
+        $sortEntity2                   = new SortEntityWithSortingRestrictions();
+        $sortEntity2->title            = 'test';
+        $sortEntity2->model_type = SortEntityWithSortingRestrictions::class;
+        $sortEntity2->model_id = Str::uuid();
+        $sortEntity2->sorting_position = 0;
+        $sortEntity2->save();
+        $sortEntity2->refresh();
+
+        $this->assertEquals(1, $sortEntity2->sorting_position);
+        $this->assertEquals(2, $sortEntity1->sorting_position);
+    }
+
+
+    public function testUpdateZeroSortingPositionWithRestrictionsAfterNormal_setOldSortingPosition(): void
+    {
+        $sortEntity                   = new SortEntityWithSortingRestrictions();
+        $sortEntity->title            = 'test';
+        $sortEntity->model_type = SortEntity::class;
+        $sortEntity->model_id = Str::uuid();
+        $sortEntity->sorting_position = 4;
+        $sortEntity->save();
+        $sortEntity->refresh();
+        $sortEntity->sorting_position = 0;
+        $sortEntity->save();
+        $sortEntity->refresh();
+
+        $sortEntity2                   = new SortEntityWithSortingRestrictions();
+        $sortEntity2->title            = 'test';
+        $sortEntity2->model_type = SortEntityWithSortingRestrictions::class;
+        $sortEntity2->model_id = Str::uuid();
+        $sortEntity2->sorting_position = 0;
+        $sortEntity2->save();
+        $sortEntity2->refresh();
+
+        $this->assertEquals(1, $sortEntity2->sorting_position);
+        $this->assertEquals(4, $sortEntity->sorting_position);
+    }
+
+    public function testReorderBySortingPositionWithRestrictions_hasOldPositionMoreThanNew_getEntitiesWithReorder(): void
+    {
+        $sortEntity2                   = new SortEntityWithSortingRestrictions();
+        $sortEntity2->title            = 'test2';
+        $sortEntity2->model_type = SortEntity::class;
+        $sortEntity2->model_id = Str::uuid();
+        $sortEntity2->sorting_position = 2;
+        $sortEntity2->save();
+
+        $sortEntity3                   = new SortEntityWithSortingRestrictions();
+        $sortEntity3->title            = 'test3';
+        $sortEntity3->model_type = $sortEntity2->model_type;
+        $sortEntity3->model_id = $sortEntity2->model_id;
+        $sortEntity3->sorting_position = 3;
+        $sortEntity3->save();
+
+        $sortEntity4                   = new SortEntityWithSortingRestrictions();
+        $sortEntity4->title            = 'test4';
+        $sortEntity4->model_type = $sortEntity2->model_type;
+        $sortEntity4->model_id = $sortEntity2->model_id;
+        $sortEntity4->sorting_position = 4;
+        $sortEntity4->save();
+
+        $sortEntity1                   = new SortEntityWithSortingRestrictions();
+        $sortEntity1->title            = 'test1';
+        $sortEntity1->model_type = $sortEntity2->model_type;
+        $sortEntity1->model_id = $sortEntity2->model_id;
+        $sortEntity1->sorting_position = 1;
+        $sortEntity1->save();
+
+        $sortEntityWithAnotherRestriction                   = new SortEntityWithSortingRestrictions();
+        $sortEntityWithAnotherRestriction->title            = 'test1';
+        $sortEntityWithAnotherRestriction->model_type = SortEntityWithSortingRestrictions::class;
+        $sortEntityWithAnotherRestriction->model_id = Str::uuid();
+        $sortEntityWithAnotherRestriction->sorting_position = 0;
+        $sortEntityWithAnotherRestriction->save();
+        $sortEntityWithAnotherRestriction->refresh();
+
+        //reorder
+        $sortEntity3->sorting_position = 2;
+        $sortEntity3->save();
+        $sortEntity3->refresh();
+
+        $actualEntities = SortEntityWithSortingRestrictions::where('model_type', '=', $sortEntity2->model_type)
+            ->where('model_id', '=', $sortEntity2->model_id)
+            ->get();
+
+        $this->assertEquals($sortEntity1->id, $actualEntities[0]->id);
+        $this->assertEquals($sortEntity2->id, $actualEntities[2]->id);
+        $this->assertEquals($sortEntity3->id, $actualEntities[1]->id);
+        $this->assertEquals($sortEntity4->id, $actualEntities[3]->id);
+        $this->assertEquals(1, $sortEntityWithAnotherRestriction->sorting_position);
+    }
+
+    public function testReorderBySortingPositionWithRestrictions_hasOldPositionLessThanNew_getEntitiesWithReorder(): void
+    {
+        $sortEntity2                   = new SortEntityWithSortingRestrictions();
+        $sortEntity2->title            = 'test2';
+        $sortEntity2->model_type = SortEntity::class;
+        $sortEntity2->model_id = Str::uuid();
+        $sortEntity2->sorting_position = 2;
+        $sortEntity2->save();
+
+        $sortEntity3                   = new SortEntityWithSortingRestrictions();
+        $sortEntity3->title            = 'test3';
+        $sortEntity3->model_type = $sortEntity2->model_type;
+        $sortEntity3->model_id = $sortEntity2->model_id;
+        $sortEntity3->sorting_position = 3;
+        $sortEntity3->save();
+
+        $sortEntity4                   = new SortEntityWithSortingRestrictions();
+        $sortEntity4->title            = 'test4';
+        $sortEntity4->model_type = $sortEntity2->model_type;
+        $sortEntity4->model_id = $sortEntity2->model_id;
+        $sortEntity4->sorting_position = 4;
+        $sortEntity4->save();
+
+        $sortEntity1                   = new SortEntityWithSortingRestrictions();
+        $sortEntity1->title            = 'test1';
+        $sortEntity1->model_type = $sortEntity2->model_type;
+        $sortEntity1->model_id = $sortEntity2->model_id;
+        $sortEntity1->sorting_position = 1;
+        $sortEntity1->save();
+
+        $sortEntityWithAnotherRestriction                   = new SortEntityWithSortingRestrictions();
+        $sortEntityWithAnotherRestriction->title            = 'test1';
+        $sortEntityWithAnotherRestriction->model_type = SortEntityWithSortingRestrictions::class;
+        $sortEntityWithAnotherRestriction->model_id = Str::uuid();
+        $sortEntityWithAnotherRestriction->sorting_position = 12;
+        $sortEntityWithAnotherRestriction->save();
+
+        //reorder
+        $sortEntity1->sorting_position = 4;
+        $sortEntity1->save();
+        $sortEntity1->refresh();
+
+        $actualEntities = SortEntityWithSortingRestrictions::where('model_type', '=', $sortEntity2->model_type)
+            ->where('model_id', '=', $sortEntity2->model_id)
+            ->get();
+
+        $this->assertEquals($sortEntity1->id, $actualEntities[3]->id);
+        $this->assertEquals($sortEntity2->id, $actualEntities[0]->id);
+        $this->assertEquals($sortEntity3->id, $actualEntities[1]->id);
+        $this->assertEquals($sortEntity4->id, $actualEntities[2]->id);
+        $this->assertEquals(12, $sortEntityWithAnotherRestriction->sorting_position);
+    }
+
 }
