@@ -79,7 +79,7 @@ trait Sortable
             if ($sortingPosition === null) {
                 $sortingPosition = DB::raw($this->formDefaultSQL());
             }
-        } elseif ($oldSortingPosition !== null) {
+        } elseif (is_numeric($oldSortingPosition) && is_numeric($sortingPosition)) {
             $this->reorderBySortingPosition($oldSortingPosition, $sortingPosition);
         }
 
