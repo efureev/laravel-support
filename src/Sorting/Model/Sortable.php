@@ -48,6 +48,12 @@ trait Sortable
                 $model->sorting_position = $model->sorting_position ?? 0;
             }
         );
+
+        static::deleting(
+            function ($model) {
+                $model->excludeFromOrder();
+            }
+        );
     }
 
     /**
@@ -140,6 +146,32 @@ SQL;
         }
 
         return $this;
+    }
+
+    public function excludeFromOrder()
+    {
+        DB::transaction(
+            function ()  {
+                Schema::table(
+                    $this->getTable(),
+                    function (Blueprint $blueprint) {
+                        $blueprint->dropIndex("{$this->getTable()}_sorting_position_index");
+                    }
+                );
+
+                $this->forSortingRestrictions(
+                    static::where('sorting_position', '>', $this->sorting_position)
+                )
+                   ->decrement('sorting_position');
+
+                Schema::table(
+                    $this->getTable(),
+                    function (Blueprint $blueprint) {
+                        $blueprint->index('sorting_position');
+                    }
+                );
+            }
+        );
     }
 
     /**

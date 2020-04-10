@@ -21,14 +21,14 @@ class SortEntityWithSortingRestrictions extends Model
      */
     protected $keyType = 'uuid';
 
-   
+
 
     /**
      * @return string
      */
     protected function getDefaultSortingRestrictionsSql(): string
     {
-        return "model_type = '{$this->model_type}' AND model_id = '{$this->model_id}'";
+        return "model_type = '{$this->model_type}' AND model_id = '{$this->model_id}' AND deleted_at IS NULL";
     }
 
     /**
@@ -39,6 +39,7 @@ class SortEntityWithSortingRestrictions extends Model
     {
         return $query
             ->where('model_type', '=', $this->model_type)
-            ->where('model_id', '=', $this->model_id);
+            ->where('model_id', '=', $this->model_id)
+            ->whereNull(['deleted_at']);
     }
 }
