@@ -26,6 +26,7 @@ class CreateSortEntitiesWithSortingRestrictionsTable extends Migration
                 $table->string('model_type');
                 $table->string('model_id');
                 $table->string('title')->nullable();
+                $table->softDeletes();
             }
         );
     }
