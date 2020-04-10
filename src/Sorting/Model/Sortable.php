@@ -151,7 +151,7 @@ SQL;
     public function excludeFromOrder()
     {
         DB::transaction(
-            function ()  {
+            function () {
                 Schema::table(
                     $this->getTable(),
                     function (Blueprint $blueprint) {
