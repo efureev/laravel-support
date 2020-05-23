@@ -108,7 +108,7 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     protected static function dataFromJson($json): array
     {
         if (empty($json)) {
-            return null;
+            return [];
         }
 
         if (is_array($json)) {

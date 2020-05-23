@@ -66,8 +66,11 @@ class CasterTraitTest extends AbstractFunctionalTestCase
             static::assertIsInt($item->int);
             static::assertEquals(0, $item->int);
 
-            static::assertIsString($item->getOriginal('params'));
-            static::assertEquals('[]', $item->getOriginal('params'));
+            static::assertInstanceOf(Params::class, $item->getOriginal('params'));
+
+            static::assertIsString($item->getRawOriginal('params'));
+
+            static::assertEquals('[]', $item->getRawOriginal('params'));
 
             static::assertInstanceOf(Params::class, $item->params);
             static::assertEquals(
@@ -117,9 +120,9 @@ class CasterTraitTest extends AbstractFunctionalTestCase
             static::assertEquals(7, $item->int);
 
             static::assertEquals(['key' => 2], $item->config);
-            static::assertEquals('{"key":2}', $item->getOriginal('config'));
-            static::assertIsString($item->getOriginal('params'));
-            static::assertEquals('{"key":1,"config":{"test":"value"},"testParam":"val"}', $item->getOriginal('params'));
+            static::assertEquals('{"key":2}', $item->getRawOriginal('config'));
+            static::assertIsString($item->getRawOriginal('params'));
+            static::assertEquals('{"key":1,"config":{"test":"value"},"testParam":"val"}', $item->getRawOriginal('params'));
 
             static::assertInstanceOf(Params::class, $item->params);
             static::assertEquals(
@@ -168,9 +171,9 @@ class CasterTraitTest extends AbstractFunctionalTestCase
             static::assertNull($item->str_empty);
 
             static::assertEquals(['key' => ['key' => 2]], $item->config);
-            static::assertEquals('{"key":{"key":2}}', $item->getOriginal('config'));
-            static::assertIsString($item->getOriginal('params'));
-            static::assertEquals('{"key":1,"config":{"test":"value"},"testParam":"val"}', $item->getOriginal('params'));
+            static::assertEquals('{"key":{"key":2}}', $item->getRawOriginal('config'));
+            static::assertIsString($item->getRawOriginal('params'));
+            static::assertEquals('{"key":1,"config":{"test":"value"},"testParam":"val"}', $item->getRawOriginal('params'));
 
             static::assertInstanceOf(Params::class, $item->params);
             static::assertEquals(

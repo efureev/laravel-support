@@ -26,7 +26,7 @@ class PgArrayTraitTest extends AbstractFunctionalTestCase
         $model = PgArrayModel::create(['title' => 'test title', 'tags' => []]);
 
         static::assertInstanceOf(PgArrayModel::class, $model);
-        static::assertEquals('{}', $model->getOriginal('tags'));
+        static::assertEquals('{}', $model->getRawOriginal('tags'));
         static::assertEquals('test title', $model->title);
         static::assertEquals([], $model->tags);
     }
@@ -39,7 +39,7 @@ class PgArrayTraitTest extends AbstractFunctionalTestCase
         static::assertInstanceOf(PgArrayModel::class, $model);
         static::assertEquals('test title', $model->title);
         static::assertEquals(['key', 'key2', '2'], $model->tags);
-        static::assertEquals('{key,key2,2}', $model->getOriginal('tags'));
+        static::assertEquals('{key,key2,2}', $model->getRawOriginal('tags'));
     }
 
     public function testCreateAndGetWithFillArrayNullableTags(): void
@@ -49,7 +49,7 @@ class PgArrayTraitTest extends AbstractFunctionalTestCase
 
         static::assertInstanceOf(PgArrayModel::class, $model);
         static::assertEquals(['key', '2'], $model->tags);
-        static::assertEquals('{key,2}', $model->getOriginal('tags'));
+        static::assertEquals('{key,2}', $model->getRawOriginal('tags'));
     }
 
     public function testCreateAndFindByTag(): void
