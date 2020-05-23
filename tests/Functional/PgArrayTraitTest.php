@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel\Tests\Functional;
 
-
 use Php\Support\Laravel\Tests\TestClasses\Models\PgArrayModel;
 
 class PgArrayTraitTest extends AbstractFunctionalTestCase
@@ -70,5 +69,4 @@ class PgArrayTraitTest extends AbstractFunctionalTestCase
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
     }
-
 }

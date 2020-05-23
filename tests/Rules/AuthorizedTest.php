@@ -12,7 +12,6 @@ use Php\Support\Laravel\Tests\AbstractTestCase;
 use Php\Support\Laravel\Tests\TestClasses\Models\TestModel;
 use Php\Support\Laravel\Tests\TestClasses\Policies\TestModelPolicy;
 
-
 class AuthorizedTest extends AbstractTestCase
 {
     protected function setUp(): void
@@ -80,9 +79,7 @@ class AuthorizedTest extends AbstractTestCase
 
         $user  = factory(User::class)->create();
         $model = factory(TestModel::class)->create(
-            [
-                'user_id' => 2,
-            ]
+            ['user_id' => 2]
         );
 
         $this->assertFalse($rule->passes('attribute', '1'));
@@ -92,9 +89,7 @@ class AuthorizedTest extends AbstractTestCase
     public function it_passes_attribute_ability_and_class_name_to_the_validation_message()
     {
         Lang::addLines(
-            [
-                'messages.authorized' => ':attribute :ability and :className',
-            ],
+            ['messages.authorized' => ':attribute :ability and :className'],
             Lang::getLocale(),
             'laravelSupport'
         );

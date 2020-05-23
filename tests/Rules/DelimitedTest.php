@@ -7,7 +7,6 @@ namespace Php\Support\Laravel\Tests\Rules;
 use Php\Support\Laravel\Rules\Delimited;
 use Php\Support\Laravel\Tests\AbstractTestCase;
 
-
 class DelimitedTest extends AbstractTestCase
 {
     /**
