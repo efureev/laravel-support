@@ -9,6 +9,13 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [0.5.2] - 2020-05-24
+
+### Changed
+
+- Caster
+- Minimum stability: `Laravel` >=7.0 && `PHP` >=7.3
+
 ## [0.3.0] - 2020-02-18
 
 ### Added
@@ -66,7 +73,8 @@ Check MD [online][check-online].
 - The trait `CasterAttribute`: for custom class casts
 - The trait for DB/Migration `UUID`
 
-[unreleased]: https://github.com/efureev/laravel-support/compare/v0.3.0...HEAD
+[unreleased]: https://github.com/efureev/laravel-support/compare/v0.5.2...HEAD
+[0.5.2]: https://github.com/efureev/laravel-support/compare/v0.3.0...v0.5.2
 [0.3.0]: https://github.com/efureev/laravel-support/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/efureev/laravel-support/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/efureev/laravel-support/compare/v0.1.0...v0.2.0

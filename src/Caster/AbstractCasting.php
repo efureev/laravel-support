@@ -53,7 +53,9 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
 
         $this->validate($value);
 
-        return $this->configurable($value);
+        return $this
+            ->configurable($value)
+            ->afterFill();
     }
 
     /**
@@ -66,6 +68,11 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     public function preFormat($value)
     {
         return $value;
+    }
+
+    public function afterFill(): self
+    {
+        return $this;
     }
 
     /**
