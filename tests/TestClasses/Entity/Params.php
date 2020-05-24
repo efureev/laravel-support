@@ -31,4 +31,9 @@ class Params extends AbstractCasting
             'testParam' => $this->testParam,
         ];
     }
+
+    protected static function emptyJsonStruct(): ?string
+    {
+        return self::EMPTY_JSON_ARRAY;
+    }
 }

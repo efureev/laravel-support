@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Php\Support\Laravel\Tests\Functional;
 
 use Illuminate\Database\Eloquent\Collection;
+use Php\Support\Laravel\Tests\TestClasses\Entity\EmptyParams;
 use Php\Support\Laravel\Tests\TestClasses\Entity\Params;
 use Php\Support\Laravel\Tests\TestClasses\Models\TestModel;
 
@@ -202,6 +203,15 @@ class CasterTraitTest extends AbstractFunctionalTestCase
             ],
             $params->toArray()
         );
+    }
+
+    public function testCreateFullEmptyParams(): void
+    {
+        $params = new EmptyParams();
+
+        static::assertInstanceOf(EmptyParams::class, $params);
+        static::assertEquals([], $params->toArray());
+        static::assertEquals('{}', $params->toJson());
     }
 
     /**
