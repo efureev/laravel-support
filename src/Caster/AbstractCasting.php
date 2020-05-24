@@ -65,12 +65,12 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
      *
      * @return string|array|static
      */
-    public function preFormat($value)
+    protected function preFormat($value)
     {
         return $value;
     }
 
-    public function afterFill(): self
+    protected function afterFill(): self
     {
         return $this;
     }
