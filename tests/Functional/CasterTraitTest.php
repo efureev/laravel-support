@@ -120,7 +120,10 @@ class CasterTraitTest extends AbstractFunctionalTestCase
             static::assertEquals(['key' => 2], $item->config);
             static::assertEquals('{"key":2}', $item->getRawOriginal('config'));
             static::assertIsString($item->getRawOriginal('params'));
-            static::assertEquals('{"key":1,"config":{"test":"value"},"testParam":"val"}', $item->getRawOriginal('params'));
+            static::assertEquals(
+                '{"key":1,"config":{"test":"value"},"testParam":"val"}',
+                $item->getRawOriginal('params')
+            );
 
             static::assertInstanceOf(Params::class, $item->params);
             static::assertEquals(
@@ -169,7 +172,10 @@ class CasterTraitTest extends AbstractFunctionalTestCase
             static::assertEquals(['key' => ['key' => 2]], $item->config);
             static::assertEquals('{"key":{"key":2}}', $item->getRawOriginal('config'));
             static::assertIsString($item->getRawOriginal('params'));
-            static::assertEquals('{"key":1,"config":{"test":"value"},"testParam":"val"}', $item->getRawOriginal('params'));
+            static::assertEquals(
+                '{"key":1,"config":{"test":"value"},"testParam":"val"}',
+                $item->getRawOriginal('params')
+            );
 
             static::assertInstanceOf(Params::class, $item->params);
             static::assertEquals(
@@ -181,6 +187,21 @@ class CasterTraitTest extends AbstractFunctionalTestCase
                 $item->params->toArray()
             );
         }
+    }
+
+    public function testCreateEmptyParams(): void
+    {
+        $params = new Params();
+
+        static::assertInstanceOf(Params::class, $params);
+        static::assertEquals(
+            [
+                'key'       => null,
+                'config'    => [],
+                'testParam' => null,
+            ],
+            $params->toArray()
+        );
     }
 
     /**
