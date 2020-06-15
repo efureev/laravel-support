@@ -61,6 +61,12 @@ Check MD [online][check-online].
 
 - Move the Trait `CasterAttribute` to different namespace: `Php\Support\Laravel\Traits\Models`
 
+## [0.6.0] - 2020-06-15
+
+### Added
+
+- Add global method: `user` 
+
 ## [0.0.2] - 2020-01-28
 
 ### Added

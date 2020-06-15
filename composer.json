@@ -28,6 +28,9 @@
     "fzaninotto/faker": "^1.9"
   },
   "autoload": {
+    "files": [
+      "src/Global/base.php"
+    ],
     "psr-4": {
       "Php\\Support\\Laravel\\": "src/"
     }
