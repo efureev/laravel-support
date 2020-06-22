@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [0.7.0] - 2020-06-22
+
+### Added
+
+- Add `PaginatedResourceArray`
+
 ## [0.6.0] - 2020-06-15
 
 ### Added
@@ -85,7 +91,8 @@ Check MD [online][check-online].
 - The trait `CasterAttribute`: for custom class casts
 - The trait for DB/Migration `UUID`
 
-[unreleased]: https://github.com/efureev/laravel-support/compare/v0.6.0...HEAD
+[unreleased]: https://github.com/efureev/laravel-support/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/efureev/laravel-support/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/efureev/laravel-support/compare/v0.5.3...v0.6.0
 [0.5.3]: https://github.com/efureev/laravel-support/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/efureev/laravel-support/compare/v0.3.0...v0.5.2
