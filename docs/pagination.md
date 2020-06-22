@@ -27,7 +27,7 @@ class FolderResource extends JsonResource
 }
 ```
 
-Json will be likes
+Json will be like
 ```json
 {
     "data": {
