@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [0.7.1] - 2020-06-23
+
+### Added
+
+- Add `AbstractCastingCollection`
+
 ## [0.7.0] - 2020-06-22
 
 ### Added
