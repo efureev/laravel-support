@@ -9,6 +9,7 @@ use Php\Support\Laravel\Tests\TestClasses\Entity\ArrayCollection;
 use Php\Support\Laravel\Tests\TestClasses\Entity\Component;
 use Php\Support\Laravel\Tests\TestClasses\Entity\ComponentCollection;
 use Php\Support\Laravel\Tests\TestClasses\Models\CasterCollection;
+use Ramsey\Uuid\Uuid;
 
 class CasterCollectionTest extends AbstractFunctionalTestCase
 {
@@ -95,6 +96,31 @@ class CasterCollectionTest extends AbstractFunctionalTestCase
             '[{"name":"news"},{"name":"news"},{"name":"news"},{"name":"news"}]',
             $model->components->toJson()
         );
+    }
+
+    public function testCreateKeyCollection(): void
+    {
+        $data = [
+            (string)Uuid::uuid4() => self::createComponent(),
+            (string)Uuid::uuid4() => self::createComponent(true),
+            (string)Uuid::uuid4() => self::createComponent(),
+            (string)Uuid::uuid4() => self::createComponent(),
+        ];
+
+        $model = CasterCollection::create(['components' => $data]);
+
+        //        dd($model->components);
+        static::assertInstanceOf(ComponentCollection::class, $model->components);
+        static::assertInstanceOf(ComponentCollection::class, $model->getOriginal('components'));
+
+        static::assertCount(4, $model->components);
+
+        foreach ($model->components as $k => $component) {
+            static::assertInstanceOf(Component::class, $component);
+            static::assertEquals($data[$k]['module'], $component->module);
+        }
+
+        static::assertJsonStringEqualsJsonString(Json::encode($data), $model->getRawOriginal('components'));
     }
 
     /**

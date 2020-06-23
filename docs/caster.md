@@ -19,6 +19,9 @@ class ArrayCollection extends AbstractCastingCollection
 {
 }
 ```
+```json
+[{"id": "key","title": "value"}]
+```
 
 Collection for wrap elements (example: other class):
 ```php
@@ -31,6 +34,13 @@ class ComponentCollection extends AbstractCastingCollection
         };
     }
 }
+```
+
+```json
+[{"id": "key","title": "value"}]
+```
+```json
+{"key1":{"id": "key2","title": "value"},"key2":{"id": "key2","title": "value2"}}
 ```
 
 Model:
@@ -78,4 +88,7 @@ class PgArrayModel extends Model
         $this->scopeWherePgArrayContains($query, 'tags', $value);
     }
 }
+```
+```json
+['value', 'val2', 'value3']
 ```

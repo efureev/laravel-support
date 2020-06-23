@@ -40,7 +40,7 @@ abstract class AbstractCastingCollection implements Caster, Arrayable, Jsonable,
         $this->validate($value);
 
         return $this
-            ->push(...$value)
+            ->fillItems($value)
             ->afterFill();
     }
 
@@ -202,11 +202,12 @@ abstract class AbstractCastingCollection implements Caster, Arrayable, Jsonable,
      *
      * @return $this
      */
-    public function push(...$values): self
+    public function fillItems($values): self
     {
         $cb = $this->wrapEntity();
-        foreach ($values as $value) {
-            $this->add($value, $cb);
+
+        foreach ($values as $key => $value) {
+            $this->set($key, $value, $cb);
         }
 
         return $this;
@@ -223,6 +224,20 @@ abstract class AbstractCastingCollection implements Caster, Arrayable, Jsonable,
     public function add($item, ?callable $cb = null): self
     {
         $this->items[] = with($item, $cb);
+
+        return $this;
+    }
+
+    /**
+     * @param string|int $key
+     * @param mixed $item
+     * @param callable|null $cb
+     *
+     * @return $this
+     */
+    public function set($key, $item, ?callable $cb = null): self
+    {
+        $this->items[$key] = with($item, $cb);
 
         return $this;
     }
