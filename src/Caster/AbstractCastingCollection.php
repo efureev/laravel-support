@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel\Caster;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Enumerable;
 use Php\Support\Exceptions\Exception;
 use Php\Support\Exceptions\JsonException;
+use Php\Support\Helpers\Arr;
 use Php\Support\Helpers\Json;
-use Php\Support\Interfaces\Arrayable;
+use Php\Support\Interfaces\Arrayable as uArrayable;
 
-abstract class AbstractCastingCollection implements Caster, Arrayable, Jsonable
+abstract class AbstractCastingCollection implements Caster, Arrayable, Jsonable, \Countable, uArrayable
 {
     /**
      * The items contained in the collection.
@@ -173,7 +175,7 @@ abstract class AbstractCastingCollection implements Caster, Arrayable, Jsonable
      *
      * @return string|null
      */
-    protected static function dataToJson(array $data, $options = 320): ?string
+    protected static function dataToJson(?array $data, $options = 320): ?string
     {
         if (empty($data)) {
             return '[]';
@@ -202,8 +204,9 @@ abstract class AbstractCastingCollection implements Caster, Arrayable, Jsonable
      */
     public function push(...$values): self
     {
+        $cb = $this->wrapEntity();
         foreach ($values as $value) {
-            $this->add($value);
+            $this->add($value, $cb);
         }
 
         return $this;
@@ -213,12 +216,13 @@ abstract class AbstractCastingCollection implements Caster, Arrayable, Jsonable
      * Add an item to the collection.
      *
      * @param mixed $item
+     * @param callable|null $cb
      *
      * @return $this
      */
-    public function add($item): self
+    public function add($item, ?callable $cb = null): self
     {
-        $this->items[] = with($item, $this->wrapEntity());
+        $this->items[] = with($item, $cb);
 
         return $this;
     }
@@ -234,6 +238,15 @@ abstract class AbstractCastingCollection implements Caster, Arrayable, Jsonable
     protected function wrapEntity(): ?callable
     {
         return null;
+    }
+
+    public function toArray(): array
+    {
+        if (!$this->wrapEntity()) {
+            return $this->items;
+        }
+
+        return Arr::dataToArray($this->items);
     }
 
     public function all(): array

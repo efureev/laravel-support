@@ -17,7 +17,8 @@ class CreateCasterTable extends Migration
      */
     public function up()
     {
-        Schema::create('users',
+        Schema::create(
+            'users',
             static function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name');
@@ -55,6 +56,17 @@ class CreateCasterTable extends Migration
 
         DB::statement('ALTER TABLE pg_table ADD COLUMN tags varchar(255)[]');
         DB::statement('ALTER TABLE pg_table ADD COLUMN tag_ids integer[]');
+
+
+        Schema::create(
+            'test_table_caster',
+            static function (Blueprint $table) {
+                static::columnUUID($table)->primary();
+
+                $table->jsonb('components')->nullable();
+                $table->jsonb('arrays')->nullable();
+            }
+        );
     }
 
     /**
@@ -64,6 +76,7 @@ class CreateCasterTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('test_table_caster');
         Schema::dropIfExists('pg_table');
         Schema::dropIfExists('test_table');
         Schema::dropIfExists('users');
