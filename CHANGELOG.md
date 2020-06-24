@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [0.7.4] - 2020-06-24
+
+### Added
+
+- Add global function `toCollect`
+
 ## [0.7.1] - 2020-06-23
 
 ### Added
