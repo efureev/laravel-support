@@ -242,6 +242,17 @@ abstract class AbstractCastingCollection implements Caster, Arrayable, Jsonable,
         return $this;
     }
 
+
+    /**
+     * @param string|int $key
+     *
+     * @return mixed|null
+     */
+    public function get($key)
+    {
+        return $this->items[$key] ?? null;
+    }
+
     /**
      * Wrapper for element
      * @return callable|null
