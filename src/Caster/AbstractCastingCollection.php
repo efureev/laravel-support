@@ -13,7 +13,13 @@ use Php\Support\Helpers\Arr;
 use Php\Support\Helpers\Json;
 use Php\Support\Interfaces\Arrayable as uArrayable;
 
-abstract class AbstractCastingCollection implements Caster, Arrayable, Jsonable, \Countable, uArrayable
+abstract class AbstractCastingCollection implements
+    Caster,
+    Arrayable,
+    Jsonable,
+    \Countable,
+    uArrayable,
+    \IteratorAggregate
 {
     /**
      * The items contained in the collection.
