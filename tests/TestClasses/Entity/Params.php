@@ -23,6 +23,8 @@ class Params extends AbstractCasting
 
     protected $testParam;
 
+    protected $jsonRenderToObject = false;
+
     public function toArray(): array
     {
         return [
@@ -30,10 +32,5 @@ class Params extends AbstractCasting
             'config'    => $this->config,
             'testParam' => $this->testParam,
         ];
-    }
-
-    protected static function emptyJsonStruct(): ?string
-    {
-        return self::EMPTY_JSON_ARRAY;
     }
 }

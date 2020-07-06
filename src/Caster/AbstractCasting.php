@@ -15,9 +15,7 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
 {
     use ConfigurableTrait;
 
-    protected const EMPTY_JSON_OBJECT = '{}';
-
-    protected const EMPTY_JSON_ARRAY = '[]';
+    protected $jsonRenderToObject = true;
 
     /**
      * AbstractCasting constructor.
@@ -157,6 +155,10 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
      */
     public function toJson($options = 320): ?string
     {
+        if ($this->jsonRenderToObject) {
+            $options |= JSON_FORCE_OBJECT;
+        }
+
         return static::dataToJson($this->toArray(), $options);
     }
 
@@ -171,10 +173,6 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
      */
     protected static function dataToJson(array $data, $options = 320): ?string
     {
-        if (empty($data)) {
-            return static::emptyJsonStruct();
-        }
-
         return Json::encode($data, $options);
     }
 
@@ -188,10 +186,5 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     public function castFromDatabase(?string $value): self
     {
         return $this->fill($value);
-    }
-
-    protected static function emptyJsonStruct(): ?string
-    {
-        return self::EMPTY_JSON_OBJECT;
     }
 }
