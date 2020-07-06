@@ -144,7 +144,7 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
             return $value->toJson();
         }
 
-        return static::dataToJson($value);
+        return static::dataToJson($value ?? []);
     }
 
     /**
