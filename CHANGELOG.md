@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [0.8.0] - 2020-07-08
+
+### Added
+
+- Add trait `WrapQuery`
+
 ## [0.7.4] - 2020-06-24
 
 ### Added
