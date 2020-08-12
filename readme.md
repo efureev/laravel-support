@@ -11,7 +11,7 @@
 
 ## Install
 ```bash
-composer require efureev/laravel-support "^0.6"
+composer require efureev/laravel-support "^0.9"
 ```
 
 ## Usage
