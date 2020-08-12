@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [0.9.1] - 2020-08-13
+
+### Added
+
+- Add trait `RequestModelable`
+
 ## [0.9.0] - 2020-08-13
 
 ### Added
