@@ -38,7 +38,10 @@
   "autoload-dev": {
     "psr-4": {
       "Php\\Support\\Laravel\\Tests\\": "tests/"
-    }
+    },
+    "classmap": [
+      "tests/database/seeds"
+    ]
   },
   "extra": {
     "laravel": {
