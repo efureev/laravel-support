@@ -9,4 +9,6 @@ interface Caster
     public static function castToDatabase($value): ?string;
 
     public function castFromDatabase(?string $value);
+
+    public static function isEquivalent($value, $original): bool;
 }

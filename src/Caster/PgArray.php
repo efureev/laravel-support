@@ -22,4 +22,9 @@ class PgArray implements Caster
     {
         return Arr::fromPostgresArray($value);
     }
+
+    public static function isEquivalent($value, $original): bool
+    {
+        return $value === $original;
+    }
 }

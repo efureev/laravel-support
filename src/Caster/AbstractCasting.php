@@ -190,6 +190,18 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
         return $this->fill($value);
     }
 
+    /**
+     * @param $value
+     * @param $original
+     *
+     * @return bool
+     * @throws JsonException
+     */
+    public static function isEquivalent($value, $original): bool
+    {
+        return $value->toJson() === $original->toJson();
+    }
+
     protected static function emptyJsonStruct(): ?string
     {
         return self::EMPTY_JSON_OBJECT;

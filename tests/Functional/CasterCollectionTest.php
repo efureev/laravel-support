@@ -9,6 +9,7 @@ use Php\Support\Laravel\Tests\TestClasses\Entity\ArrayCollection;
 use Php\Support\Laravel\Tests\TestClasses\Entity\Component;
 use Php\Support\Laravel\Tests\TestClasses\Entity\ComponentCollection;
 use Php\Support\Laravel\Tests\TestClasses\Models\CasterCollection;
+use Php\Support\Laravel\Tests\TestClasses\Models\CasterDirtyCollection;
 use Ramsey\Uuid\Uuid;
 
 class CasterCollectionTest extends AbstractFunctionalTestCase
@@ -121,6 +122,90 @@ class CasterCollectionTest extends AbstractFunctionalTestCase
         }
 
         static::assertJsonStringEqualsJsonString(Json::encode($data), $model->getRawOriginal('components'));
+    }
+
+    public function testCreateAndCheckDirty(): void
+    {
+        $data  = [
+            self::createComponent(),
+            self::createComponent(true),
+        ];
+        $model = CasterDirtyCollection::make(['arrays' => $data]);
+
+
+        static::assertTrue($model->isDirty('arrays'));
+        static::assertEquals(
+            '[{"module":"news","isMain":false,"params":[]},{"module":"news","isMain":true,"params":[]}]' ,
+            $model->getDirty()['arrays']
+        );
+
+        $model->save();
+
+        $model->fill(['arrays' => $data]);
+
+        static::assertFalse($model->isDirty('arrays'));
+        static::assertEmpty($model->getDirty());
+
+
+        $model->fill(['arrays' => [self::createComponent(), self::createComponent(),self::createComponent(),]]);
+
+        static::assertTrue($model->isDirty('arrays'));
+        static::assertEquals(
+            '[{"module":"news","isMain":false,"params":[]},{"module":"news","isMain":false,"params":[]},{"module":"news","isMain":false,"params":[]}]',
+            $model->getDirty()['arrays']
+        );
+
+        $model->save();
+
+        static::assertEquals(
+            '[{"module":"news","isMain":false,"params":[]},{"module":"news","isMain":false,"params":[]},{"module":"news","isMain":false,"params":[]}]',
+            $model->getRawOriginal('arrays')
+        );
+    }
+
+    public function testCreateAndCheckDirtyArray(): void
+    {
+        $data = [
+            self::createComponent(),
+            self::createComponent(true),
+            self::createComponent(),
+            self::createComponent(),
+        ];
+
+        $model = CasterDirtyCollection::make(['components' => $data]);
+
+
+        static::assertTrue($model->isDirty('components'));
+        static::assertEquals(
+            '[{"module":"news","isMain":false,"params":[]},' .
+            '{"module":"news","isMain":true,"params":[]},' .
+            '{"module":"news","isMain":false,"params":[]},' .
+            '{"module":"news","isMain":false,"params":[]}]',
+            $model->getDirty()['components']
+        );
+
+        $model->save();
+
+        $model->fill(['components' => $data]);
+
+        static::assertFalse($model->isDirty('components'));
+        static::assertEmpty($model->getDirty());
+
+
+        $model->fill(['components' => [self::createComponent(), self::createComponent()]]);
+
+        static::assertTrue($model->isDirty('components'));
+        static::assertEquals(
+            '[{"module":"news","isMain":false,"params":[]},{"module":"news","isMain":false,"params":[]}]',
+            $model->getDirty()['components']
+        );
+
+        $model->save();
+
+        static::assertEquals(
+            '[{"module":"news","isMain":false,"params":[]},{"module":"news","isMain":false,"params":[]}]',
+            $model->getRawOriginal('components')
+        );
     }
 
     /**

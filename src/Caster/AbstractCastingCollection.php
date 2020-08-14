@@ -201,6 +201,11 @@ abstract class AbstractCastingCollection implements
         return $this->fill($value);
     }
 
+    public static function isEquivalent($value, $original): bool
+    {
+        return $value->toJson() === $original->toJson();
+    }
+
     /**
      * Push one or more items onto the end of the collection.
      *

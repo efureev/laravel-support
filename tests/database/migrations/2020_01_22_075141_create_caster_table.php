@@ -37,9 +37,9 @@ class CreateCasterTable extends Migration
                 $table->string('title')->nullable();
                 $table->boolean('enabled')->default(false);
                 $table->jsonb('params')->nullable();
-                $table->string('status');
+                $table->string('status')->nullable();
                 $table->jsonb('config')->nullable();
-                $table->string('str');
+                $table->string('str')->nullable();
                 $table->string('str_empty')->nullable();
                 $table->integer('int')->default(0);
                 $table->integer('user_id')->nullable();

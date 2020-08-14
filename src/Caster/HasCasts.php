@@ -110,6 +110,28 @@ trait HasCasts
         return $value;
     }
 
+    public function originalIsEquivalent($key)
+    {
+        if (!array_key_exists($key, $this->original)) {
+            return false;
+        }
+
+        $type = $this->getCastType($key);
+
+        if ($this->typeIsClass($type)) {
+            $castType = $this->$key;
+            if (is_array($castType) && method_exists($type, 'isEquivalent')) {
+                return $type::isEquivalent($castType, $this->getOriginal($key));
+            }
+
+            if ($castType instanceof Caster) {
+                return $castType::isEquivalent($castType, $this->getOriginal($key));
+            }
+        }
+
+        return parent::originalIsEquivalent($key);
+    }
+
     /**
      * @inheritDoc
      */

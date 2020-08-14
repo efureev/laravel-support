@@ -7,6 +7,8 @@ namespace Php\Support\Laravel\Tests\Functional;
 use Illuminate\Database\Eloquent\Collection;
 use Php\Support\Laravel\Tests\TestClasses\Entity\EmptyParams;
 use Php\Support\Laravel\Tests\TestClasses\Entity\Params;
+use Php\Support\Laravel\Tests\TestClasses\Models\PgArrayModel;
+use Php\Support\Laravel\Tests\TestClasses\Models\TestDirtyModel;
 use Php\Support\Laravel\Tests\TestClasses\Models\TestModel;
 
 class CasterTraitTest extends AbstractFunctionalTestCase
@@ -188,6 +190,76 @@ class CasterTraitTest extends AbstractFunctionalTestCase
                 $item->params->toArray()
             );
         }
+    }
+
+
+    public function testCreateAndCheckDirty(): void
+    {
+        $model = TestDirtyModel::make(
+            [
+                'params' => [
+                    'key' => 1,
+                ],
+            ]
+        );
+
+        static::assertTrue($model->isDirty('params'));
+        static::assertEquals('{"key":1}', $model->getDirty()['params']);
+
+        $model->save();
+
+        $model->fill(
+            [
+                'params' => [
+                    'key' => 1,
+                ],
+            ]
+        );
+
+        static::assertFalse($model->isDirty('params'));
+        static::assertEmpty($model->getDirty());
+
+
+        $model->fill(
+            [
+                'params' => [
+                    'key' => 2,
+                ],
+            ]
+        );
+
+        static::assertTrue($model->isDirty('params'));
+        static::assertEquals('{"key":2}', $model->getDirty()['params']);
+
+        $model->save();
+
+        static::assertEquals('{"key":2}', $model->getRawOriginal('params'));
+    }
+
+
+    public function testCreateAndCheckDirtyPgArray(): void
+    {
+        $model = PgArrayModel::make(['tags' => ['key', 'tag1']]);
+
+        static::assertTrue($model->isDirty('tags'));
+        static::assertEquals('{key,tag1}', $model->getDirty()['tags']);
+
+        $model->save();
+
+        $model->fill(['tags' => ['key', 'tag1']]);
+
+        static::assertFalse($model->isDirty('tags'));
+        static::assertEmpty($model->getDirty());
+
+
+        $model->fill(['tags' => ['key', 'tag2']]);
+
+        static::assertTrue($model->isDirty('tags'));
+        static::assertEquals('{key,tag2}', $model->getDirty()['tags']);
+
+        $model->save();
+
+        static::assertEquals('{key,tag2}', $model->getRawOriginal('tags'));
     }
 
     public function testCreateEmptyParams(): void
