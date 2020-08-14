@@ -13,7 +13,7 @@ Check MD [online][check-online].
 
 ### Fixed
 
-- Fixed `isDirty` and `getDirty` into Eloquent Model with `Caster` interface.
+- Fixed `isDirty` and `getDirty` into Eloquent Model with `Caster` interface
 
 ## [0.9.1] - 2020-08-13
 
