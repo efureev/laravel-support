@@ -29,7 +29,7 @@ abstract class AbstractRepository
 
     protected function setModel(string $modelName): self
     {
-        $this->model = new $modelName;
+        $this->model = new $modelName();
 
         return $this;
     }
