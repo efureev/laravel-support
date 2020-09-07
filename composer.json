@@ -16,9 +16,9 @@
     }
   ],
   "require": {
-    "php": ">=7.3",
+    "php": ">=7.4",
     "ext-json": "*",
-    "efureev/support": "^2.10",
+    "efureev/support": "^2.12",
     "illuminate/database": "^7.0"
   },
   "require-dev": {
