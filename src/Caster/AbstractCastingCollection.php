@@ -248,7 +248,7 @@ abstract class AbstractCastingCollection implements
      */
     public function set($key, $item, ?callable $cb = null): self
     {
-        $this->items[$key] = with($item, $cb);
+        $this->items[$key] = $cb === null ? $item : $cb($item, $key);
 
         return $this;
     }
