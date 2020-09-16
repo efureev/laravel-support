@@ -1,6 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Providers;
+declare(strict_types=1);
+
+namespace Php\Support\Laravel;
 
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\ServiceProvider;
