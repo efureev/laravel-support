@@ -20,9 +20,7 @@ class LaraRequestServiceProvider extends ServiceProvider
             static function ($request, $app) {
                 $request = LaraRequest::createFrom($app['request'], $request);
 
-                $request
-                    ->setContainer($app)
-                    ->setRedirector($app->make(Redirector::class));
+                $request->setContainer($app);
             }
         );
     }
