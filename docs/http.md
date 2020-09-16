@@ -6,6 +6,8 @@ Helps you build your own Requests.
 
 ### Example
 
+You need to boot `LaraRequestServiceProvider`.
+
 Custom Request
 ```php
 <?php
