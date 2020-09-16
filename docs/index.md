@@ -5,6 +5,7 @@
 - [Pagination][pagination]
 - [Traits][traits]
 - [Repository][repository]
+- [Http][http]
 
 
 [global]:./global.md
@@ -12,3 +13,4 @@
 [pagination]:./pagination.md
 [traits]:./traits.md
 [repository]:./repository.md
+[http]:./http.md
