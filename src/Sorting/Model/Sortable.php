@@ -106,7 +106,7 @@ trait Sortable
         return <<<SQL
 (SELECT
       CASE
-        WHEN MAX(sorting_position) IS NOT NULL 
+        WHEN MAX(sorting_position) IS NOT NULL
             THEN MAX(sorting_position) + 1
         ELSE 1
       END
@@ -152,7 +152,7 @@ SQL;
     {
         DB::transaction(
             function () {
-                Schema::table(
+                Schema::setConnection($this->getConnection())->table(
                     $this->getTable(),
                     function (Blueprint $blueprint) {
                         $blueprint->dropIndex("{$this->getTable()}_sorting_position_index");
@@ -164,7 +164,7 @@ SQL;
                 )
                    ->decrement('sorting_position');
 
-                Schema::table(
+                Schema::setConnection($this->getConnection())->table(
                     $this->getTable(),
                     function (Blueprint $blueprint) {
                         $blueprint->index('sorting_position');
@@ -193,7 +193,7 @@ SQL;
     {
         DB::transaction(
             function () use ($oldPosition, $newPosition) {
-                Schema::table(
+                Schema::setConnection($this->getConnection())::table(
                     $this->getTable(),
                     function (Blueprint $blueprint) {
                         $blueprint->dropIndex("{$this->getTable()}_sorting_position_index");
@@ -204,7 +204,7 @@ SQL;
                 } elseif ($oldPosition < $newPosition) {
                     $this->decrementInReorder($oldPosition, $newPosition);
                 }
-                Schema::table(
+                Schema::setConnection($this->getConnection())::table(
                     $this->getTable(),
                     function (Blueprint $blueprint) {
                         $blueprint->index('sorting_position');
