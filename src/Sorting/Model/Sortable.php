@@ -193,7 +193,7 @@ SQL;
     {
         DB::transaction(
             function () use ($oldPosition, $newPosition) {
-                Schema::setConnection($this->getConnection())::table(
+                Schema::setConnection($this->getConnection())->table(
                     $this->getTable(),
                     function (Blueprint $blueprint) {
                         $blueprint->dropIndex("{$this->getTable()}_sorting_position_index");
@@ -204,7 +204,7 @@ SQL;
                 } elseif ($oldPosition < $newPosition) {
                     $this->decrementInReorder($oldPosition, $newPosition);
                 }
-                Schema::setConnection($this->getConnection())::table(
+                Schema::setConnection($this->getConnection())->table(
                     $this->getTable(),
                     function (Blueprint $blueprint) {
                         $blueprint->index('sorting_position');
