@@ -31,6 +31,18 @@ trait Sortable
                 $model->onSavingSortingPosition();
             }
         );
+
+        static::addGlobalScope(
+            static::getSortingScopeName(),
+            static function (Builder $builder) {
+                $builder->orderBy(static::getSortingColumnName());
+            }
+        );
+    }
+
+    public static function getSortingScopeName(): string
+    {
+        return 'sortingPosition';
     }
 
     public static function getSortingColumnName(): string

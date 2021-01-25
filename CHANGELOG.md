@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [0.10.1] - 2021-01-25
+
+### Added
+
+- Added Global Scope to `Sortable`
+
 ## [0.10.0] - 2021-01-25
 
 ### Changed
@@ -146,7 +152,8 @@ Check MD [online][check-online].
 - The trait `CasterAttribute`: for custom class casts
 - The trait for DB/Migration `UUID`
 
-[unreleased]: https://github.com/efureev/laravel-support/compare/v0.10.0...HEAD
+[unreleased]: https://github.com/efureev/laravel-support/compare/v0.10.1...HEAD
+[0.10.1]: https://github.com/efureev/laravel-support/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/efureev/laravel-support/compare/v0.9.4...v0.10.0
 [0.9.4]: https://github.com/efureev/laravel-support/compare/v0.9.3...v0.9.4
 [0.9.3]: https://github.com/efureev/laravel-support/compare/v0.9.2...v0.9.3
