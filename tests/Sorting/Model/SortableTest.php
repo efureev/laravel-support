@@ -157,7 +157,12 @@ class SortableTest extends AbstractTestCase
             ->pluck(SortEntity::getSortingColumnName(), 'id')
             ->all();
 
-        array_walk($expectedModels, static fn(&$item) => $item++);
+        array_walk(
+            $expectedModels,
+            static function (&$item) {
+                return $item++;
+            }
+        );
 
         $model->save();
         $this->assertEquals($position, $model->refresh()->sortingPosition());
@@ -215,7 +220,12 @@ class SortableTest extends AbstractTestCase
             ->pluck(SortEntity::getSortingColumnName(), 'id')
             ->all();
 
-        array_walk($expectedModels, static fn(&$item) => $item++);
+        array_walk(
+            $expectedModels,
+            static function (&$item) {
+                return $item++;
+            }
+        );
 
         $model->save();
         $this->assertEquals(1, $model->refresh()->sortingPosition());
