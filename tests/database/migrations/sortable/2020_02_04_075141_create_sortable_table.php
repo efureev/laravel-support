@@ -21,8 +21,8 @@ class CreateSortableTable extends Migration
         Schema::create(
             'sort_entities',
             static function (Blueprint $table) {
-                static::columnUUID($table)->primary();
-                static::columnSortingPosition($table);
+                $table->increments('id');
+                static::columnSortingPosition($table, SortEntity::getSortingColumnName());
                 $table->string('title')->nullable();
             }
         );

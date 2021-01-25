@@ -6,6 +6,7 @@
 - [Traits][traits]
 - [Repository][repository]
 - [Http][http]
+- [Sortable][sortable]
 
 
 [global]:./global.md
@@ -14,3 +15,4 @@
 [traits]:./traits.md
 [repository]:./repository.md
 [http]:./http.md
+[sortable]:./sortable.md

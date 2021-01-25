@@ -16,6 +16,8 @@ abstract class AbstractTestCase extends TestCase
 {
     use InteractsWithDatabase;
 
+    protected $migrations = [];
+
     /**
      * Define environment setup.
      *
@@ -53,12 +55,41 @@ abstract class AbstractTestCase extends TestCase
         ];
     }
 
+    protected static function databasePath(string $path = null): string
+    {
+        return __DIR__ . '/database' . ($path ? "/$path" : '');
+    }
+
+    protected static function migrationsPath(string $path = null): string
+    {
+        return self::databasePath('migrations' . ($path ? "/$path" : ''));
+    }
+
     /**
      * @return void
      */
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->artisan('db:wipe');
+
+        $this->installMigrations();
+    }
+
+    protected function installMigrations(): void
+    {
+        foreach ($this->migrations as $migration) {
+            $this->loadMigrationsFrom(self::migrationsPath($migration));
+        }
+    }
+
+    protected static function getProtectedMethod(string $class, string $name): \ReflectionMethod
+    {
+        $class  = new \ReflectionClass($class);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+
+        return $method;
     }
 }

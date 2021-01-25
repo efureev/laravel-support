@@ -3,248 +3,174 @@
 namespace Php\Support\Laravel\Sorting\Model;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 /**
  * Trait Sortable
  *
  * Use it in the Eloquent Model class to add sorting to it
  *
+ * @method Sortable sortingPositionGreaterThen(int $value, bool $andSelf = true)
+ * @method Sortable sortingPositionLessThen(int $value, bool $andSelf = true)
+ *
+ * @mixin Model
+ * @mixin Builder
  */
 trait Sortable
 {
-    /**
-     * @var string Name of the global sorting scope
-     */
-    protected static $sortingScopeName = 'sortingPosition';
-
-    /**
-     * @var bool
-     */
-    protected static $sortingGlobalScope = true;
-
-
     /**
      * Call it in boot method of your Eloquent model
      *
      * @return void
      */
-    protected static function bootSortable()
+    protected static function bootSortable(): void
     {
-        if (static::$sortingGlobalScope) {
-            static::addGlobalScope(
-                static::$sortingScopeName,
-                function (Builder $builder) {
-                    $builder->orderBy('sorting_position');
-                }
-            );
-        }
-
-        static::creating(
-            function ($model) {
-                $model->sorting_position = $model->sorting_position ?? 0;
-            }
-        );
-
-        static::deleting(
-            function ($model) {
-                $model->excludeFromOrder();
+        static::saving(
+            static function (Model $model) {
+                $model->onSavingSortingPosition();
             }
         );
     }
 
-    /**
-     * @return string
-     */
-    public static function getSortingScopeName(): string
+    public static function getSortingColumnName(): string
     {
-        return static::$sortingScopeName;
+        return static::$sortingColumnName ?? 'sorting_position';
     }
 
-    /**
-     * @param $sortingPosition
-     */
-    public function setSortingPositionAttribute($sortingPosition)
+    public function setSortingPosition(int $value): self
     {
-        $this->attributes['sorting_position'] = $this->normalizeSortingPosition($sortingPosition);
+        if ($value <= 0) {
+            $value = new Expression($this->sqlForMaxQuery());
+        }
+        $this->attributes[static::getSortingColumnName()] = $value;
+
+        return $this;
     }
 
-    /**
-     * @param $sortingPosition
-     * @return Expression
-     */
-    protected function normalizeSortingPosition($sortingPosition)
+    private function normalizeSortingPosition(): self
     {
-        $oldSortingPosition = $this->getOriginal('sorting_position');
-        if (empty($sortingPosition)) {
-            $sortingPosition = $oldSortingPosition;
+        $position = $this->{static::getSortingColumnName()} ?? 0;
+        if ($position instanceof Expression) {
+            return $this;
+        }
 
-            if ($sortingPosition === null) {
-                $sortingPosition = DB::raw($this->formDefaultSQL());
+        return $this->setSortingPosition($position);
+    }
+
+    public function sortingPosition(): int
+    {
+        return $this->{static::getSortingColumnName()} ?? 0;
+    }
+
+    public function setFirstForSortingPosition(): self
+    {
+        return $this->setSortingPosition(1);
+    }
+
+    public function onSavingSortingPosition()
+    {
+        $this->normalizeSortingPosition();
+        $this->reorderingSortingPosition();
+    }
+
+
+    protected function sqlForMaxQuery(): string
+    {
+        $where = [];
+        if ($this->exists) {
+            $id     = $this->getKey();
+            $idName = $this->getKeyName();
+            switch ($this->keyType) {
+                case 'int':
+                case 'integer':
+                    break;
+                default:
+                    $id = "'$id'";
             }
-        } elseif (is_numeric($oldSortingPosition) && is_numeric($sortingPosition)) {
-            $this->reorderBySortingPosition($oldSortingPosition, $sortingPosition);
+
+            $where[] = "($idName <> $id)";
         }
 
-        return $sortingPosition;
-    }
-
-    /**
-     * @return string
-     */
-    protected function formDefaultSQL(): string
-    {
-        $where = '';
-        $defaultSortingRestrictions = $this->getDefaultSortingRestrictionsSql();
-        if ($defaultSortingRestrictions) {
-            $where .= "WHERE {$defaultSortingRestrictions}";
+        if ($defaultSortingRestrictions = $this->getDefaultSortingRestrictionsSql()) {
+            $where[] = $defaultSortingRestrictions;
         }
-
+        if ($where) {
+            $where = 'WHERE ' . implode(' AND ', $where);
+        } else {
+            $where = '';
+        }
+        $sortingColumnName = static::getSortingColumnName();
         return <<<SQL
-(SELECT
-      CASE
-        WHEN MAX(sorting_position) IS NOT NULL
-            THEN MAX(sorting_position) + 1
-        ELSE 1
-      END
-FROM {$this->getTable()} {$where})
+(
+    WITH max_s_p AS (select MAX({$sortingColumnName}) as m FROM {$this->getTable()} {$where})
+
+    SELECT CASE
+        WHEN m IS NOT NULL THEN m + 1 ELSE 1 END as v
+    FROM max_s_p
+    )
 SQL;
     }
 
-    /**
-     * @param int $steps
-     *
-     * @return $this
-     */
-    public function upInSorting(int $steps)
+    private function reorderingSortingPosition(): void
     {
-        $currentPosition = (int) $this->sorting_position;
-        if ($steps > $currentPosition) {
-            throw new \InvalidArgumentException('Current position is less than possible');
-        }
-        $this->sorting_position -= $steps;
-
-        return $this;
-    }
-
-    /**
-     * @param int $steps
-     *
-     * @return $this
-     */
-    public function downInSorting(int $steps)
-    {
-        if ($steps < 0) {
-            throw new \InvalidArgumentException('Please, use upInSorting if you want to up Sortable in sorting');
+        if (($position = $this->{static::getSortingColumnName()}) instanceof Expression) {
+            return;
         }
 
-        if ($steps > 0) {
-            $this->sorting_position += $steps;
-        }
+        if ($position > 0) {
+            $column = static::getSortingColumnName();
+            $new    = $this->sortingPosition();
+            $old    = $this->getRawOriginal($column);
 
-        return $this;
-    }
-
-    public function excludeFromOrder()
-    {
-        DB::transaction(
-            function () {
-                Schema::setConnection($this->getConnection())->table(
-                    $this->getTable(),
-                    function (Blueprint $blueprint) {
-                        $blueprint->dropIndex("{$this->getTable()}_sorting_position_index");
-                    }
-                );
-
-                $this->forSortingRestrictions(
-                    static::where('sorting_position', '>', $this->sorting_position)
-                )
-                   ->decrement('sorting_position');
-
-                Schema::setConnection($this->getConnection())->table(
-                    $this->getTable(),
-                    function (Blueprint $blueprint) {
-                        $blueprint->index('sorting_position');
-                    }
-                );
-            }
-        );
-    }
-
-    /**
-     * @param Builder $query
-     * @return Builder
-     */
-    protected function forSortingRestrictions(Builder $query): Builder
-    {
-        return $query;
-    }
-
-    /**
-     * @param int $oldPosition
-     * @param int $newPosition
-     *
-     * @return void
-     */
-    protected function reorderBySortingPosition(int $oldPosition, int $newPosition): void
-    {
-        DB::transaction(
-            function () use ($oldPosition, $newPosition) {
-                Schema::setConnection($this->getConnection())->table(
-                    $this->getTable(),
-                    function (Blueprint $blueprint) {
-                        $blueprint->dropIndex("{$this->getTable()}_sorting_position_index");
-                    }
-                );
-                if ($oldPosition > $newPosition) {
-                    $this->incrementInReorder($oldPosition, $newPosition);
-                } elseif ($oldPosition < $newPosition) {
-                    $this->decrementInReorder($oldPosition, $newPosition);
+            if ($old === null) {
+                $this->incrementInReorder($new, $new);
+            } else {
+                if ($new > $old) {
+                    $this->decrementInReorder($new, $old);
+                } else {
+                    $this->incrementInReorder($new, $old);
                 }
-                Schema::setConnection($this->getConnection())->table(
-                    $this->getTable(),
-                    function (Blueprint $blueprint) {
-                        $blueprint->index('sorting_position');
-                    }
-                );
             }
-        );
+        }
     }
 
-    /**
-     * @param int $oldPosition
-     * @param int $newPosition
-     */
-    protected function incrementInReorder(int $oldPosition, int $newPosition): void
+    private function incrementInReorder($new, $old): void
     {
-        $this->forSortingRestrictions(
-            static::where('sorting_position', '>=', $newPosition)
-                ->where('sorting_position', '<', $oldPosition)
-        )
-            ->increment('sorting_position');
+        $column = static::getSortingColumnName();
+        $query  = $this->where($column, '>=', $new);
+
+        if ($this->exists) {
+            $query->where($column, '<', $old);
+        }
+
+        $query->increment($column);
     }
 
-    /**
-     * @param int $oldPosition
-     * @param int $newPosition
-     */
-    protected function decrementInReorder(int $oldPosition, int $newPosition): void
+    private function decrementInReorder($new, $old): void
     {
-        $this->forSortingRestrictions(
-            static::where('sorting_position', '<=', $newPosition)
-                ->where('sorting_position', '>', $oldPosition)
-        )
-            ->decrement('sorting_position');
+        $column = static::getSortingColumnName();
+        $query  = $this->where($column, '<=', $new);
+
+        if ($this->exists) {
+            $query->where($column, '>', $old);
+        }
+
+        $query->decrement($column);
     }
 
-    /**
-     * @return string
-     */
     protected function getDefaultSortingRestrictionsSql(): string
     {
         return '';
+    }
+
+    public function scopeSortingPositionGreaterThen(Builder $query, int $value, bool $andSelf = true)
+    {
+        return $query->where(static::getSortingColumnName(), $andSelf ? '>=' : '>', $value);
+    }
+
+    public function scopeSortingPositionLessThen(Builder $query, int $value, bool $andSelf = true)
+    {
+        return $query->where(static::getSortingColumnName(), $andSelf ? '<=' : '<', $value);
     }
 }
