@@ -35,7 +35,7 @@ trait Sortable
         static::addGlobalScope(
             static::getSortingScopeName(),
             static function (Builder $builder) {
-                $builder->orderBy(static::getSortingColumnName());
+                $builder->orderByDesc(static::getSortingColumnName());
             }
         );
     }
