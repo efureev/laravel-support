@@ -3,6 +3,7 @@
 namespace Php\Support\Laravel\Tests\Sorting\Model;
 
 use Illuminate\Support\Facades\DB;
+use Php\Support\Laravel\Sorting\Model\SortOrderingDesc;
 use Php\Support\Laravel\Tests\AbstractTestCase;
 use Php\Support\Laravel\Tests\TestClasses\Models\SortEntity;
 
@@ -12,15 +13,20 @@ class SortableTest extends AbstractTestCase
         'sortable/2020_02_04_075141_create_sortable_table.php',
     ];
 
-    protected static function fillSimpleRawData(int $count = 4, $ordering = true): void
-    {
+    protected static function fillSimpleRawData(
+        int $count = 4,
+        bool $ordering = true,
+        bool $orderingReverse = false
+    ): void {
         $table = (new SortEntity)->getTable();
         $spCol = SortEntity::getSortingColumnName();
 
         for ($i = 1; $i <= $count; $i++) {
             $title = "test_$i";
             if ($ordering) {
-                DB::insert("insert into $table (title, {$spCol}) values (?,?)", [$title, $i]);
+                $orderID = $orderingReverse ? $count - $i + 1 : $i;
+
+                DB::insert("insert into $table (title, {$spCol}) values (?,?)", [$title, $orderID]);
             } else {
                 DB::insert("insert into $table (title) values (?)", [$title]);
             }
@@ -298,5 +304,76 @@ class SortableTest extends AbstractTestCase
         $this->assertEquals(2, $model3->refresh()->sortingPosition());
         $this->assertEquals(3, $model4->refresh()->sortingPosition());
         $this->assertEquals(5, $model5->refresh()->sortingPosition());
+    }
+
+    public function testOrderingBySortingPosition(): void
+    {
+        static::fillSimpleRawData(10);
+
+        static::assertArrayNotHasKey(
+            SortEntity::getSortingScopeName(),
+            SortEntity::query()->getModel()->getGlobalScopes()
+        );
+
+        $models = SortEntity::pluck(SortEntity::getSortingColumnName());
+        $count  = $models->count();
+
+        foreach ($models as $key => $sp) {
+            //            static::assertEquals($id, $count - $sp + 1);
+            static::assertEquals($key + 1, $sp);
+        }
+    }
+
+    public function testOrderingBySortingPositionWithGlobalScope(): void
+    {
+        static::fillSimpleRawData(10);
+        SortEntity::addGlobalScope(new SortOrderingDesc());
+
+        static::assertArrayHasKey(
+            SortOrderingDesc::class,
+            SortEntity::query()->getModel()->getGlobalScopes()
+        );
+
+        $models = SortEntity::pluck(SortEntity::getSortingColumnName());
+        $count  = $models->count();
+
+        foreach ($models as $key => $sp) {
+            static::assertEquals($key + 1, $count - $sp + 1);
+        }
+    }
+
+
+    public function testOrderingByAscSortingPosition(): void
+    {
+        static::fillSimpleRawData(10);
+
+        static::assertArrayNotHasKey(
+            SortEntity::getSortingScopeName(),
+            SortEntity::query()->getModel()->getGlobalScopes()
+        );
+
+        $models = SortEntity::sortingPositionOrderByAsc()->pluck(SortEntity::getSortingColumnName());
+
+        foreach ($models as $key => $sp) {
+            //            static::assertEquals($id, $count - $sp + 1);
+            static::assertEquals($key + 1, $sp);
+        }
+    }
+
+    public function testOrderingByDescSortingPosition(): void
+    {
+        static::fillSimpleRawData(10);
+
+        static::assertArrayNotHasKey(
+            SortEntity::getSortingScopeName(),
+            SortEntity::query()->getModel()->getGlobalScopes()
+        );
+
+        $models = SortEntity::sortingPositionOrderByDesc()->pluck(SortEntity::getSortingColumnName());
+        $count  = $models->count();
+
+        foreach ($models as $key => $sp) {
+            static::assertEquals($key + 1, $count - $sp + 1);
+        }
     }
 }

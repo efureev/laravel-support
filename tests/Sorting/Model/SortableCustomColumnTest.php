@@ -2,6 +2,7 @@
 
 namespace Php\Support\Laravel\Tests\Sorting\Model;
 
+use Illuminate\Support\Facades\DB;
 use Php\Support\Laravel\Tests\AbstractTestCase;
 use Php\Support\Laravel\Tests\TestClasses\Models\SortCustomColumnModel;
 
@@ -60,4 +61,25 @@ class SortableCustomColumnTest extends AbstractTestCase
         $this->assertEquals(1, $model->refresh()->sortingPosition());
     }
 
+    protected static function fillSimpleRawData(
+        int $count = 4,
+        bool $ordering = true,
+        bool $orderingReverse = false
+    ): void {
+        $table = (new SortCustomColumnModel)->getTable();
+        $spCol = SortCustomColumnModel::getSortingColumnName();
+
+        for ($i = 1; $i <= $count; $i++) {
+            $title = "test_$i";
+            if ($ordering) {
+                $orderID = $orderingReverse ? $count - $i + 1 : $i;
+
+                DB::insert("insert into $table (title, {$spCol}) values (?,?)", [$title, $orderID]);
+            } else {
+                DB::insert("insert into $table (title) values (?)", [$title]);
+            }
+        }
+
+        static::assertCount($count, SortCustomColumnModel::all());
+    }
 }

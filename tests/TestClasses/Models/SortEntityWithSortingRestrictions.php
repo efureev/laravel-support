@@ -22,7 +22,6 @@ class SortEntityWithSortingRestrictions extends Model
     protected $keyType = 'uuid';
 
 
-
     /**
      * @return string
      */
@@ -33,6 +32,7 @@ class SortEntityWithSortingRestrictions extends Model
 
     /**
      * @param Builder $query
+     *
      * @return Builder
      */
     protected function forSortingRestrictions(Builder $query): Builder

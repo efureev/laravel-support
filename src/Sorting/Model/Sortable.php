@@ -13,6 +13,8 @@ use Illuminate\Database\Query\Expression;
  *
  * @method Sortable sortingPositionGreaterThen(int $value, bool $andSelf = true)
  * @method Sortable sortingPositionLessThen(int $value, bool $andSelf = true)
+ * @method Sortable sortingPositionOrderByDesc()
+ * @method Sortable sortingPositionOrderByAsc()
  *
  * @mixin Model
  * @mixin Builder
@@ -31,13 +33,28 @@ trait Sortable
                 $model->onSavingSortingPosition();
             }
         );
+        /*
+            static::addGlobalScope(new SortOrderingDesc);
+            // OR
+            static::addGlobalScope(
+                static::getSortingScopeName(),
+                fn(Builder $builder) => static::sortingOrderingFn($builder)
+            );
+        */
+    }
 
-        static::addGlobalScope(
-            static::getSortingScopeName(),
-            static function (Builder $builder) {
-                $builder->orderByDesc(static::getSortingColumnName());
-            }
-        );
+    protected static function sortingOrderingFn(Builder $builder): Builder
+    {
+        if ($direction = static::sortingOrderingDirection()) {
+            $builder->orderBy(static::getSortingColumnName(), $direction);
+        }
+
+        return $builder;
+    }
+
+    protected static function sortingOrderingDirection(): ?string
+    {
+        return 'desc';
     }
 
     public static function getSortingScopeName(): string
@@ -176,13 +193,23 @@ SQL;
         return '';
     }
 
-    public function scopeSortingPositionGreaterThen(Builder $query, int $value, bool $andSelf = true)
+    public function scopeSortingPositionGreaterThen(Builder $query, int $value, bool $andSelf = true): Builder
     {
         return $query->where(static::getSortingColumnName(), $andSelf ? '>=' : '>', $value);
     }
 
-    public function scopeSortingPositionLessThen(Builder $query, int $value, bool $andSelf = true)
+    public function scopeSortingPositionLessThen(Builder $query, int $value, bool $andSelf = true): Builder
     {
         return $query->where(static::getSortingColumnName(), $andSelf ? '<=' : '<', $value);
+    }
+
+    public function scopeSortingPositionOrderByDesc(Builder $query): Builder
+    {
+        return $query->orderByDesc(static::getSortingColumnName());
+    }
+
+    public function scopeSortingPositionOrderByAsc(Builder $query): Builder
+    {
+        return $query->orderBy(static::getSortingColumnName());
     }
 }
