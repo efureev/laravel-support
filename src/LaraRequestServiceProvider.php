@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel;
 
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\ServiceProvider;
 use Php\Support\Laravel\Http\LaraRequest;
 

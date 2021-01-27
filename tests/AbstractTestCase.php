@@ -46,9 +46,19 @@ abstract class AbstractTestCase extends TestCase
                 'sslmode'        => 'prefer',
             ]
         );
+
+        $app['config']->set(
+            'database.connections.sqlite',
+            [
+                'driver'   => 'sqlite',
+                'host'     => '127.0.0.1',
+                'port'     => '3306',
+                'database' => __DIR__ . '/_data/database.sqlite',
+            ]
+        );
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             ServiceProvider::class,

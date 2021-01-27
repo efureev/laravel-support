@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [0.11.0] - 2021-01-27
+
+### Removed
+
+- Move all `Laravel Database/Scheme` code to new package `efureev/laravel-support-db`
+
 ## [0.10.1] - 2021-01-25
 
 ### Added
@@ -152,7 +158,8 @@ Check MD [online][check-online].
 - The trait `CasterAttribute`: for custom class casts
 - The trait for DB/Migration `UUID`
 
-[unreleased]: https://github.com/efureev/laravel-support/compare/v0.10.1...HEAD
+[unreleased]: https://github.com/efureev/laravel-support/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/efureev/laravel-support/compare/v0.10.1...v0.11.0
 [0.10.1]: https://github.com/efureev/laravel-support/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/efureev/laravel-support/compare/v0.9.4...v0.10.0
 [0.9.4]: https://github.com/efureev/laravel-support/compare/v0.9.3...v0.9.4
