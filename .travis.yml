@@ -14,7 +14,6 @@ env:
 
 before_install:
   - composer install
-  - composer global require hirak/prestissimo --update-no-dev
   - if [[ $coverage = 'false' ]]; then phpenv config-rm xdebug.ini || true; fi
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
@@ -39,14 +38,14 @@ after_success:
 
 matrix:
   include:
-    - php: 7.3
+    - php: 7.4
       env: setup=stable
-    - php: 7.3
+    - php: 7.4
       env: coverage=true
 
-    - php: 7.4
+    - php: 8.0
       env: setup=stable
-    - php: 7.4
+    - php: 8.0
       env: coverage=true
 
     - php: nightly
