@@ -10,7 +10,7 @@ use Php\Support\Helpers\Json;
 
 trait HasCasts
 {
-    public function setAttribute($key, $value)
+    public function setAttribute($key, $value): self
     {
         if ($value instanceof Caster) {
             $this->attributes[$key] = $value::castToDatabase($value);
@@ -110,7 +110,7 @@ trait HasCasts
         return $value;
     }
 
-    public function originalIsEquivalent($key)
+    public function originalIsEquivalent($key): bool
     {
         if (!array_key_exists($key, $this->original)) {
             return false;

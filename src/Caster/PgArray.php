@@ -13,12 +13,12 @@ class PgArray implements Caster
         return Arr::toPostgresArray(static::normalize($value));
     }
 
-    protected static function normalize($value)
+    protected static function normalize($value): array
     {
         return array_filter($value);
     }
 
-    public function castFromDatabase(?string $value)
+    public function castFromDatabase(?string $value): array
     {
         return Arr::fromPostgresArray($value);
     }

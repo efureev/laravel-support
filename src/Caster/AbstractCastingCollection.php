@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel\Caster;
 
+use ArrayIterator;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Enumerable;
@@ -26,7 +27,7 @@ abstract class AbstractCastingCollection implements
      *
      * @var array
      */
-    protected $items = [];
+    protected array $items = [];
 
     public function __construct($value = null)
     {
@@ -294,11 +295,11 @@ abstract class AbstractCastingCollection implements
     /**
      * Get an iterator for the items.
      *
-     * @return \ArrayIterator
+     * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
-        return new \ArrayIterator($this->items);
+        return new ArrayIterator($this->items);
     }
 
     /**
