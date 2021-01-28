@@ -3,6 +3,7 @@
 namespace Php\Support\Laravel\Tests\Sorting\Model;
 
 use Illuminate\Support\Facades\DB;
+use Php\Support\Laravel\Sorting\Model\SortOrderingAsc;
 use Php\Support\Laravel\Sorting\Model\SortOrderingDesc;
 use Php\Support\Laravel\Tests\AbstractTestCase;
 use Php\Support\Laravel\Tests\TestClasses\Models\SortEntity;
@@ -324,7 +325,7 @@ class SortableTest extends AbstractTestCase
         }
     }
 
-    public function testOrderingBySortingPositionWithGlobalScope(): void
+    public function testOrderingByDescSortingPositionWithGlobalScope(): void
     {
         static::fillSimpleRawData(10);
         SortEntity::addGlobalScope(new SortOrderingDesc());
@@ -374,6 +375,24 @@ class SortableTest extends AbstractTestCase
 
         foreach ($models as $key => $sp) {
             static::assertEquals($key + 1, $count - $sp + 1);
+        }
+    }
+
+    public function testOrderingByAscSortingPositionWithGlobalScope(): void
+    {
+        static::fillSimpleRawData(10);
+        SortEntity::addGlobalScope(new SortOrderingAsc());
+
+        static::assertArrayHasKey(
+            SortOrderingAsc::class,
+            SortEntity::query()->getModel()->getGlobalScopes()
+        );
+
+        $models = SortEntity::pluck(SortEntity::getSortingColumnName());
+        $count  = $models->count();
+
+        foreach ($models as $key => $sp) {
+            static::assertEquals($key + 1, $sp);
         }
     }
 }
