@@ -20,6 +20,6 @@ class SortOrderingDesc implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->orderByDesc($model::getSortingColumnName());
+        $builder->orderByDesc($model->qualifyColumn($model::getSortingColumnName()));
     }
 }
