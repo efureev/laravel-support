@@ -18,6 +18,6 @@ class SortOrderingAsc implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->orderBy("{$model->getTable()}.{$model::getSortingColumnName()}");
+        $builder->orderBy($model->qualifyColumn($model::getSortingColumnName()));
     }
 }
