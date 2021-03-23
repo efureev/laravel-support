@@ -46,7 +46,7 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
         $value = $this->preFormat($value);
 
         if (empty($value)) {
-            return $this;
+            return $this->afterFill();
         }
 
         $value = $this->convert($value);
