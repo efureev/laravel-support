@@ -1,5 +1,7 @@
 <?php
 
+namespace Php\Support\Laravel\Tests\Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Php\Support\Laravel\Tests\TestClasses\Models\BaseModel;
 

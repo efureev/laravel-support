@@ -27,7 +27,7 @@ class PgArrayModel extends Model
     use PostgresArray;
 
     public $timestamps = false;
-    protected $keyType = 'uuid';
+    protected $keyType = 'string';
     protected $table   = 'pg_table';
 
     protected $fillable = [

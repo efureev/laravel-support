@@ -20,10 +20,5 @@ class SortEntity extends Model
      */
     public $timestamps = false;
 
-    /**
-     * @var string
-     */
-    //    protected $keyType = 'uuid';
-
     protected $fillable = ['title'];
 }

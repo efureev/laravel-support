@@ -28,7 +28,7 @@ class TestModel extends Model
     use HasCasts;
 
     public $timestamps = false;
-    protected $keyType = 'uuid';
+    protected $keyType = 'string';
     protected $table   = 'test_table';
 
     protected $fillable = [
@@ -45,7 +45,7 @@ class TestModel extends Model
         'status'    => Status::class,
         'config'    => 'array',
         'str'       => 'string',
-        'str_empty' => null,
+        'str_empty' => 'string',
         'int'       => 'int',
     ];
 

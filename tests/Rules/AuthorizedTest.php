@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel\Tests\Rules;
 
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Lang;
 use Php\Support\Laravel\Rules\Authorized;
 use Php\Support\Laravel\Tests\AbstractTestCase;
+use Php\Support\Laravel\Tests\Database\Factories\TestModelFactory;
+use Php\Support\Laravel\Tests\Database\Factories\UserFactory;
 use Php\Support\Laravel\Tests\TestClasses\Models\TestModel;
 use Php\Support\Laravel\Tests\TestClasses\Policies\TestModelPolicy;
 
@@ -18,8 +19,7 @@ class AuthorizedTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->withFactories(__DIR__ . '/../database/factories');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         Gate::policy(TestModel::class, TestModelPolicy::class);
     }
@@ -27,11 +27,10 @@ class AuthorizedTest extends AbstractTestCase
     /** @test */
     public function it_will_return_true_if_the_gate_returns_true_for_the_given_ability_name()
     {
-
         $rule = new Authorized('edit', TestModel::class);
 
-        $user  = factory(User::class)->create();
-        $model = factory(TestModel::class)->create(
+        $user  = UserFactory::new()->create();
+        $model = TestModelFactory::new()->create(
             [
                 'user_id' => $user->getKey(),
             ]
@@ -39,7 +38,7 @@ class AuthorizedTest extends AbstractTestCase
 
         $this->actingAs($user);
 
-        $this->assertTrue($rule->passes('attribute', $model->getKey()));
+        self::assertTrue($rule->passes('attribute', $model->getKey()));
     }
 
     /** @test */
@@ -47,14 +46,14 @@ class AuthorizedTest extends AbstractTestCase
     {
         $rule = new Authorized('edit', TestModel::class);
 
-        $user  = factory(User::class)->create();
-        $model = factory(TestModel::class)->create(
+        $user  = UserFactory::new()->create();
+        $model = TestModelFactory::new()->create(
             [
                 'user_id' => $user->getKey(),
             ]
         );
 
-        $this->assertFalse($rule->passes('attribute', $model->getKey()));
+        self::assertFalse($rule->passes('attribute', $model->getKey()));
     }
 
     /** @test */
@@ -62,14 +61,14 @@ class AuthorizedTest extends AbstractTestCase
     {
         $rule = new Authorized('edit', TestModel::class);
 
-        $user  = factory(User::class)->create();
-        $model = factory(TestModel::class)->create(
+        /*$user  = UserFactory::new()->create();
+        $model = TestModelFactory::new()->create(
             [
                 'user_id' => $user->getKey(),
             ]
-        );
+        );*/
 
-        $this->assertFalse($rule->passes('attribute', '2'));
+        self::assertFalse($rule->passes('attribute', '2'));
     }
 
     /** @test */
@@ -77,12 +76,12 @@ class AuthorizedTest extends AbstractTestCase
     {
         $rule = new Authorized('edit', TestModel::class);
 
-        $user  = factory(User::class)->create();
-        $model = factory(TestModel::class)->create(
-            ['user_id' => 2]
-        );
+        /* $user  = UserFactory::new()->create();
+         $model = TestModelFactory::new()->create(
+             ['user_id' => 2]
+         );*/
 
-        $this->assertFalse($rule->passes('attribute', '1'));
+        self::assertFalse($rule->passes('attribute', '1'));
     }
 
     /** @test */
@@ -98,6 +97,6 @@ class AuthorizedTest extends AbstractTestCase
 
         $rule->passes('name_field', 'John Doe');
 
-        $this->assertEquals('name_field edit and TestModel', $rule->message());
+        self::assertEquals('name_field edit and TestModel', $rule->message());
     }
 }

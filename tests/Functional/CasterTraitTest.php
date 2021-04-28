@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Php\Support\Laravel\Tests\Functional;
 
 use Illuminate\Database\Eloquent\Collection;
+use Php\Support\Laravel\Tests\Database\Factories\TestModelFactory;
 use Php\Support\Laravel\Tests\TestClasses\Entity\EmptyParams;
 use Php\Support\Laravel\Tests\TestClasses\Entity\Params;
 use Php\Support\Laravel\Tests\TestClasses\Models\PgArrayModel;
@@ -16,7 +17,7 @@ class CasterTraitTest extends AbstractFunctionalTestCase
     public function testCreateAndGetWithNullParams(): void
     {
         /** @var Collection $list */
-        $list = factory(TestModel::class, 5)->create();
+        $list = TestModelFactory::times(5)->create();
 
         static::assertCount(5, $list);
 
@@ -42,7 +43,7 @@ class CasterTraitTest extends AbstractFunctionalTestCase
     public function testCreateAndGetWithEmptyArrayParams(): void
     {
         /** @var Collection $list */
-        $list = factory(TestModel::class, 5)->create(
+        $list = TestModelFactory::times(5)->create(
             [
                 'params'    => [],
                 'config'    => [],
@@ -90,7 +91,7 @@ class CasterTraitTest extends AbstractFunctionalTestCase
     public function testCreateAndGetWithFillArrayParams(): void
     {
         /** @var Collection $list */
-        $list = factory(TestModel::class, 5)->create(
+        $list = TestModelFactory::times(5)->create(
             [
                 'str'       => 'string',
                 'str_empty' => 'string empty',
@@ -143,7 +144,7 @@ class CasterTraitTest extends AbstractFunctionalTestCase
     public function testCreateAndGetWithClassParams(): void
     {
         /** @var Collection $list */
-        $list = factory(TestModel::class, 5)->create(
+        $list = TestModelFactory::times(5)->create(
             [
                 'str_empty' => null,
                 'config'    => [
@@ -293,7 +294,6 @@ class CasterTraitTest extends AbstractFunctionalTestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->withFactories(__DIR__ . '/../database/factories');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 }
