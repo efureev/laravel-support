@@ -63,10 +63,14 @@ class CasterTraitTest extends AbstractFunctionalTestCase
         static::assertEmpty($model->config);
         static::assertNull($model->params);
         static::assertNull($model->getOriginal('params'));
+        static::assertEquals([], $model->getDirty());
 
         $model->status = Status::STATUS_INSTALLED;
+        static::assertEquals(['status' => Status::STATUS_INSTALLED], $model->getDirty());
 
         $model->save();
+
+        static::assertEquals([], $model->getDirty());
     }
 
     public function testCreateAndGetWithNullParamsAndStatusIsNull2(): void
@@ -94,13 +98,16 @@ class CasterTraitTest extends AbstractFunctionalTestCase
         static::assertEmpty($model->config);
         static::assertNull($model->params);
         static::assertNull($model->getOriginal('params'));
+        static::assertEquals(['status' => null], $model->getDirty());
 
         $model->status = Status::STATUS_INSTALLED;
+        static::assertEquals(['status' => Status::STATUS_INSTALLED], $model->getDirty());
 
         $model->save();
 
         self::assertInstanceOf(Status::class, $model->status);
         self::assertEquals(Status::STATUS_INSTALLED, $model->status->key());
+        static::assertEquals([], $model->getDirty());
     }
 
     public function testCreateAndGetWithEmptyArrayParams(): void
