@@ -7,7 +7,6 @@ namespace Php\Support\Laravel\Caster;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Php\Support\Exceptions\Exception;
-use Php\Support\Exceptions\JsonException;
 use Php\Support\Helpers\Json;
 use Php\Support\Traits\ConfigurableTrait;
 
@@ -22,10 +21,9 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     /**
      * AbstractCasting constructor.
      *
-     * @param string|array|static $value
+     * @param  string|array|static  $value
      *
      * @throws Exception
-     * @throws JsonException
      */
     public function __construct($value = null)
     {
@@ -35,11 +33,10 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     /**
      * Fill the instance with data
      *
-     * @param string|array|static $value
+     * @param  string|array|static  $value
      *
      * @return AbstractCasting
      * @throws Exception
-     * @throws JsonException
      */
     public function fill($value): self
     {
@@ -61,7 +58,7 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     /**
      * Prepend formatting
      *
-     * @param string|array|static $value
+     * @param  string|array|static  $value
      *
      * @return string|array|static
      */
@@ -78,10 +75,9 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     /**
      * Convert value data
      *
-     * @param mixed $value
+     * @param  mixed  $value
      *
      * @return array|string
-     * @throws JsonException
      */
     public function convert($value)
     {
@@ -97,7 +93,7 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     }
 
     /**
-     * @param mixed $value
+     * @param  mixed  $value
      *
      * @throws Exception
      */
@@ -111,10 +107,9 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     /**
      * JSON-string to Array
      *
-     * @param string|null|array $json
+     * @param  string|null|array  $json
      *
      * @return array
-     * @throws JsonException
      */
     protected static function dataFromJson($json): array
     {
@@ -135,10 +130,9 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     abstract public function toArray(): array;
 
     /**
-     * @param static|array $value
+     * @param  static|array  $value
      *
      * @return string|null
-     * @throws JsonException
      */
     public static function castToDatabase($value): ?string
     {
@@ -150,10 +144,9 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     }
 
     /**
-     * @param int $options
+     * @param  int  $options
      *
      * @return string|null
-     * @throws JsonException
      */
     public function toJson($options = 320): ?string
     {
@@ -163,11 +156,10 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     /**
      * Array to JSON-string
      *
-     * @param array $data
-     * @param int $options Default is `JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE`.
+     * @param  array  $data
+     * @param  int  $options  Default is `JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE`.
      *
      * @return string|null
-     * @throws JsonException
      */
     protected static function dataToJson(array $data, $options = 320): ?string
     {
@@ -179,11 +171,10 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     }
 
     /**
-     * @param string|null $value
+     * @param  string|null  $value
      *
      * @return $this
      * @throws Exception
-     * @throws JsonException
      */
     public function castFromDatabase(?string $value): self
     {
@@ -195,7 +186,6 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
      * @param $original
      *
      * @return bool
-     * @throws JsonException
      */
     public static function isEquivalent($value, $original): bool
     {

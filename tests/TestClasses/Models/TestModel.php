@@ -16,6 +16,7 @@ use Php\Support\Laravel\Tests\TestClasses\Entity\Status;
  * @property boolean $enabled
  * @property string $title
  * @property Params $params
+ * @property Status $status
  * @property array $config
  * @property string $str
  * @property string $str_empty
@@ -29,7 +30,7 @@ class TestModel extends Model
 
     public $timestamps = false;
     protected $keyType = 'string';
-    protected $table   = 'test_table';
+    protected $table = 'test_table';
 
     protected $fillable = [
         'params',
@@ -37,6 +38,7 @@ class TestModel extends Model
         'str',
         'str_empty',
         'int',
+        'enabled',
     ];
 
     protected $casts = [

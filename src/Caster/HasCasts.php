@@ -70,7 +70,7 @@ trait HasCasts
         switch ($simpleType = strtolower(trim($type))) {
             case 'int':
             case 'integer':
-                return (int) $value;
+                return (int)$value;
             case 'real':
             case 'float':
             case 'double':
@@ -78,10 +78,10 @@ trait HasCasts
             case 'decimal':
                 return $this->asDecimal($value, explode(':', $simpleType, 2)[1]);
             case 'string':
-                return (string) $value;
+                return (string)$value;
             case 'bool':
             case 'boolean':
-                return (bool) $value;
+                return (bool)$value;
             case 'object':
                 return $this->fromJson($value, true);
             case 'array':

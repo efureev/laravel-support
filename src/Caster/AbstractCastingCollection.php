@@ -9,7 +9,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Enumerable;
 use Php\Support\Exceptions\Exception;
-use Php\Support\Exceptions\JsonException;
 use Php\Support\Helpers\Arr;
 use Php\Support\Helpers\Json;
 use Php\Support\Interfaces\Arrayable as uArrayable;
@@ -54,7 +53,7 @@ abstract class AbstractCastingCollection implements
     /**
      * Prepend formatting
      *
-     * @param string|array|static $value
+     * @param  string|array|static  $value
      *
      * @return string|array|static
      */
@@ -66,7 +65,7 @@ abstract class AbstractCastingCollection implements
     /**
      * Convert value data into array
      *
-     * @param mixed $value
+     * @param  mixed  $value
      *
      * @return array|string
      */
@@ -86,10 +85,9 @@ abstract class AbstractCastingCollection implements
     /**
      * JSON-string to Array
      *
-     * @param string|null $json
+     * @param  string|null  $json
      *
      * @return array
-     * @throws JsonException
      */
     protected static function dataFromJson($json): array
     {
@@ -103,10 +101,9 @@ abstract class AbstractCastingCollection implements
     /**
      * Results array of items from Collection or Arrayable.
      *
-     * @param mixed $items
+     * @param  mixed  $items
      *
      * @return array|mixed|null
-     * @throws \Php\Support\Exceptions\JsonException
      */
     protected function getArrayableItems($items)
     {
@@ -138,7 +135,7 @@ abstract class AbstractCastingCollection implements
     }
 
     /**
-     * @param mixed $value
+     * @param  mixed  $value
      *
      * @throws Exception
      */
@@ -151,7 +148,7 @@ abstract class AbstractCastingCollection implements
 
 
     /**
-     * @param static|array $value
+     * @param  static|array  $value
      *
      * @return string|null
      */
@@ -165,7 +162,7 @@ abstract class AbstractCastingCollection implements
     }
 
     /**
-     * @param int $options
+     * @param  int  $options
      *
      * @return string|null
      */
@@ -177,8 +174,8 @@ abstract class AbstractCastingCollection implements
     /**
      * Array to JSON-string
      *
-     * @param array $data
-     * @param int $options Default is `JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE`.
+     * @param  array  $data
+     * @param  int  $options  Default is `JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE`.
      *
      * @return string|null
      */
@@ -192,7 +189,7 @@ abstract class AbstractCastingCollection implements
     }
 
     /**
-     * @param string|null $value
+     * @param  string|null  $value
      *
      * @return $this
      * @throws Exception
@@ -210,7 +207,7 @@ abstract class AbstractCastingCollection implements
     /**
      * Push one or more items onto the end of the collection.
      *
-     * @param mixed $values [optional]
+     * @param  mixed  $values  [optional]
      *
      * @return $this
      */
@@ -228,8 +225,8 @@ abstract class AbstractCastingCollection implements
     /**
      * Add an item to the collection.
      *
-     * @param mixed $item
-     * @param callable|null $cb
+     * @param  mixed  $item
+     * @param  callable|null  $cb
      *
      * @return $this
      */
@@ -241,9 +238,9 @@ abstract class AbstractCastingCollection implements
     }
 
     /**
-     * @param string|int $key
-     * @param mixed $item
-     * @param callable|null $cb
+     * @param  string|int  $key
+     * @param  mixed  $item
+     * @param  callable|null  $cb
      *
      * @return $this
      */
@@ -256,7 +253,7 @@ abstract class AbstractCastingCollection implements
 
 
     /**
-     * @param string|int $key
+     * @param  string|int  $key
      *
      * @return mixed|null
      */
