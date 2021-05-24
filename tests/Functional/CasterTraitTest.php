@@ -92,13 +92,12 @@ class CasterTraitTest extends AbstractFunctionalTestCase
 
         static::assertFalse($model->enabled);
         static::assertNull($model->status);
-        $model->status = null;
-        static::assertNull($model->status);
+
         static::assertNull($model->config);
         static::assertEmpty($model->config);
         static::assertNull($model->params);
         static::assertNull($model->getOriginal('params'));
-        static::assertEquals(['status' => null], $model->getDirty());
+        static::assertEquals([], $model->getDirty());
 
         $model->status = Status::STATUS_INSTALLED;
         static::assertEquals(['status' => Status::STATUS_INSTALLED], $model->getDirty());

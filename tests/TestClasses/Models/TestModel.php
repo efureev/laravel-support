@@ -36,6 +36,7 @@ class TestModel extends Model
         'params',
         'config',
         'str',
+        'status',
         'str_empty',
         'int',
         'enabled',

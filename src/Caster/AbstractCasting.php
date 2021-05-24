@@ -189,7 +189,7 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
      */
     public static function isEquivalent($value, $original): bool
     {
-        return $value->toJson() === $original->toJson();
+        return $value->toJson() === $original?->toJson();
     }
 
     protected static function emptyJsonStruct(): ?string
