@@ -196,4 +196,9 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     {
         return self::EMPTY_JSON_OBJECT;
     }
+
+    public function value(): mixed
+    {
+        return static::castToDatabase($this);
+    }
 }

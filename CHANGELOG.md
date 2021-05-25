@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [1.1.0] - 2021-05-25
+
+### Added
+
+- Add a method `value` to the interface `Caster`
+
 ## [1.0.0] - 2021-04-28
 
 ### Changed

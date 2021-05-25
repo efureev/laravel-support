@@ -27,4 +27,9 @@ class PgArray implements Caster
     {
         return $value === $original;
     }
+
+    public function value(): mixed
+    {
+        return static::castToDatabase($this);
+    }
 }

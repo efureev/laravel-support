@@ -308,4 +308,9 @@ abstract class AbstractCastingCollection implements
     {
         return count($this->items);
     }
+
+    public function value(): mixed
+    {
+        return static::castToDatabase($this);
+    }
 }

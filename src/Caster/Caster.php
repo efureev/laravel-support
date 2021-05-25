@@ -11,4 +11,6 @@ interface Caster
     public function castFromDatabase(?string $value);
 
     public static function isEquivalent($value, $original): bool;
+
+    public function value(): mixed;
 }
