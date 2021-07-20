@@ -13,12 +13,12 @@ use Illuminate\Support\Facades\Validator;
 trait HasValidate
 {
     /**
-     * @param string $value
+     * @param mixed $value
      * @param string $rules
      * @param string $attributeName
      * @param string|null $message
      *
-     * @return array
+     * @return mixed
      * @throws \Illuminate\Validation\ValidationException
      *
      * @example
@@ -26,15 +26,17 @@ trait HasValidate
      *
      */
     protected static function validateValue(
-        string $value,
+        mixed $value,
         string $rules,
         string $attributeName = 'value',
         string $message = null
-    ): array {
-        return Validator::make(
+    ): mixed {
+        Validator::make(
             [$attributeName => $value],
             [$attributeName => $rules],
             $message ? [$attributeName => $message] : []
         )->validate();
+
+        return $value;
     }
 }
