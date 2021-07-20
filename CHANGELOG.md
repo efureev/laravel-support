@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [1.2.0] - 2021-07-20
+
+### Added
+
+- Add a method `validateValue` to trait `HasValidate`
+
 ## [1.1.0] - 2021-05-25
 
 ### Added
