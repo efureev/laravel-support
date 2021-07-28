@@ -38,6 +38,7 @@
     "psr-4": {
       "Php\\Support\\Laravel\\Tests\\Database\\Factories\\": "tests/database/factories",
       "Php\\Support\\Laravel\\Tests\\Database\\Seeders\\": "tests/database/seeders",
+      "Php\\Support\\Laravel\\Tests\\TestClasses\\ServiceProviders\\": "tests/TestClasses/ServiceProviders/src/",
       "Php\\Support\\Laravel\\Tests\\": "tests/"
     }
   },

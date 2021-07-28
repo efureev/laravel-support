@@ -9,6 +9,18 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [1.3.0] - 2021-07-29
+
+### Added
+
+- Add helpers to work with `ServiceProvider`:
+    - class `AbstractServiceProvider`
+    - trait `HasBooting`
+    - trait `HasCommands`
+    - trait `HasPolicies`
+    - trait `HasPathHelpers`
+    - trait `HasRegisters`
+
 ## [1.2.0] - 2021-07-20
 
 ### Added
