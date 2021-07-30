@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User;
+use Php\Support\Laravel\Caster\GeoPoint;
 use Php\Support\Laravel\Caster\HasCasts;
 use Php\Support\Laravel\Tests\TestClasses\Entity\Params;
 use Php\Support\Laravel\Tests\TestClasses\Entity\Status;
@@ -17,6 +18,7 @@ use Php\Support\Laravel\Tests\TestClasses\Entity\Status;
  * @property string $title
  * @property Params $params
  * @property Status $status
+ * @property GeoPoint $geo_point
  * @property array $config
  * @property string $str
  * @property string $str_empty
@@ -40,6 +42,7 @@ class TestModel extends Model
         'str_empty',
         'int',
         'enabled',
+        'geo_point',
     ];
 
     protected $casts = [
@@ -50,6 +53,7 @@ class TestModel extends Model
         'str'       => 'string',
         'str_empty' => 'string',
         'int'       => 'int',
+        'geo_point' => GeoPoint::class,
     ];
 
     public function user(): BelongsTo

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Php\Support\Laravel\Tests\Functional;
 
 use Illuminate\Database\Eloquent\Collection;
+use Php\Support\Laravel\Caster\GeoPoint;
 use Php\Support\Laravel\Tests\Database\Factories\TestModelFactory;
 use Php\Support\Laravel\Tests\TestClasses\Entity\EmptyParams;
 use Php\Support\Laravel\Tests\TestClasses\Entity\Params;
@@ -18,7 +19,11 @@ class CasterTraitTest extends AbstractFunctionalTestCase
     public function testCreateAndGetWithNullParams(): void
     {
         /** @var Collection $list */
-        $list = TestModelFactory::times(5)->create();
+        $list = TestModelFactory::times(5)->create(
+            [
+                'geo_point' => null,
+            ]
+        );
 
         static::assertCount(5, $list);
 
@@ -32,6 +37,7 @@ class CasterTraitTest extends AbstractFunctionalTestCase
             static::assertNotEmpty($item->str);
             static::assertNull($item->str_empty);
             static::assertNull($item->int);
+            static::assertNull($item->geo_point);
 
             static::assertIsBool($item->enabled);
             static::assertNull($item->config);
@@ -209,6 +215,23 @@ class CasterTraitTest extends AbstractFunctionalTestCase
             );
         }
     }
+
+    public function testCreateGeoPoint(): void
+    {
+        $model = TestModel::create(
+            [
+                'geo_point' => new GeoPoint(111.02, 21.20),
+            ]
+        );
+
+        static::assertInstanceOf(GeoPoint::class, $model->geo_point);
+        static::assertEquals(111.02, $model->geo_point->x);
+        static::assertEquals(21.20, $model->geo_point->y);
+        static::assertEquals('(111.02,21.2)', $model->geo_point->value());
+        static::assertEquals([111.02, 21.2], $model->geo_point->toArray());
+        static::assertEquals('{"longitude":111.02,"latitude":21.2}', $model->geo_point->toJson());
+    }
+
 
     public function testCreateAndGetWithClassParams(): void
     {

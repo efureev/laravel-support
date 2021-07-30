@@ -1,9 +1,9 @@
 <?php
 
-
 namespace Php\Support\Laravel\Tests\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Php\Support\Laravel\Caster\GeoPoint;
 use Php\Support\Laravel\Tests\TestClasses\Entity\Status;
 use Php\Support\Laravel\Tests\TestClasses\Models\TestModel;
 
@@ -19,10 +19,11 @@ class TestModelFactory extends Factory
     public function definition(): array
     {
         return [
-            'title'   => $this->faker->sentence,
-            'str'     => $this->faker->title,
-            'enabled' => $this->faker->randomElement([true, false]),
-            'status'  => $this->faker->randomElement(Status::STATUSES),
+            'title'     => $this->faker->sentence,
+            'str'       => $this->faker->title,
+            'enabled'   => $this->faker->randomElement([true, false]),
+            'status'    => $this->faker->randomElement(Status::STATUSES),
+            'geo_point' => new GeoPoint($this->faker->randomFloat(), $this->faker->randomFloat()),
         ];
     }
 }
