@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel\Rules;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -38,5 +39,33 @@ trait HasValidate
         )->validate();
 
         return $value;
+    }
+
+
+    protected static function gainIntValue(
+        Request $request,
+        string $name,
+        int $default = null
+    ): ?int {
+        $value = $request->get($name, $default);
+        return $value === null ? null : (((int)$value) ?: $default);
+    }
+
+    protected static function gainBoolValue(
+        Request $request,
+        string $name,
+        bool $default = null
+    ): ?bool {
+        $value = $request->get($name, $default);
+        return $value === null ? null : isTrue($value);
+    }
+
+    protected static function gainStringValue(
+        Request $request,
+        string $name,
+        string $default = null
+    ): ?string {
+        $value = (string)$request->get($name, $default);
+        return $value ?: null;
     }
 }
