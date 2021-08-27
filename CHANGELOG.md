@@ -197,7 +197,9 @@ Check MD [online][check-online].
 - The trait `CasterAttribute`: for custom class casts
 - The trait for DB/Migration `UUID`
 
-[unreleased]: https://github.com/efureev/laravel-support/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/efureev/laravel-support/compare/v1.6.0...HEAD
+
+[1.6.0]: https://github.com/efureev/laravel-support/compare/v1.0.0...v1.6.0
 
 [1.0.0]: https://github.com/efureev/laravel-support/compare/v0.11.0...v1.0.0
 
