@@ -9,17 +9,26 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [1.6.0] - 2021-08-27
+
+### Added
+
+- Add some functions to the `HasValidate`:
+    - `gainIntValue`
+    - `gainStringValue`
+    - `gainBoolValue`
+
 ## [1.3.0] - 2021-07-29
 
 ### Added
 
 - Add helpers to work with `ServiceProvider`:
-  - class `AbstractServiceProvider`
-  - trait `HasBooting`
-  - trait `HasCommands`
-  - trait `HasPolicies`
-  - trait `HasPathHelpers`
-  - trait `HasRegisters`
+    - class `AbstractServiceProvider`
+    - trait `HasBooting`
+    - trait `HasCommands`
+    - trait `HasPolicies`
+    - trait `HasPathHelpers`
+    - trait `HasRegisters`
 
 ## [1.2.0] - 2021-07-20
 
