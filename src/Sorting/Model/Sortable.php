@@ -167,7 +167,7 @@ SQL;
     private function incrementInReorder($new, $old): void
     {
         $column = static::getSortingColumnName();
-        $query = $this->forSortingRestrictions($this->newQuery())
+        $query  = $this->forSortingRestrictions($this->newQuery())
             ->where($column, '>=', $new);
 
         if ($this->exists) {
