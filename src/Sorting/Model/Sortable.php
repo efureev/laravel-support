@@ -167,7 +167,8 @@ SQL;
     private function incrementInReorder($new, $old): void
     {
         $column = static::getSortingColumnName();
-        $query  = $this->where($column, '>=', $new);
+        $query = $this->forSortingRestrictions($this->newQuery())
+            ->where($column, '>=', $new);
 
         if ($this->exists) {
             $query->where($column, '<', $old);
@@ -179,7 +180,8 @@ SQL;
     private function decrementInReorder($new, $old): void
     {
         $column = static::getSortingColumnName();
-        $query  = $this->where($column, '<=', $new);
+        $query  = $this->forSortingRestrictions($this->newQuery())
+            ->where($column, '<=', $new);
 
         if ($this->exists) {
             $query->where($column, '>', $old);
@@ -211,5 +213,10 @@ SQL;
     public function scopeSortingPositionOrderByAsc(Builder $query): Builder
     {
         return $query->orderBy(static::getSortingColumnName());
+    }
+
+    protected function forSortingRestrictions(Builder $query): Builder
+    {
+        return $query;
     }
 }
