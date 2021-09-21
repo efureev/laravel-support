@@ -1,17 +1,17 @@
 name: PHP Laravel Package
 
-on: [push]
+on: [ push ]
 
 jobs:
-  phpcs:
-    name: PHPCS
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: PHPCS check
-        uses: chekalsky/phpcs-action@v1
-        with:
-          enable_warnings: true
+  #  phpcs:
+  #    name: PHPCS
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - uses: actions/checkout@v2
+  #      - name: PHPCS check
+  #        uses: chekalsky/phpcs-action@v1
+  #        with:
+  #          enable_warnings: true
 
   lint-changelog:
     name: Lint changelog file
@@ -29,15 +29,15 @@ jobs:
   testing:
     name: Test on PHP ${{ matrix.php }} with ${{ matrix.setup }} dependencies
 
-    needs: [phpcs, lint-changelog]
+    needs: [ lint-changelog ]
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
     strategy:
       fail-fast: false
       matrix:
-        setup: ['basic', 'lowest']
-        php: ['7.4', '8.0']
+        setup: [ 'basic', 'lowest' ]
+        php: [ '8.0' ]
 
     services:
       postgres:
@@ -58,7 +58,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Use PHP ${{ matrix.php }}
-        uses: shivammathur/setup-php@v1 # Action page: <https://github.com/shivammathur/setup-php>
+        uses: shivammathur/setup-php@v2 # Action page: <https://github.com/shivammathur/setup-php>
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring
@@ -102,7 +102,7 @@ jobs:
 
   release:
     name: Create Release
-    needs: [testing]
+    needs: [ testing ]
     runs-on: ubuntu-latest
     if: ${{ startsWith(github.ref, 'refs/tags/v') && endsWith(github.ref, '.0') }}
     steps:

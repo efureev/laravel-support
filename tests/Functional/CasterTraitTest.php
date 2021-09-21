@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Php\Support\Laravel\Tests\Functional;
 
 use Illuminate\Database\Eloquent\Collection;
+use Php\Support\Laravel\Caster\GeoPoint;
+use Php\Support\Laravel\Tests\Database\Factories\TestModelFactory;
 use Php\Support\Laravel\Tests\TestClasses\Entity\EmptyParams;
 use Php\Support\Laravel\Tests\TestClasses\Entity\Params;
+use Php\Support\Laravel\Tests\TestClasses\Entity\Status;
 use Php\Support\Laravel\Tests\TestClasses\Models\PgArrayModel;
 use Php\Support\Laravel\Tests\TestClasses\Models\TestDirtyModel;
 use Php\Support\Laravel\Tests\TestClasses\Models\TestModel;
@@ -16,7 +19,11 @@ class CasterTraitTest extends AbstractFunctionalTestCase
     public function testCreateAndGetWithNullParams(): void
     {
         /** @var Collection $list */
-        $list = factory(TestModel::class, 5)->create();
+        $list = TestModelFactory::times(5)->create(
+            [
+                'geo_point' => null,
+            ]
+        );
 
         static::assertCount(5, $list);
 
@@ -30,6 +37,7 @@ class CasterTraitTest extends AbstractFunctionalTestCase
             static::assertNotEmpty($item->str);
             static::assertNull($item->str_empty);
             static::assertNull($item->int);
+            static::assertNull($item->geo_point);
 
             static::assertIsBool($item->enabled);
             static::assertNull($item->config);
@@ -39,10 +47,78 @@ class CasterTraitTest extends AbstractFunctionalTestCase
         }
     }
 
+    public function testCreateAndGetWithNullParamsAndStatusIsNull(): void
+    {
+        $model = TestModel::create(
+            [
+                'title'   => 'test',
+                'str'     => "test2",
+                'enabled' => false,
+            ]
+        );
+
+        static::assertNull($model->title);
+        static::assertEquals('test2', $model->str);
+
+        static::assertNull($model->str_empty);
+        static::assertNull($model->int);
+
+        static::assertFalse($model->enabled);
+        static::assertNull($model->status);
+        static::assertNull($model->config);
+        static::assertEmpty($model->config);
+        static::assertNull($model->params);
+        static::assertNull($model->getOriginal('params'));
+        static::assertEquals([], $model->getDirty());
+
+        $model->status = Status::STATUS_INSTALLED;
+        static::assertEquals(['status' => Status::STATUS_INSTALLED], $model->getDirty());
+
+        $model->save();
+
+        static::assertEquals([], $model->getDirty());
+    }
+
+    public function testCreateAndGetWithNullParamsAndStatusIsNull2(): void
+    {
+        $model = TestModel::create(
+            [
+                'title'   => 'test',
+                'str'     => "test2",
+                'enabled' => false,
+                'status'  => null,
+            ]
+        );
+
+        static::assertNull($model->title);
+        static::assertEquals('test2', $model->str);
+
+        static::assertNull($model->str_empty);
+        static::assertNull($model->int);
+
+        static::assertFalse($model->enabled);
+        static::assertNull($model->status);
+
+        static::assertNull($model->config);
+        static::assertEmpty($model->config);
+        static::assertNull($model->params);
+        static::assertNull($model->getOriginal('params'));
+        static::assertEquals([], $model->getDirty());
+
+        $model->status = Status::STATUS_INSTALLED;
+        static::assertEquals(['status' => Status::STATUS_INSTALLED], $model->getDirty());
+
+        $model->save();
+
+        self::assertInstanceOf(Status::class, $model->status);
+        self::assertEquals(Status::STATUS_INSTALLED, $model->status->key());
+        static::assertEquals([], $model->getDirty());
+    }
+
     public function testCreateAndGetWithEmptyArrayParams(): void
     {
         /** @var Collection $list */
-        $list = factory(TestModel::class, 5)->create(
+        $list = TestModelFactory::times(5)->create(
             [
                 'params'    => [],
                 'config'    => [],
@@ -90,7 +166,7 @@ class CasterTraitTest extends AbstractFunctionalTestCase
     public function testCreateAndGetWithFillArrayParams(): void
     {
         /** @var Collection $list */
-        $list = factory(TestModel::class, 5)->create(
+        $list = TestModelFactory::times(5)->create(
             [
                 'str'       => 'string',
                 'str_empty' => 'string empty',
@@ -140,10 +216,27 @@ class CasterTraitTest extends AbstractFunctionalTestCase
         }
     }
 
+    public function testCreateGeoPoint(): void
+    {
+        $model = TestModel::create(
+            [
+                'geo_point' => new GeoPoint(111.02, 21.20),
+            ]
+        );
+
+        static::assertInstanceOf(GeoPoint::class, $model->geo_point);
+        static::assertEquals(111.02, $model->geo_point->x);
+        static::assertEquals(21.20, $model->geo_point->y);
+        static::assertEquals('(111.02,21.2)', $model->geo_point->value());
+        static::assertEquals([111.02, 21.2], $model->geo_point->toArray());
+        static::assertEquals('{"longitude":111.02,"latitude":21.2}', $model->geo_point->toJson());
+    }
+
+
     public function testCreateAndGetWithClassParams(): void
     {
         /** @var Collection $list */
-        $list = factory(TestModel::class, 5)->create(
+        $list = TestModelFactory::times(5)->create(
             [
                 'str_empty' => null,
                 'config'    => [
@@ -294,6 +387,5 @@ class CasterTraitTest extends AbstractFunctionalTestCase
         parent::setUp();
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->withFactories(__DIR__ . '/../database/factories');
     }
 }

@@ -1,21 +1,29 @@
 <?php
 
-/** @var Factory $factory */
+namespace Php\Support\Laravel\Tests\Database\Factories;
 
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Str;
 
-$factory->define(
-    User::class,
-    static function (Faker\Generator $faker) {
-        static $password;
+class UserFactory extends Factory
+{
+    protected $model = User::class;
 
+    protected static ?string $password = null;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition(): array
+    {
         return [
-            'name'           => $faker->name,
-            'email'          => $faker->unique()->safeEmail,
-            'password'       => $password ?: $password = bcrypt('secret'),
+            'name'           => $this->faker->name,
+            'email'          => $this->faker->unique()->safeEmail,
+            'password'       => \Hash::make(self::$password ?: self::$password = 'secret'),
             'remember_token' => Str::random(10),
         ];
     }
-);
+}

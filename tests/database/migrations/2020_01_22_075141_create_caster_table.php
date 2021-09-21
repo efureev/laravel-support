@@ -46,6 +46,8 @@ class CreateCasterTable extends Migration
             }
         );
 
+        DB::statement('ALTER TABLE test_table ADD COLUMN geo_point point');
+
         Schema::create(
             'pg_table',
             static function (Blueprint $table) {

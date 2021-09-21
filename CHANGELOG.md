@@ -9,6 +9,45 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [1.6.0] - 2021-08-27
+
+### Added
+
+- Add some functions to the `HasValidate`:
+  - `gainIntValue`
+  - `gainStringValue`
+  - `gainBoolValue`
+
+## [1.3.0] - 2021-07-29
+
+### Added
+
+- Add helpers to work with `ServiceProvider`:
+  - class `AbstractServiceProvider`
+  - trait `HasBooting`
+  - trait `HasCommands`
+  - trait `HasPolicies`
+  - trait `HasPathHelpers`
+  - trait `HasRegisters`
+
+## [1.2.0] - 2021-07-20
+
+### Added
+
+- Add a method `validateValue` to trait `HasValidate`
+
+## [1.1.0] - 2021-05-25
+
+### Added
+
+- Add a method `value` to the interface `Caster`
+
+## [1.0.0] - 2021-04-28
+
+### Changed
+
+- Create a new stage of the package with minimal PHP version: `8.0`
+
 ## [0.11.0] - 2021-01-27
 
 ### Removed
@@ -158,27 +197,52 @@ Check MD [online][check-online].
 - The trait `CasterAttribute`: for custom class casts
 - The trait for DB/Migration `UUID`
 
-[unreleased]: https://github.com/efureev/laravel-support/compare/v0.11.0...HEAD
+[unreleased]: https://github.com/efureev/laravel-support/compare/v1.6.0...HEAD
+
+[1.6.0]: https://github.com/efureev/laravel-support/compare/v1.0.0...v1.6.0
+
+[1.0.0]: https://github.com/efureev/laravel-support/compare/v0.11.0...v1.0.0
+
 [0.11.0]: https://github.com/efureev/laravel-support/compare/v0.10.1...v0.11.0
+
 [0.10.1]: https://github.com/efureev/laravel-support/compare/v0.10.0...v0.10.1
+
 [0.10.0]: https://github.com/efureev/laravel-support/compare/v0.9.4...v0.10.0
+
 [0.9.4]: https://github.com/efureev/laravel-support/compare/v0.9.3...v0.9.4
+
 [0.9.3]: https://github.com/efureev/laravel-support/compare/v0.9.2...v0.9.3
+
 [0.9.2]: https://github.com/efureev/laravel-support/compare/v0.9.0...v0.9.2
+
 [0.8.0]: https://github.com/efureev/laravel-support/compare/v0.8.0...v0.9.0
+
 [0.8.0]: https://github.com/efureev/laravel-support/compare/v0.7.0...v0.8.0
+
 [0.7.0]: https://github.com/efureev/laravel-support/compare/v0.6.0...v0.7.0
+
 [0.6.0]: https://github.com/efureev/laravel-support/compare/v0.5.3...v0.6.0
+
 [0.5.3]: https://github.com/efureev/laravel-support/compare/v0.5.2...v0.5.3
+
 [0.5.2]: https://github.com/efureev/laravel-support/compare/v0.3.0...v0.5.2
+
 [0.3.0]: https://github.com/efureev/laravel-support/compare/v0.2.1...v0.3.0
+
 [0.2.1]: https://github.com/efureev/laravel-support/compare/v0.2.0...v0.2.1
+
 [0.2.0]: https://github.com/efureev/laravel-support/compare/v0.1.0...v0.2.0
+
 [0.1.0]: https://github.com/efureev/laravel-support/compare/v0.0.3...v0.1.0
+
 [0.0.3]: https://github.com/efureev/laravel-support/compare/v0.0.2...v0.0.3
+
 [0.0.2]: https://github.com/efureev/laravel-support/compare/v0.0.1...v0.0.2
+
 [0.0.1]: https://github.com/efureev/laravel-support/releases/tag/v0.0.1
 
 [keepachangelog]:https://keepachangelog.com/en/1.1.0/
+
 [semver]:https://semver.org/spec/v2.0.0.html
+
 [check-online]:https://dlaa.me/markdownlint

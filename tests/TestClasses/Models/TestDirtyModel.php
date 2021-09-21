@@ -19,7 +19,7 @@ class TestDirtyModel extends Model
     use HasCasts;
 
     public $timestamps = false;
-    protected $keyType = 'uuid';
+    protected $keyType = 'string';
     protected $table = 'test_table';
 
     protected $fillable = [

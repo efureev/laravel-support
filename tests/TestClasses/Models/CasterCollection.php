@@ -21,7 +21,7 @@ class CasterCollection extends Model
     use HasCasts;
 
     public $timestamps = false;
-    protected $keyType = 'uuid';
+    protected $keyType = 'string';
     protected $table = 'test_table_caster';
 
     protected $casts = [

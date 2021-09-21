@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Php\Support\Exceptions\UnknownMethodException;
+use Php\Support\Laravel\Tests\Database\Seeders\BaseTableSeeder;
 use Php\Support\Laravel\Tests\TestClasses\HasCustomModel;
 use Php\Support\Laravel\Tests\TestClasses\HasModel;
 use Php\Support\Laravel\Tests\TestClasses\Models\BaseModel;
@@ -86,8 +87,8 @@ class ModelableTest extends AbstractFunctionalTestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations/2020_08_12_075141_create_base_table.php');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations/2020_08_12_075141_create_base_table.php');
 
-        $this->seed(\BaseTableSeeder::class);
+        $this->seed(BaseTableSeeder::class);
     }
 }

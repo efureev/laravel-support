@@ -10,7 +10,7 @@ namespace Php\Support\Laravel\Tests\TestClasses\Models;
  */
 class SortCustomColumnModel extends SortEntity
 {
-    protected $keyType = 'uuid';
+    protected $keyType = 'string';
 
     protected $table = 'sort_entities_custom_col';
 
