@@ -9,7 +9,7 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
-## [1.7.1] - 2021-09-29
+## [1.7.2] - 2021-09-29
 
 ### Remove
 
