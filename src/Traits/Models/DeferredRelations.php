@@ -23,6 +23,11 @@ trait DeferredRelations
         return self::$deferredRelations[$relation];
     }
 
+    public static function hasDeferredRelation(string $relation): bool
+    {
+        return isset(self::$deferredRelations[$relation]);
+    }
+
     public static function getDeferredRelations(): array
     {
         return self::$deferredRelations;
