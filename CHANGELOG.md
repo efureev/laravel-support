@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [1.7.0] - 2021-09-29
+
+### Added
+
+- Add model's trait `DeferredRelations`:
+
 ## [1.6.0] - 2021-08-27
 
 ### Added
