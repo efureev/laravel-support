@@ -5,6 +5,7 @@ namespace Php\Support\Laravel\Sorting\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Trait Sortable
@@ -15,6 +16,7 @@ use Illuminate\Database\Query\Expression;
  * @method Sortable sortingPositionLessThen(int $value, bool $andSelf = true)
  * @method Sortable sortingPositionOrderByDesc()
  * @method Sortable sortingPositionOrderByAsc()
+ * @method Sortable nearestModel(self $model, int $position)
  *
  * @mixin Model
  * @mixin Builder
@@ -75,6 +77,15 @@ trait Sortable
         $this->attributes[static::getSortingColumnName()] = $value;
 
         return $this;
+    }
+
+    public function setSortingPositionOffset(int $offset): self
+    {
+        $newSortingPosition = $this->nearestModel($this, $offset)
+            ->pluck(static::getSortingColumnName())
+            ->first();
+
+        return $this->setSortingPosition($newSortingPosition);
     }
 
     private function normalizeSortingPosition(): self
@@ -218,5 +229,32 @@ SQL;
     protected function forSortingRestrictions(Builder $query): Builder
     {
         return $query;
+    }
+
+    public function scopeNearestModel(Builder $query, Model $model, int $position): Builder
+    {
+        $sortingColumnName  = static::getSortingColumnName();
+        $isPositivePosition = $position >= 0;
+
+        $equalSign          = $isPositivePosition ? '>' : '<';
+        $orderBy            = $isPositivePosition ? 'asc' : 'desc';
+        $aliasRowNumber = 'row_num';
+
+        $subQueryFrom = $model->forSortingRestrictions($query)
+            ->where(
+                $sortingColumnName,
+                $equalSign,
+                $model->{$sortingColumnName}
+            )
+            ->select([
+                DB::raw("row_number() over (order by \"{$sortingColumnName}\" {$orderBy}) as {$aliasRowNumber}"),
+                '*',
+            ])
+            ->orderBy($sortingColumnName, $orderBy);
+
+
+        return $this->withoutGlobalScopes()
+            ->from($subQueryFrom, 'subquery')
+            ->where($aliasRowNumber, abs($position));
     }
 }
