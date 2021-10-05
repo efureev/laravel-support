@@ -79,7 +79,7 @@ trait Sortable
         return $this;
     }
 
-    public function setSortingPositionOffset(int $offset): self
+    public function setSortingPositionByOffset(int $offset): self
     {
         $newSortingPosition = $this->nearestModel($this, $offset)
             ->pluck(static::getSortingColumnName())
