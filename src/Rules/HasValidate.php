@@ -6,6 +6,7 @@ namespace Php\Support\Laravel\Rules;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use stdClass;
 
 /**
  * Trait HasValidate
@@ -39,6 +40,25 @@ trait HasValidate
         )->validate();
 
         return $value;
+    }
+
+    /**
+     * @param mixed $values
+     * @param array $rules
+     * @param array $messages
+     *
+     * @return mixed
+     * @throws \Illuminate\Validation\ValidationException
+     * @example static::validateValues($data, ['id' => 'required|uuid']);
+     */
+    protected static function validateValues(
+        array|stdClass $values,
+        array $rules,
+        array $messages = []
+    ): mixed {
+        Validator::make($values, $rules, $messages)->validate();
+
+        return $values;
     }
 
 
