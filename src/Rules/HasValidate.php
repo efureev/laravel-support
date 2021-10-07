@@ -41,6 +41,25 @@ trait HasValidate
         return $value;
     }
 
+    /**
+     * @param array $values
+     * @param array $rules
+     * @param array $messages
+     *
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     * @example static::validateValues($data, ['id' => 'required|uuid']);
+     */
+    protected static function validateValues(
+        array $values,
+        array $rules,
+        array $messages = []
+    ): array {
+        Validator::make($values, $rules, $messages)->validate();
+
+        return $values;
+    }
+
 
     protected static function gainIntValue(
         Request $request,
