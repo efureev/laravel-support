@@ -9,6 +9,15 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [1.8.0] - 2021-10-16
+
+### Added
+
+- Add some methods to `PostgresArray` trait:
+  - `scopeWherePgArrayContainsAny`
+  - `scopeWherePgArrayContainsOnly`
+  - `scopeWherePgArrayOverlapWith`
+
 ## [1.7.2] - 2021-09-29
 
 ### Remove
