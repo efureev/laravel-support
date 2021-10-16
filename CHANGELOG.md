@@ -20,7 +20,7 @@ Check MD [online][check-online].
 
 ## [1.7.2] - 2021-09-29
 
-### Remove
+### Removed
 
 - Remove model's trait `DeferredRelations`. Use `Model::$relationResolvers`
 
