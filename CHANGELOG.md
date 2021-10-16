@@ -9,7 +9,7 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
-## [1.8.0] - 2021-10-16
+## [1.9.0] - 2021-10-16
 
 ### Added
 
