@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [1.10.0] - 2021-11-14
+
+### Added
+
+- Add trait `AllowToExecute`
+
 ## [1.9.0] - 2021-10-16
 
 ### Added
