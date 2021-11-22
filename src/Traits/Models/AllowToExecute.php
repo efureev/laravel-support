@@ -52,4 +52,11 @@ trait AllowToExecute
     {
         static::$disallowMethodsMap[$method] = $hint;
     }
+
+    protected static function addMethodsToDisallowMap(array $methods): void
+    {
+        foreach ($methods as $method => $hint) {
+            static::$disallowMethodsMap[$method] = $hint;
+        }
+    }
 }
