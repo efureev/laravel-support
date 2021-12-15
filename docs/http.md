@@ -9,6 +9,7 @@ Helps you build your own Requests.
 You need to boot `LaraRequestServiceProvider`.
 
 Custom Request
+
 ```php
 <?php
 
@@ -33,4 +34,12 @@ class CustomController extends Controller
         return $request->id();
     }
 }
+```
+
+Other services
+
+```php
+$app['request'] instanceOf CustomRequest === true
+request() instanceOf CustomRequest === true
+app('request') instanceOf CustomRequest === true
 ```
