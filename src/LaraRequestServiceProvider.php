@@ -17,9 +17,7 @@ class LaraRequestServiceProvider extends ServiceProvider
         $this->app->resolving(
             LaraRequest::class,
             static function ($request, $app) {
-                $request = LaraRequest::createFrom($app['request'], $request);
-
-                $request->setContainer($app);
+                $app->instance('request', LaraRequest::createFrom($app->make('request'), $request)->setContainer($app));
             }
         );
     }
