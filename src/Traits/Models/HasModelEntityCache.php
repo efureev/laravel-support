@@ -20,9 +20,7 @@ trait HasModelEntityCache
 
     protected static function registerEventsForCache(): void
     {
-        static::created(static fn(Model $model) => static::cacheForgetCollection());
         static::saved($fn = static::cacheForgetFn());
-        static::updated($fn);
         static::deleted($fn);
     }
 
