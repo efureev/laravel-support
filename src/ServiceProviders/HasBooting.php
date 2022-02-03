@@ -22,7 +22,7 @@ trait HasBooting
                 $this->app->environment('testing') => 'Testing',
                 $this->app->runningInConsole() => 'Console',
                 default => 'Server',
-            };
+        };
     }
 
     private ?bool $availableToBootCache = null;
