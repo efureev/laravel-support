@@ -174,9 +174,21 @@ trait HasRegisters
         return $this;
     }
 
+    protected bool $runMigration = true;
+
+    public function ignoreMigrations(): void
+    {
+        $this->runMigration = false;
+    }
+
+    public function runMigrations(bool $enable = true): void
+    {
+        $this->runMigration = $enable;
+    }
+
     protected function registerMigrations(): static
     {
-        if ($path = self::getMigrationsPath()) {
+        if ($this->runMigration && ($path = self::getMigrationsPath())) {
             $this->loadMigrationsFrom($path);
         }
 
