@@ -14,20 +14,15 @@ use Illuminate\Support\ServiceProvider;
  */
 trait HasBooting
 {
-    private function bootMethod(): string
+    protected function bootMethod(): string
     {
         static $method;
-        if (!$method) {
-            $result = match (true) {
+
+        return $method ??= 'bootPackageFor' . match (true) {
                 $this->app->environment('testing') => 'Testing',
                 $this->app->runningInConsole() => 'Console',
                 default => 'Server',
             };
-
-            $method = "bootPackageFor$result";
-        }
-
-        return $method;
     }
 
     private ?bool $availableToBootCache = null;

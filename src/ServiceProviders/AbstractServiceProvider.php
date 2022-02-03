@@ -16,6 +16,7 @@ use Illuminate\Support\ServiceProvider;
  */
 abstract class AbstractServiceProvider extends ServiceProvider
 {
+    use PackageNames;
     use HasPolicies;
     use HasCommands;
     use HasBooting;
@@ -50,33 +51,5 @@ abstract class AbstractServiceProvider extends ServiceProvider
         }
 
         parent::callBootedCallbacks();
-    }
-
-    /**
-     * Defines NS for the package
-     *
-     * @return string
-     */
-    public static function getPackageNamespace(): string
-    {
-        if (method_exists(static::class, 'packageNamespace')) {
-            return static::packageNamespace();
-        }
-
-        return classNamespace(static::class);
-    }
-
-    /**
-     * Package name
-     *
-     * @return string
-     */
-    public function getPackageName(): string
-    {
-        if (defined($this::class . '::PACKAGE_NS')) {
-            return static::PACKAGE_NS;
-        }
-
-        return $this::class;
     }
 }
