@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [1.11.0] - 2022-02-08
+
+### Added
+
+- Add caster `PgPoint`
+
 ## [1.10.0] - 2021-11-14
 
 ### Added
