@@ -28,6 +28,11 @@ class LaraRequest extends Request
     {
         $this->container = $container;
 
+        return $this->afterInit();
+    }
+
+    protected function afterInit(): static
+    {
         return $this;
     }
 }
