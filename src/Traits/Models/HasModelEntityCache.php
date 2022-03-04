@@ -97,6 +97,11 @@ trait HasModelEntityCache
 
     public static bool $cacheEnable = true;
 
+    public static function disableCache(): void
+    {
+        static::$cacheEnable = false;
+    }
+
     public static function remember(callable $fn, string $key): mixed
     {
         if (!static::$cacheEnable) {
