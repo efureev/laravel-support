@@ -34,6 +34,10 @@ trait HasModelEntityCache
 
     protected static function cacheForget(Model $model): bool
     {
+        if (!static::$cacheEnable) {
+            return true;
+        }
+
         return Cache::forget(
             static::cachePrefixKey($model->{static::cacheKeyName()})
         );
@@ -79,7 +83,6 @@ trait HasModelEntityCache
         return 'id';
     }
 
-
     protected static function cachePrefixKey(string $key = null, string $prefix = null): string
     {
         $prefix ??= class_basename(static::class);
@@ -92,8 +95,14 @@ trait HasModelEntityCache
         return 60 * 60;
     }
 
+    public static bool $cacheEnable = true;
+
     public static function remember(callable $fn, string $key): mixed
     {
+        if (!static::$cacheEnable) {
+            return $fn();
+        }
+
         return Cache::remember(
             static::cachePrefixKey($key),
             static::cacheTtl(),
