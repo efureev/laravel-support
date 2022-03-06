@@ -174,6 +174,18 @@ trait HasRegisters
         return $this;
     }
 
+
+    protected function registerInstance(string $abstract, mixed $instance, string $alias = null): static
+    {
+        $this->app->instance($abstract, $instance);
+
+        if ($alias) {
+            $this->app->alias($abstract, $alias);
+        }
+
+        return $this;
+    }
+
     protected bool $runMigration = true;
 
     public function ignoreMigrations(): void
