@@ -9,6 +9,12 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [1.14.0] - 2022-03-07
+
+### Added
+
+- Add a register helper `registerInstance`
+
 ## [1.13.0] - 2022-02-08
 
 ### Added
