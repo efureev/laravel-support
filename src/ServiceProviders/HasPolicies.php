@@ -24,9 +24,14 @@ trait HasPolicies
     protected function registerPoliciesForce(array $policies): static
     {
         foreach ($policies as $modelForPolicy => $policy) {
-            Gate::policy($modelForPolicy, $policy);
+            static::registerPolicy($modelForPolicy, $policy);
         }
 
         return $this;
+    }
+
+    protected static function registerPolicy(string $model, string $policy): void
+    {
+        Gate::policy($model, $policy);
     }
 }
