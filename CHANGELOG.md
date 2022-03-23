@@ -9,11 +9,17 @@ Check MD [online][check-online].
 
 ## [unreleased]
 
+## [1.15.0] - 2022-03-23
+
+### Added
+
+- Add the global function `objectToArray`
+
 ## [1.14.0] - 2022-03-07
 
 ### Added
 
-- Add a register helper `registerInstance`
+- Add the register helper `registerInstance`
 
 ## [1.13.0] - 2022-02-08
 

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -9,9 +11,9 @@ if (!function_exists('user')) {
      *
      * @param string|null $guard
      *
-     * @return null|\Illuminate\Contracts\Auth\Authenticatable
+     * @return null|Authenticatable
      */
-    function user($guard = null)
+    function user(?string $guard = null): ?Authenticatable
     {
         return app('auth')->guard($guard)->user();
     }
@@ -23,7 +25,7 @@ if (!function_exists('toCollect')) {
      *
      * @return Collection
      */
-    function toCollect($model)
+    function toCollect(mixed $model): Collection
     {
         if ($model instanceof Model) {
             return collect([$model]);
@@ -38,5 +40,34 @@ if (!function_exists('toCollect')) {
         }
 
         return collect([$model]);
+    }
+}
+
+
+if (!function_exists('objectToArray')) {
+    /**
+     * @param mixed $data
+     *
+     * @return mixed
+     */
+    function objectToArray(mixed $data): mixed
+    {
+        if ($data instanceof Arrayable) {
+            $data = $data->toArray();
+        } elseif ($data instanceof \JsonSerializable) {
+            $data = $data->jsonSerialize();
+        } elseif ($data instanceof \Traversable) {
+            $data = iterator_to_array($data);
+        }
+
+        if (!is_array($data)) {
+            return $data;
+        }
+
+        foreach ($data as &$item) {
+            $item = objectToArray($item);
+        }
+
+        return $data;
     }
 }
