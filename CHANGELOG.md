@@ -4,6 +4,10 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.15.2](https://github.com/efureev/laravel-support/compare/v1.15.1...v1.15.2) (2022-04-15)
+
+---
+
 ## [1.15.1](https://github.com/efureev/laravel-support/compare/v1.15.0...v1.15.1) (2022-04-15)
 ### Bug Fixes
 
