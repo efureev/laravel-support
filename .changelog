@@ -1,0 +1,13 @@
+<?php
+
+return [
+    // Types allowed on changelog
+    'types'        => ['feat', 'fix', 'perf'], // These could overwrite ignored types
+    // Exclude not notables types (following types are the default excluded types)
+    'ignoreTypes'  => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
+    'packageBumps' => [
+        //        'ConventionalChangelog\PackageBump\ComposerJson',
+        ConventionalChangelog\PackageBump\PackageJson::class,
+    ],
+    'postRun'      => static fn() => `composer normalize`,
+];

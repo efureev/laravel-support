@@ -1,293 +1,414 @@
+<!--- BEGIN HEADER -->
 # Changelog
 
 All notable changes to this project will be documented in this file.
+<!--- END HEADER -->
 
-The format is based on [Keep a Changelog][keepachangelog]
-and this project adheres to [Semantic Versioning][semver].
+## [1.15.0](https://github.com/efureev/laravel-support/compare/v1.14.1...v1.15.0) (2022-03-23)
+### Features
 
-Check MD [online][check-online].
+* Add the global function `objectToArray` ([1e1b15](https://github.com/efureev/laravel-support/commit/1e1b15bd40155041866e875d390b0563aed6713c))
 
-## [unreleased]
 
-## [1.15.0] - 2022-03-23
+---
 
-### Added
+## [1.14.1](https://github.com/efureev/laravel-support/compare/v1.14.0...v1.14.1) (2022-03-09)
+### Features
 
-- Add the global function `objectToArray`
+* Policies: divide a logic ([423bff](https://github.com/efureev/laravel-support/commit/423bffec139cf9828ef6beeefcff2391573b030d))
 
-## [1.14.0] - 2022-03-07
 
-### Added
+---
 
-- Add the register helper `registerInstance`
+## [1.14.0](https://github.com/efureev/laravel-support/compare/v1.13.3...v1.14.0) (2022-03-07)
+### Features
 
-## [1.13.0] - 2022-02-08
+* Add registerInstance ([e10615](https://github.com/efureev/laravel-support/commit/e106157eddcd24fef93462e2f0b961ff934c659c))
 
-### Added
 
-- Add caster `PgPoint`
+---
 
-## [1.10.0] - 2021-11-14
+## [1.13.3](https://github.com/efureev/laravel-support/compare/v1.13.2...v1.13.3) (2022-03-04)
 
-### Added
+---
 
-- Add trait `AllowToExecute`
+## [1.13.2](https://github.com/efureev/laravel-support/compare/v1.13.1...v1.13.2) (2022-03-04)
+### Bug Fixes
 
-## [1.9.0] - 2021-10-16
+* Cache ([500e3d](https://github.com/efureev/laravel-support/commit/500e3d1ff7e0dcbf67f7dd170f3e9836f9b828ce))
 
-### Added
 
-- Add some methods to `PostgresArray` trait:
-  - `scopeWherePgArrayContainsAny`
-  - `scopeWherePgArrayContainsOnly`
-  - `scopeWherePgArrayOverlapWith`
+---
 
-## [1.7.2] - 2021-09-29
+## [1.13.1](https://github.com/efureev/laravel-support/compare/v1.13.0...v1.13.1) (2022-02-21)
+### Features
 
-### Removed
+* Add afterInit method to LaraRequestServiceProvider ([7f5b24](https://github.com/efureev/laravel-support/commit/7f5b24cfe4bb26a41ca1e5ae3253c60ab165be9b))
 
-- Remove model's trait `DeferredRelations`. Use `Model::$relationResolvers`
 
-## [1.7.0] - 2021-09-29
+---
 
-### Added
+## [1.13.0](https://github.com/efureev/laravel-support/compare/v1.12.2...v1.13.0) (2022-02-08)
+### Features
 
-- Add model's trait `DeferredRelations`
+* Add caster PgPoint ([328f30](https://github.com/efureev/laravel-support/commit/328f302068cf7e97131c5fa54768b703d1d195c1))
 
-## [1.6.0] - 2021-08-27
 
-### Added
+---
 
-- Add some functions to the `HasValidate`:
-  - `gainIntValue`
-  - `gainStringValue`
-  - `gainBoolValue`
+## [1.12.2](https://github.com/efureev/laravel-support/compare/v1.12.1...v1.12.2) (2022-02-03)
 
-## [1.3.0] - 2021-07-29
+---
 
-### Added
+## [1.12.1](https://github.com/efureev/laravel-support/compare/v1.12.0...v1.12.1) (2022-02-03)
 
-- Add helpers to work with `ServiceProvider`:
-  - class `AbstractServiceProvider`
-  - trait `HasBooting`
-  - trait `HasCommands`
-  - trait `HasPolicies`
-  - trait `HasPathHelpers`
-  - trait `HasRegisters`
+---
 
-## [1.2.0] - 2021-07-20
+## [1.12.0](https://github.com/efureev/laravel-support/compare/v1.11.1...v1.12.0) (2022-02-03)
+### Features
 
-### Added
+* Fix ServiceProviders ([b1af69](https://github.com/efureev/laravel-support/commit/b1af692b91365238ea9fc3573825bcd9c5be3844))
 
-- Add a method `validateValue` to trait `HasValidate`
 
-## [1.1.0] - 2021-05-25
+---
 
-### Added
+## [1.11.1](https://github.com/efureev/laravel-support/compare/v1.11.0...v1.11.1) (2022-01-21)
+### Bug Fixes
 
-- Add a method `value` to the interface `Caster`
+* Caching ([2b5075](https://github.com/efureev/laravel-support/commit/2b5075224031f48b7880b55c49672f72e20fbf3e))
 
-## [1.0.0] - 2021-04-28
 
-### Changed
+---
 
-- Create a new stage of the package with minimal PHP version: `8.0`
+## [1.11.0](https://github.com/efureev/laravel-support/compare/v1.10.3...v1.11.0) (2022-01-18)
+### Features
 
-## [0.11.0] - 2021-01-27
+* Add HasModelEntityCache ([754117](https://github.com/efureev/laravel-support/commit/754117eb338e2034e228b498b2941686c594ca59))
 
-### Removed
 
-- Move all `Laravel Database/Scheme` code to new package `efureev/laravel-support-db`
+---
 
-## [0.10.1] - 2021-01-25
+## [1.10.3](https://github.com/efureev/laravel-support/compare/v1.10.2...v1.10.3) (2021-12-15)
+### Bug Fixes
 
-### Added
+* LaraRequestServiceProvider ([2822de](https://github.com/efureev/laravel-support/commit/2822deb235c1272c68c8504ff057ce89c8b62cc2), [6d0b05](https://github.com/efureev/laravel-support/commit/6d0b05e6d5988fd9a68ef97d180ebe5b91e8fbd2))
 
-- Added Global Scope to `Sortable`
 
-## [0.10.0] - 2021-01-25
+---
 
-### Changed
+## [1.10.2](https://github.com/efureev/laravel-support/compare/v1.10.1...v1.10.2) (2021-11-22)
 
-- Completely rewritten the code of `Sortable`
+---
 
-## [0.9.4] - 2020-09-16
+## [1.10.1](https://github.com/efureev/laravel-support/compare/v1.10.0...v1.10.1) (2021-11-14)
 
-### Added
+---
 
-- Added class `LaraRequest` for building custom requests
+## [1.10.0](https://github.com/efureev/laravel-support/compare/v1.9.0...v1.10.0) (2021-11-14)
+### Features
 
-## [0.9.3] - 2020-09-07
+* Add trait AllowToExecute ([0fda4d](https://github.com/efureev/laravel-support/commit/0fda4d0e83fcb38e1c699bf58c5a790379825644))
 
-### Added
 
-- Added class `AbstractRepository` for building custom repositories
+---
 
-## [0.9.2] - 2020-08-14
+## [1.9.0](https://github.com/efureev/laravel-support/compare/v1.8.0...v1.9.0) (2021-10-16)
 
-### Fixed
+---
 
-- Fixed `isDirty` and `getDirty` into Eloquent Model with `Caster` interface
+## [1.8.0](https://github.com/efureev/laravel-support/compare/v1.7.2...v1.8.0) (2021-10-07)
 
-## [0.9.1] - 2020-08-13
+---
 
-### Added
+## [1.7.2](https://github.com/efureev/laravel-support/compare/v1.7.1...v1.7.2) (2021-09-29)
 
-- Add trait `RequestModelable`
+---
 
-## [0.9.0] - 2020-08-13
+## [1.7.1](https://github.com/efureev/laravel-support/compare/v1.7.0...v1.7.1) (2021-09-29)
+### Features
 
-### Added
+* Add hasDeferredRelation to DeferredRelations ([a2a237](https://github.com/efureev/laravel-support/commit/a2a2377f624d109809388bb3514783f10d0f2daa))
 
-- Add trait `Modelable`
-- Add trait `ModelQueryable`
 
-## [0.8.0] - 2020-07-08
+---
 
-### Added
+## [1.7.0](https://github.com/efureev/laravel-support/compare/v1.6.1...v1.7.0) (2021-09-29)
+### Features
 
-- Add trait `WrapQuery`
+* Add model`s trait DeferredRelations ([3af639](https://github.com/efureev/laravel-support/commit/3af639f43f5d346916f777eb5dea0cdffa9c0ccf))
 
-## [0.7.4] - 2020-06-24
 
-### Added
+---
 
-- Add global function `toCollect`
+## [1.6.1](https://github.com/efureev/laravel-support/compare/v1.6.0...v1.6.1) (2021-09-21)
 
-## [0.7.1] - 2020-06-23
+---
 
-### Added
+## [1.6.0](https://github.com/efureev/laravel-support/compare/v1.5.0...v1.6.0) (2021-08-27)
+### Features
 
-- Add `AbstractCastingCollection`
+* Add some functions to HasValidate ([a95677](https://github.com/efureev/laravel-support/commit/a956778a62fa0829da182ba5120cb11a573956d6))
 
-## [0.7.0] - 2020-06-22
 
-### Added
+---
 
-- Add `PaginatedResourceArray`
+## [1.5.0](https://github.com/efureev/laravel-support/compare/v1.4.0...v1.5.0) (2021-08-11)
+### Features
 
-## [0.6.0] - 2020-06-15
+* Add HasMergeAdditional ([9992b6](https://github.com/efureev/laravel-support/commit/9992b67ddf072fd6029e35903e95de528246812b))
 
-### Added
 
-- Add global method: `user`
+---
 
-## [0.5.3] - 2020-05-24
+## [1.4.0](https://github.com/efureev/laravel-support/compare/v1.3.1...v1.4.0) (2021-07-30)
+### Features
 
-### Changed
+* Add GeoPoint caster ([c8f1e9](https://github.com/efureev/laravel-support/commit/c8f1e9dafac3820923a92b58fc331b2720da9c6b))
 
-- Caster: change public to protected
 
-## [0.5.2] - 2020-05-24
+---
 
-### Changed
+## [1.3.1](https://github.com/efureev/laravel-support/compare/v1.3.0...v1.3.1) (2021-07-29)
 
-- Caster
-- Minimum stability: `Laravel` >=7.0 && `PHP` >=7.3
+---
 
-## [0.3.0] - 2020-02-18
+## [1.3.0](https://github.com/efureev/laravel-support/compare/v1.2.1...v1.3.0) (2021-07-29)
+### Features
 
-### Added
+* Add ServiceProvider helpers ([84ae6f](https://github.com/efureev/laravel-support/commit/84ae6fc087bbe252cb3282e6bbd3b805d7f3c446))
 
-- Rules: `Authorized`, `Delimited`
 
-## [0.2.1] - 2020-02-11
+---
 
-### Changed
+## [1.2.1](https://github.com/efureev/laravel-support/compare/v1.2.0...v1.2.1) (2021-07-20)
 
-- Sortable: refactor
+---
 
-## [0.2.0] - 2020-02-06
+## [1.2.0](https://github.com/efureev/laravel-support/compare/v1.1.0...v1.2.0) (2021-07-20)
+### Features
 
-### Added
+* Add `validateValue` method ([29b085](https://github.com/efureev/laravel-support/commit/29b0857c37372fb555ffb12d6c2ee3186a014c08))
 
-- Sortable traits: Sorting models in list
 
-## [0.1.0] - 2020-01-29
+---
 
-### Changed
+## [1.1.0](https://github.com/efureev/laravel-support/compare/v1.0.1...v1.1.0) (2021-05-25)
 
-- Refactor `Caster` functionality
-- Remove from the trait `PostgresArray` methods: `mutateToPgArray`, `accessPgArray`
+---
 
-### Added
+## [1.0.1](https://github.com/efureev/laravel-support/compare/v1.0.0...v1.0.1) (2021-05-24)
 
-- Written tests
+---
 
-### Removed
+## [1.0.0](https://github.com/efureev/laravel-support/compare/v0.11.5...v1.0.0) (2021-04-28)
 
-- The trait `CasterAttribute`
+---
 
-## [0.0.3] - 2020-01-28
+## [0.11.5](https://github.com/efureev/laravel-support/compare/v0.11.3...v0.11.5) (2021-02-16)
 
-### Changed
+---
 
-- Move the Trait `CasterAttribute` to different namespace: `Php\Support\Laravel\Traits\Models`
+## [0.11.3](https://github.com/efureev/laravel-support/compare/v0.11.4...v0.11.3) (2021-02-04)
 
-## [0.0.2] - 2020-01-28
+---
 
-### Added
+## [0.11.4](https://github.com/efureev/laravel-support/compare/v0.11.2...v0.11.4) (2021-02-04)
 
-- The trait for Model `PostgresArray`
+---
 
-### Changed
+## [0.11.2](https://github.com/efureev/laravel-support/compare/v0.11.1...v0.11.2) (2021-01-29)
 
-- Refactor: changed namespaces
+---
 
-## [0.0.1] - 2020-01-28
+## [0.11.1](https://github.com/efureev/laravel-support/compare/v0.11.0...v0.11.1) (2021-01-28)
 
-### Added
+---
 
-- The trait `Caster`: for custom class casts
-- The trait `CasterAttribute`: for custom class casts
-- The trait for DB/Migration `UUID`
+## [0.11.0](https://github.com/efureev/laravel-support/compare/v0.10.3...v0.11.0) (2021-01-27)
 
-[unreleased]: https://github.com/efureev/laravel-support/compare/v1.6.0...HEAD
+---
 
-[1.6.0]: https://github.com/efureev/laravel-support/compare/v1.0.0...v1.6.0
+## [0.10.3](https://github.com/efureev/laravel-support/compare/v0.10.2...v0.10.3) (2021-01-26)
 
-[1.0.0]: https://github.com/efureev/laravel-support/compare/v0.11.0...v1.0.0
+---
 
-[0.11.0]: https://github.com/efureev/laravel-support/compare/v0.10.1...v0.11.0
+## [0.10.2](https://github.com/efureev/laravel-support/compare/v0.10.1...v0.10.2) (2021-01-25)
 
-[0.10.1]: https://github.com/efureev/laravel-support/compare/v0.10.0...v0.10.1
+---
 
-[0.10.0]: https://github.com/efureev/laravel-support/compare/v0.9.4...v0.10.0
+## [0.10.1](https://github.com/efureev/laravel-support/compare/v0.10.0...v0.10.1) (2021-01-25)
 
-[0.9.4]: https://github.com/efureev/laravel-support/compare/v0.9.3...v0.9.4
+---
 
-[0.9.3]: https://github.com/efureev/laravel-support/compare/v0.9.2...v0.9.3
+## [0.10.0](https://github.com/efureev/laravel-support/compare/v0.9.6...v0.10.0) (2021-01-25)
 
-[0.9.2]: https://github.com/efureev/laravel-support/compare/v0.9.0...v0.9.2
+---
 
-[0.8.0]: https://github.com/efureev/laravel-support/compare/v0.8.0...v0.9.0
+## [0.9.6](https://github.com/efureev/laravel-support/compare/v0.9.5...v0.9.6) (2020-12-28)
 
-[0.8.0]: https://github.com/efureev/laravel-support/compare/v0.7.0...v0.8.0
+---
 
-[0.7.0]: https://github.com/efureev/laravel-support/compare/v0.6.0...v0.7.0
+## [0.9.5](https://github.com/efureev/laravel-support/compare/v0.9.4.2...v0.9.5) (2020-11-06)
 
-[0.6.0]: https://github.com/efureev/laravel-support/compare/v0.5.3...v0.6.0
+---
 
-[0.5.3]: https://github.com/efureev/laravel-support/compare/v0.5.2...v0.5.3
+## [0.9.4.2](https://github.com/efureev/laravel-support/compare/v0.9.4.1...v0.9.4.2) (2020-09-16)
 
-[0.5.2]: https://github.com/efureev/laravel-support/compare/v0.3.0...v0.5.2
+---
 
-[0.3.0]: https://github.com/efureev/laravel-support/compare/v0.2.1...v0.3.0
+## [0.9.4.1](https://github.com/efureev/laravel-support/compare/v0.9.4...v0.9.4.1) (2020-09-16)
 
-[0.2.1]: https://github.com/efureev/laravel-support/compare/v0.2.0...v0.2.1
+---
 
-[0.2.0]: https://github.com/efureev/laravel-support/compare/v0.1.0...v0.2.0
+## [0.9.4](https://github.com/efureev/laravel-support/compare/v0.9.3.2...v0.9.4) (2020-09-16)
 
-[0.1.0]: https://github.com/efureev/laravel-support/compare/v0.0.3...v0.1.0
+---
 
-[0.0.3]: https://github.com/efureev/laravel-support/compare/v0.0.2...v0.0.3
+## [0.9.3.2](https://github.com/efureev/laravel-support/compare/v0.9.3.1...v0.9.3.2) (2020-09-10)
 
-[0.0.2]: https://github.com/efureev/laravel-support/compare/v0.0.1...v0.0.2
+---
 
-[0.0.1]: https://github.com/efureev/laravel-support/releases/tag/v0.0.1
+## [0.9.3.1](https://github.com/efureev/laravel-support/compare/v0.9.3...v0.9.3.1) (2020-09-07)
 
-[keepachangelog]:https://keepachangelog.com/en/1.1.0/
+---
 
-[semver]:https://semver.org/spec/v2.0.0.html
+## [0.9.3](https://github.com/efureev/laravel-support/compare/v0.9.2...v0.9.3) (2020-09-07)
 
-[check-online]:https://dlaa.me/markdownlint
+---
+
+## [0.9.2](https://github.com/efureev/laravel-support/compare/v0.9.1...v0.9.2) (2020-08-14)
+
+---
+
+## [0.9.1](https://github.com/efureev/laravel-support/compare/v0.9.0...v0.9.1) (2020-08-12)
+
+---
+
+## [0.9.0](https://github.com/efureev/laravel-support/compare/v0.8.0...v0.9.0) (2020-08-12)
+
+---
+
+## [0.8.0](https://github.com/efureev/laravel-support/compare/v0.7.9...v0.8.0) (2020-07-08)
+
+---
+
+## [0.7.9](https://github.com/efureev/laravel-support/compare/v0.7.8...v0.7.9) (2020-07-06)
+
+---
+
+## [0.7.8](https://github.com/efureev/laravel-support/compare/v0.7.7...v0.7.8) (2020-07-06)
+
+---
+
+## [0.7.7](https://github.com/efureev/laravel-support/compare/v0.7.6...v0.7.7) (2020-07-06)
+
+---
+
+## [0.7.6](https://github.com/efureev/laravel-support/compare/v0.7.5...v0.7.6) (2020-07-03)
+
+---
+
+## [0.7.5](https://github.com/efureev/laravel-support/compare/v0.7.4...v0.7.5) (2020-07-02)
+
+---
+
+## [0.7.4](https://github.com/efureev/laravel-support/compare/v0.7.3...v0.7.4) (2020-06-24)
+
+---
+
+## [0.7.3](https://github.com/efureev/laravel-support/compare/v0.7.2...v0.7.3) (2020-06-23)
+
+---
+
+## [0.7.2](https://github.com/efureev/laravel-support/compare/v0.7.1...v0.7.2) (2020-06-23)
+
+---
+
+## [0.7.1](https://github.com/efureev/laravel-support/compare/v0.7.0...v0.7.1) (2020-06-23)
+
+---
+
+## [0.7.0](https://github.com/efureev/laravel-support/compare/v0.6.0...v0.7.0) (2020-06-22)
+
+---
+
+## [0.6.0](https://github.com/efureev/laravel-support/compare/v0.5.3...v0.6.0) (2020-06-15)
+
+---
+
+## [0.5.3](https://github.com/efureev/laravel-support/compare/v0.5.2...v0.5.3) (2020-05-24)
+
+---
+
+## [0.5.2](https://github.com/efureev/laravel-support/compare/v0.5.1...v0.5.2) (2020-05-24)
+
+---
+
+## [0.5.1](https://github.com/efureev/laravel-support/compare/v0.5.0...v0.5.1) (2020-05-24)
+
+---
+
+## [0.5.0](https://github.com/efureev/laravel-support/compare/v0.4.3...v0.5.0) (2020-05-23)
+
+---
+
+## [0.4.3](https://github.com/efureev/laravel-support/compare/v0.4.2...v0.4.3) (2020-05-23)
+
+---
+
+## [0.4.2](https://github.com/efureev/laravel-support/compare/v0.4.1...v0.4.2) (2020-04-10)
+
+---
+
+## [0.4.1](https://github.com/efureev/laravel-support/compare/v0.4.0...v0.4.1) (2020-04-06)
+
+---
+
+## [0.4.0](https://github.com/efureev/laravel-support/compare/v0.3.4...v0.4.0) (2020-04-04)
+
+---
+
+## [0.3.4](https://github.com/efureev/laravel-support/compare/v0.3.3...v0.3.4) (2020-03-05)
+
+---
+
+## [0.3.3](https://github.com/efureev/laravel-support/compare/v0.3.2...v0.3.3) (2020-02-25)
+
+---
+
+## [0.3.2](https://github.com/efureev/laravel-support/compare/v0.3.1...v0.3.2) (2020-02-19)
+
+---
+
+## [0.3.1](https://github.com/efureev/laravel-support/compare/v0.3.0...v0.3.1) (2020-02-19)
+
+---
+
+## [0.3.0](https://github.com/efureev/laravel-support/compare/v0.2.1...v0.3.0) (2020-02-18)
+
+---
+
+## [0.2.1](https://github.com/efureev/laravel-support/compare/v0.2.0...v0.2.1) (2020-02-11)
+
+---
+
+## [0.2.0](https://github.com/efureev/laravel-support/compare/v0.1.0...v0.2.0) (2020-02-06)
+
+---
+
+## [0.1.0](https://github.com/efureev/laravel-support/compare/v0.0.3...v0.1.0) (2020-01-29)
+
+---
+
+## [0.0.3](https://github.com/efureev/laravel-support/compare/v0.0.2...v0.0.3) (2020-01-28)
+
+---
+
+## [0.0.2](https://github.com/efureev/laravel-support/compare/v0.0.1...v0.0.2) (2020-01-28)
+
+---
+
+## [0.0.1](https://github.com/efureev/laravel-support/compare/19bad4a26e54f968db9f7c4efd7be1dc97712a0d...v0.0.1) (2020-01-28)
+
+---
+

@@ -21,18 +21,20 @@
     "illuminate/database": "^8.78"
   },
   "require-dev": {
-    "phpunit/phpunit": "^9.5",
+    "ergebnis/composer-normalize": "^2.25",
+    "fakerphp/faker": "^1.19",
+    "marcocesarato/php-conventional-changelog": "^1.13",
     "orchestra/testbench": "^6.24",
-    "squizlabs/php_codesniffer": "^3.6",
-    "fakerphp/faker": "^1.19"
+    "phpunit/phpunit": "^9.5",
+    "squizlabs/php_codesniffer": "^3.6"
   },
   "autoload": {
-    "files": [
-      "src/Global/base.php"
-    ],
     "psr-4": {
       "Php\\Support\\Laravel\\": "src/"
-    }
+    },
+    "files": [
+      "src/Global/base.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
@@ -42,7 +44,18 @@
       "Php\\Support\\Laravel\\Tests\\": "tests/"
     }
   },
+  "config": {
+    "allow-plugins": {
+      "ergebnis/composer-normalize": true
+    },
+    "lock": false,
+    "sort-packages": true
+  },
   "extra": {
+    "composer-normalize": {
+      "indent-size": 2,
+      "indent-style": "space"
+    },
     "laravel": {
       "providers": [
         "Php\\Support\\Laravel\\ServiceProvider"
@@ -50,10 +63,24 @@
     }
   },
   "scripts": {
-    "phpcs": "@php ./vendor/bin/phpcs",
     "cs-fix": "@php ./vendor/bin/phpcbf",
+    "phpcs": "@php ./vendor/bin/phpcs",
     "phpunit": "@php ./vendor/bin/phpunit --no-coverage --testdox --colors=always",
     "phpunit-cover": "@php ./vendor/bin/phpunit --coverage-text",
+    "postversion": "git push && git push --tag",
+    "release": "@php ./vendor/bin/conventional-changelog --commit",
+    "release:major": [
+      "@php ./vendor/bin/conventional-changelog --major --commit",
+      "@postversion"
+    ],
+    "release:minor": [
+      "@php ./vendor/bin/conventional-changelog --minor --commit",
+      "@postversion"
+    ],
+    "release:patch": [
+      "@php ./vendor/bin/conventional-changelog --patch --commit",
+      "@postversion"
+    ],
     "test": [
       "@phpcs",
       "@phpunit"
