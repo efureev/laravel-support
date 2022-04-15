@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.15.1](https://github.com/efureev/laravel-support/compare/v1.15.0...v1.15.1) (2022-04-15)
+### Bug Fixes
+
+* Set sorting position as integer ([57043c](https://github.com/efureev/laravel-support/commit/57043ccddfb739cd0877c98fa297b44c8d70ecb9))
+
+
+---
+
 ## [1.15.0](https://github.com/efureev/laravel-support/compare/v1.14.1...v1.15.0) (2022-03-23)
 ### Features
 
