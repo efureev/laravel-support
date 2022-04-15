@@ -34,9 +34,11 @@ trait Sortable
             }
         );
 
-        static::saved(static function(self $model) {
-            $model->onSavedSortingPosition();
-        });
+        static::saved(
+            static function (self $model) {
+                $model->onSavedSortingPosition();
+            }
+        );
         /*
             static::addGlobalScope(new SortOrderingDesc);
             // OR
