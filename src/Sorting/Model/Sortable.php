@@ -33,6 +33,10 @@ trait Sortable
                 $model->onSavingSortingPosition();
             }
         );
+
+        static::saved(static function(self $model) {
+            $model->onSavedSortingPosition();
+        });
         /*
             static::addGlobalScope(new SortOrderingDesc);
             // OR
@@ -103,6 +107,21 @@ trait Sortable
         $this->reorderingSortingPosition();
     }
 
+    public function onSavedSortingPosition()
+    {
+        $this->refreshSortingPosition();
+    }
+
+    public function refreshSortingPosition()
+    {
+        if ($this->{static::getSortingColumnName()} instanceof Expression) {
+            $this->{static::getSortingColumnName()} = $this->setKeysForSelectQuery(
+                $this->newQueryWithoutScopes()
+            )
+                ->firstOrFail([static::getSortingColumnName()])
+                ->{static::getSortingColumnName()};
+        }
+    }
 
     protected function sqlForMaxQuery(): string
     {
