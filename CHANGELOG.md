@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.16.0](https://github.com/efureev/laravel-support/compare/v1.15.2...v1.16.0) (2022-04-22)
+### Features
+
+* Add trait `CreateHttpRequests` to `Test` ns ([a8d076](https://github.com/efureev/laravel-support/commit/a8d07600a421edc028171848ec3c379fe0ffe0d3))
+
+
+---
+
 ## [1.15.2](https://github.com/efureev/laravel-support/compare/v1.15.1...v1.15.2) (2022-04-15)
 
 ---
