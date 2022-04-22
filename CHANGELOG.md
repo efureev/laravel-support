@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.16.1](https://github.com/efureev/laravel-support/compare/v1.16.0...v1.16.1) (2022-04-22)
+### Features
+
+* Add some new funcs to CreateHttpRequests ([58a878](https://github.com/efureev/laravel-support/commit/58a878ac247529cfda98597a339278f0da37198b))
+
+
+---
+
 ## [1.16.0](https://github.com/efureev/laravel-support/compare/v1.15.2...v1.16.0) (2022-04-22)
 ### Features
 
