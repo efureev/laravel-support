@@ -116,11 +116,14 @@ trait CreateHttpRequests
         $files   = $this->extractFilesFromDataArray($data);
         $content = Json::encode($data);
 
-        $headers = array_merge([
-            'CONTENT_LENGTH' => mb_strlen($content, '8bit'),
-            'CONTENT_TYPE'   => 'application/json',
-            'Accept'         => 'application/json',
-        ], $headers);
+        $headers = array_merge(
+            [
+                'CONTENT_LENGTH' => mb_strlen($content, '8bit'),
+                'CONTENT_TYPE'   => 'application/json',
+                'Accept'         => 'application/json',
+            ],
+            $headers
+        );
 
         $cookies = $this->prepareCookiesForRequest();
         $server  = $this->transformHeadersToServerVars($headers);
@@ -147,11 +150,13 @@ trait CreateHttpRequests
     protected function transformHeadersToServerVars(array $headers): array
     {
         return collect(array_merge($this->defaultHeaders, $headers))
-            ->mapWithKeys(function ($value, $name) {
-                $name = str_replace('-', '_', strtoupper($name));
+            ->mapWithKeys(
+                function ($value, $name) {
+                    $name = str_replace('-', '_', strtoupper($name));
 
-                return [$this->formatServerHeaderKey($name) => $value];
-            })
+                    return [$this->formatServerHeaderKey($name) => $value];
+                }
+            )
             ->all();
     }
 
@@ -167,12 +172,14 @@ trait CreateHttpRequests
         }
 
         return collect($this->defaultCookies)
-            ->map(function ($value, $key) {
-                $encrypter = Container::getInstance()->make('encrypter');
-                $encPrefix = CookieValuePrefix::create($key, $encrypter->getKey());
+            ->map(
+                function ($value, $key) {
+                    $encrypter = Container::getInstance()->make('encrypter');
+                    $encPrefix = CookieValuePrefix::create($key, $encrypter->getKey());
 
-                return $encrypter->encrypt($encPrefix . $value, false);
-            })
+                    return $encrypter->encrypt($encPrefix . $value, false);
+                }
+            )
             ->merge($this->unencryptedCookies)
             ->all();
     }
