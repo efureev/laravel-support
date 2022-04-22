@@ -21,21 +21,21 @@ trait CreateHttpRequests
      *
      * @var array
      */
-    protected array $defaultHeaders = [];
+    protected array $defaultHeaderList = [];
 
     /**
      * Additional cookies for the request.
      *
      * @var array
      */
-    protected array $defaultCookies = [];
+    protected array $defaultCookieList = [];
 
     /**
      * Additional cookies will not be encrypted for the request.
      *
      * @var array
      */
-    protected array $unencryptedCookies = [];
+    protected array $unencryptedCookieList = [];
 
 
     /**
@@ -43,7 +43,7 @@ trait CreateHttpRequests
      *
      * @var bool
      */
-    protected bool $encryptCookies = true;
+    protected bool $encryptCookieList = true;
 
     /**
      * Indicated whether JSON requests should be performed "with credentials" (cookies).
@@ -52,7 +52,7 @@ trait CreateHttpRequests
      *
      * @var bool
      */
-    protected bool $withCredentials = false;
+    protected bool $credentials = false;
 
     protected function createGetRequest(string $uri, array $headers = []): Request
     {
@@ -113,7 +113,7 @@ trait CreateHttpRequests
 
     protected function createJsonRequest(string $method, string $uri, array $data = [], array $headers = []): Request
     {
-        $files   = $this->extractFilesFromDataArray($data);
+        $files   = $this->extractFilesFromData($data);
         $content = Json::encode($data);
 
         $headers = array_merge(
@@ -149,12 +149,12 @@ trait CreateHttpRequests
 
     protected function transformHeadersToServerVars(array $headers): array
     {
-        return collect(array_merge($this->defaultHeaders, $headers))
+        return collect(array_merge($this->defaultHeaderList, $headers))
             ->mapWithKeys(
                 function ($value, $name) {
                     $name = str_replace('-', '_', strtoupper($name));
 
-                    return [$this->formatServerHeaderKey($name) => $value];
+                    return [$this->formatServerHeaderName($name) => $value];
                 }
             )
             ->all();
@@ -167,11 +167,11 @@ trait CreateHttpRequests
      */
     protected function prepareCookiesForRequest(): array
     {
-        if (!$this->encryptCookies) {
-            return array_merge($this->defaultCookies, $this->unencryptedCookies);
+        if (!$this->encryptCookieList) {
+            return array_merge($this->defaultCookieList, $this->unencryptedCookieList);
         }
 
-        return collect($this->defaultCookies)
+        return collect($this->defaultCookieList)
             ->map(
                 function ($value, $key) {
                     $encrypter = Container::getInstance()->make('encrypter');
@@ -180,7 +180,7 @@ trait CreateHttpRequests
                     return $encrypter->encrypt($encPrefix . $value, false);
                 }
             )
-            ->merge($this->unencryptedCookies)
+            ->merge($this->unencryptedCookieList)
             ->all();
     }
 
@@ -191,7 +191,7 @@ trait CreateHttpRequests
      */
     protected function prepareCookiesForJsonRequest(): array
     {
-        return $this->withCredentials ? $this->prepareCookiesForRequest() : [];
+        return $this->credentials ? $this->prepareCookiesForRequest() : [];
     }
 
 
@@ -202,7 +202,7 @@ trait CreateHttpRequests
      *
      * @return string
      */
-    protected function formatServerHeaderKey(string $name): string
+    protected function formatServerHeaderName(string $name): string
     {
         if (!Str::startsWith($name, 'HTTP_') && $name !== 'CONTENT_TYPE' && $name !== 'REMOTE_ADDR') {
             return 'HTTP_' . $name;
@@ -218,7 +218,7 @@ trait CreateHttpRequests
      *
      * @return array
      */
-    protected function extractFilesFromDataArray(array &$data): array
+    protected function extractFilesFromData(array &$data): array
     {
         $files = [];
 
@@ -230,7 +230,7 @@ trait CreateHttpRequests
             }
 
             if (is_array($value)) {
-                $files[$key] = $this->extractFilesFromDataArray($value);
+                $files[$key] = $this->extractFilesFromData($value);
 
                 $data[$key] = $value;
             }
