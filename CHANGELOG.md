@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.16.3](https://github.com/efureev/laravel-support/compare/v1.16.2...v1.16.3) (2022-04-28)
+### Features
+
+* Add method getVersionFromFile to get version ([0c6cf9](https://github.com/efureev/laravel-support/commit/0c6cf917bc15e99b6769fe3c4c3e91d55c33156c), [11c66b](https://github.com/efureev/laravel-support/commit/11c66b124f0ca8592871c09952cde8fba2ec24e0))
+
+
+---
+
 ## [1.16.2](https://github.com/efureev/laravel-support/compare/v1.16.1...v1.16.2) (2022-04-22)
 ### Bug Fixes
 
