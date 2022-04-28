@@ -126,14 +126,22 @@ trait HasPathHelpers
      */
     public static function version(): string
     {
-        $pathComposer = static::packagePath('composer.json');
-        if (file_exists($pathComposer)) {
-            $composerData = Json::decode(file_get_contents($pathComposer));
-            if ($version = Arr::get($composerData, 'version', '')) {
-                return $version;
-            }
+        return (string)(
+            static::getVersionFromFile('version.json') ??
+            static::getVersionFromFile('composer.json')
+        );
+    }
+
+    protected static function getVersionFromFile(string $filePath, string $key = 'version'): ?string
+    {
+        if (!file_exists($filePath)) {
+            return null;
         }
 
-        return '';
+        if (!$composerData = Json::decode(file_get_contents($filePath))) {
+            return null;
+        }
+
+        return Arr::get($composerData, $key);
     }
 }
