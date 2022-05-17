@@ -27,6 +27,10 @@ trait HasModelEntityCache
     protected static function cacheForgetFn(): callable
     {
         return static function (Model $model) {
+            if (!static::$cacheEnable) {
+                return;
+            }
+
             static::cacheForget($model);
             static::cacheForgetCollection();
         };
