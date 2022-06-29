@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.16.5](https://github.com/efureev/laravel-support/compare/v1.16.4...v1.16.5) (2022-06-29)
+### Bug Fixes
+
+* CacheForgetByKey ([0e136b](https://github.com/efureev/laravel-support/commit/0e136ba5ee42555e4984ea09df828bc62d24d755))
+
+
+---
+
 ## [1.16.3](https://github.com/efureev/laravel-support/compare/v1.16.2...v1.16.3) (2022-04-28)
 ### Features
 
