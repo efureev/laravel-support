@@ -42,9 +42,16 @@ trait HasModelEntityCache
             return true;
         }
 
-        return Cache::forget(
-            static::cachePrefixKey($model->{static::cacheKeyName()})
-        );
+        return static::cacheForgetByKey($model->{static::cacheKeyName()});
+    }
+
+    public static function cacheForgetByKey(string $key): bool
+    {
+        if (!static::$cacheEnable) {
+            return true;
+        }
+
+        return Cache::forget(static::cachePrefixKey($key));
     }
 
     protected static function cacheForgetCollection(string $key = 'list:*'): bool
