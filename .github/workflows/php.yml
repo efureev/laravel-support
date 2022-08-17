@@ -74,6 +74,10 @@ jobs:
         if: matrix.setup == 'basic'
         run: composer update --prefer-dist --no-interaction --no-suggest
 
+      - name: Install [STABLE] Composer dependencies
+        if: matrix.setup == 'stable'
+        run: composer update --prefer-dist --no-interaction --no-suggest --prefer-stable
+
       - name: Show most important packages' versions
         run: composer info | grep -e efureev -e laravel/framework -e phpunit/phpunit
 
