@@ -13,7 +13,7 @@
 ## Install
 
 ```bash
-composer require efureev/laravel-support "^1.10"
+composer require efureev/laravel-support "^1.17"
 ```
 
 Read `/docs` for more documentations.
