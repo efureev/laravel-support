@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.17.0](https://github.com/efureev/laravel-support/compare/v1.16.5...v1.17.0) (2022-08-17)
+
+### Features
+
+* Add support `PHP 8.1` ([2d53f9](https://github.com/efureev/laravel-support/commit/2d53f9aad4ddb28a3f30af0bf3a9613e4a0ffa44))
+
+
+---
+
 ## [1.16.5](https://github.com/efureev/laravel-support/compare/v1.16.4...v1.16.5) (2022-06-29)
 ### Bug Fixes
 
