@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.17.1](https://github.com/efureev/laravel-support/compare/v1.17.0...v1.17.1) (2022-08-17)
+
+### Features
+
+* Add support >= Laravel 9.25 ([332a90](https://github.com/efureev/laravel-support/commit/332a901a2c52799ea84098637c8bd7e5e8e3f5e7))
+
+
+---
+
 ## [1.17.0](https://github.com/efureev/laravel-support/compare/v1.16.5...v1.17.0) (2022-08-17)
 
 ### Features
