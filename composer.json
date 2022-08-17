@@ -16,8 +16,8 @@
     }
   ],
   "require": {
-    "php": "^8.0",
-    "efureev/support": "^4.8",
+    "php": "^8.0 || ^8.1",
+    "efureev/support": "^4.13",
     "illuminate/database": "^8.78"
   },
   "require-dev": {
