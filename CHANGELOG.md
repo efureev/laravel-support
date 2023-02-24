@@ -4,6 +4,11 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.18.1](https://github.com/efureev/laravel-support/compare/v1.18.0...v1.18.1) (2023-02-24)
+
+
+---
+
 ## [1.18.0](https://github.com/efureev/laravel-support/compare/v1.17.1...v1.18.0) (2023-02-24)
 
 ### Features
