@@ -16,17 +16,17 @@
     }
   ],
   "require": {
-    "php": "^8.0 || ^8.1",
-    "efureev/support": "^4.13",
-    "illuminate/database": "^8.78 || ^9.25"
+    "php": "^8.1 | ^8.2",
+    "efureev/support": "^4.17",
+    "illuminate/database": "^10.1"
   },
   "require-dev": {
-    "ergebnis/composer-normalize": "^2.28.3",
-    "fakerphp/faker": "^1.20",
+    "ergebnis/composer-normalize": "^2.29",
+    "fakerphp/faker": "^v1.21.0",
     "marcocesarato/php-conventional-changelog": "^1.15.1",
-    "orchestra/testbench": "^6.24 || ^7.6",
-    "phpunit/phpunit": "^9.5",
-    "squizlabs/php_codesniffer": "^3.6"
+    "orchestra/testbench": "^8.0",
+    "phpunit/phpunit": "^10.0",
+    "squizlabs/php_codesniffer": "^3.7"
   },
   "autoload": {
     "psr-4": {
