@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.18.0](https://github.com/efureev/laravel-support/compare/v1.17.1...v1.18.0) (2023-02-24)
+
+### Features
+
+* Add support Laravel 10 ([847a0a](https://github.com/efureev/laravel-support/commit/847a0a05aa5e673ef4cd1a7dff0da4119526777d))
+
+
+---
+
 ## [1.17.1](https://github.com/efureev/laravel-support/compare/v1.17.0...v1.17.1) (2022-08-17)
 
 ### Features
