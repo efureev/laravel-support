@@ -15,12 +15,13 @@ use Php\Support\Laravel\Traits\Modelable;
 class TagRequest extends FormRequest
 {
     use Modelable;
-    
+
 }
 ```
 
 Json will be like
-```json
+
+```javascript
 {
     "data": {
         "id": "d2dc4265-bfc4-4a3e-b6f1-cbff02680233",

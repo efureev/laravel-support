@@ -1,7 +1,7 @@
 # Caster
 
-- for one entity
-- for collection
+* for one entity
+* for collection
 
 ## For Entity
 
@@ -14,16 +14,19 @@ Cast property into Class for collection of items (class / simple).
 ### Examples #1
 
 Collection for no-wrap elements (example: array):
+
 ```php
 class ArrayCollection extends AbstractCastingCollection
 {
 }
 ```
-```json
+
+```javascript
 [{"id": "key","title": "value"}]
 ```
 
 Collection for wrap elements (example: other class):
+
 ```php
 class ComponentCollection extends AbstractCastingCollection
 {
@@ -36,14 +39,16 @@ class ComponentCollection extends AbstractCastingCollection
 }
 ```
 
-```json
+```javascript
 [{"id": "key","title": "value"}]
 ```
-```json
+
+```javascript
 {"key1":{"id": "key2","title": "value"},"key2":{"id": "key2","title": "value2"}}
 ```
 
 Model:
+
 ```php
 /**
  * @property ComponentCollection $components
@@ -70,6 +75,7 @@ class UserModel extends Model
 ### Examples #2: Postgres array casting
 
 Model:
+
 ```php
 class PgArrayModel extends Model
 {
@@ -78,7 +84,7 @@ class PgArrayModel extends Model
 
     protected $table   = 'pg_table';
 
-    
+
     protected $casts = [
         'tags' => PgArray::class,
     ];
@@ -89,6 +95,7 @@ class PgArrayModel extends Model
     }
 }
 ```
-```json
+
+```javascript
 ['value', 'val2', 'value3']
 ```

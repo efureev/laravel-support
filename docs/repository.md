@@ -1,6 +1,6 @@
 # Repository
 
-### Example
+## Example
 
 ```php
 <?php

@@ -2,15 +2,15 @@
 
 List of traits
 
-- `HasCommands` - contains methods for easy-register console commands
-- `HasPolicies` - contains methods for easy-register policies
-- `HasPathHelpers` - contains helper-methods for work with package's paths
-- `HasRegisters` - contains helper-methods for flexibly registration any elements inside SP
-- `HasBooting` - contains helper-methods for flexibly loading sides: console, server, testing
+* `HasCommands` - contains methods for easy-register console commands
+* `HasPolicies` - contains methods for easy-register policies
+* `HasPathHelpers` - contains helper-methods for work with package's paths
+* `HasRegisters` - contains helper-methods for flexibly registration any elements inside SP
+* `HasBooting` - contains helper-methods for flexibly loading sides: console, server, testing
 
 Class `AbstractServiceProvider` aggregates all these traits
 
-### Example
+## Example
 
 ```php
 <?php
