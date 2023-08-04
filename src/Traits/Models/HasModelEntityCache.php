@@ -38,8 +38,8 @@ trait HasModelEntityCache
 
     protected static function getEntityCacheResolver(): ?CacherContract
     {
-        $cacheResolverCls = (string)Config::get('cache.resolver.class');
-        if (class_exists($cacheResolverCls)) {
+        $cacheResolverCls = Config::get('cache.resolver.class');
+        if (is_string($cacheResolverCls) && class_exists($cacheResolverCls)) {
             return $cacheResolverCls(static::class, Cache::getStore());
         }
 
