@@ -4,18 +4,58 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel\Traits\Models;
 
+use Illuminate\Cache\RedisStore;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Php\Support\Laravel\Traits\Models\Cachers\CacherContract;
+use Php\Support\Laravel\Traits\Models\Cachers\DummyCacher;
+use Php\Support\Laravel\Traits\Models\Cachers\RedisCacher;
 
 /**
  * @mixin Model
  */
 trait HasModelEntityCache
 {
+    public static bool $cacheEnable = true;
+
+    public static function disableCache(): void
+    {
+        static::$cacheEnable = false;
+    }
+
     public static function bootHasModelEntityCache(): void
     {
         static::registerEventsForCache();
+    }
+
+    protected static array $cacheStores = [];
+
+    protected static function resolveStoreDriver(): CacherContract
+    {
+        return static::$cacheStores[static::class] ??= static::resolveStoreDriverCls();
+    }
+
+    protected static function getEntityCacheResolver(): ?CacherContract
+    {
+        $cacheResolverCls = Config::get('cache.resolver.class');
+        if (class_exists($cacheResolverCls)) {
+            return $cacheResolverCls(static::class, Cache::getStore());
+        }
+
+        return null;
+    }
+
+    protected static function resolveStoreDriverCls(): CacherContract
+    {
+        if ($cacheResolverCls = static::getEntityCacheResolver()) {
+            return $cacheResolverCls;
+        }
+
+        return $cacheResolver ?? match (Cache::getStore()::class) {
+            RedisStore::class => new RedisCacher(static::class, Cache::getStore()),
+            default => new DummyCacher(static::class),
+        };
     }
 
     protected static function registerEventsForCache(): void
@@ -51,42 +91,12 @@ trait HasModelEntityCache
             return true;
         }
 
-        return Cache::forget(static::cachePrefixKey($key));
+        return static::resolveStoreDriver()->forgetByKey($key);
     }
 
-    protected static function cacheForgetCollection(string $key = 'list:*'): bool
+    protected static function cacheForgetCollection(string $key = null): bool
     {
-        return static::removeByTemplate(static::cachePrefixKey($key));
-    }
-
-    private static function removeByTemplate(string $template)
-    {
-        /** @var \Illuminate\Cache\RedisStore $store */
-        $store  = Cache::getStore();
-        $client = $store->connection()->client();
-
-        if (Config::get('database.redis.client') === 'predis') {
-            $key = $store->getPrefix() . $template;
-        } else {
-            $key = $client->_prefix($template);
-        }
-
-        $lua = <<<LUA
-        local keys = unpack(redis.call('keys', KEYS[1]))
-        if not keys then
-          return 0
-        end
-        
-        return redis.call('del', keys)
-        LUA;
-
-        $result = $client->eval(
-            $lua,
-            1,
-            $key
-        );
-
-        return $result > 0;
+        return static::resolveStoreDriver()->cacheForgetCollection($key);
     }
 
     protected static function cacheKeyName(): string
@@ -96,21 +106,12 @@ trait HasModelEntityCache
 
     protected static function cachePrefixKey(string $key = null, string $prefix = null): string
     {
-        $prefix ??= class_basename(static::class);
-
-        return "app:models:$prefix:$key";
+        return static::resolveStoreDriver()->prefixKey($key, $prefix);
     }
 
     protected static function cacheTtl(): int
     {
         return 60 * 60;
-    }
-
-    public static bool $cacheEnable = true;
-
-    public static function disableCache(): void
-    {
-        static::$cacheEnable = false;
     }
 
     public static function remember(callable $fn, string $key): mixed
