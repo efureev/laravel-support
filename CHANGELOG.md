@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.19.0](https://github.com/efureev/laravel-support/compare/v1.18.1...v1.19.0) (2023-08-04)
+
+### Features
+
+* Divide EntityCacheTrait ([81c8cb](https://github.com/efureev/laravel-support/commit/81c8cbb539ea1e3be846ddaec0cdbc0c632e2294))
+
+
+---
+
 ## [1.18.1](https://github.com/efureev/laravel-support/compare/v1.18.0...v1.18.1) (2023-02-24)
 
 
