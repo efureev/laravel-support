@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "php": "^8.1 || ^8.2",
+    "php": "^8.1",
     "efureev/support": "^4.17",
     "illuminate/database": "^10.1"
   },
@@ -38,10 +38,10 @@
   },
   "autoload-dev": {
     "psr-4": {
+      "Php\\Support\\Laravel\\Tests\\": "tests/",
       "Php\\Support\\Laravel\\Tests\\Database\\Factories\\": "tests/database/factories",
       "Php\\Support\\Laravel\\Tests\\Database\\Seeders\\": "tests/database/seeders",
-      "Php\\Support\\Laravel\\Tests\\TestClasses\\ServiceProviders\\": "tests/TestClasses/ServiceProviders/src/",
-      "Php\\Support\\Laravel\\Tests\\": "tests/"
+      "Php\\Support\\Laravel\\Tests\\TestClasses\\ServiceProviders\\": "tests/TestClasses/ServiceProviders/src/"
     }
   },
   "config": {
