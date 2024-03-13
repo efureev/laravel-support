@@ -6,6 +6,7 @@ namespace Php\Support\Laravel\Tests\Rules;
 
 use Php\Support\Laravel\Rules\Delimited;
 use Php\Support\Laravel\Tests\AbstractTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class DelimitedTest extends AbstractTestCase
 {
@@ -21,7 +22,7 @@ class DelimitedTest extends AbstractTestCase
         $this->rule = (new Delimited('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_comma_separated_email_addresses()
     {
         $this->assertRulePasses('sebastian@example.com, alex@example.com');
@@ -36,7 +37,7 @@ class DelimitedTest extends AbstractTestCase
         $this->assertRuleFails('valid@example.com, invalid@');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_a_minimum_of_valid_addresses()
     {
         $this->rule->min(1);
@@ -51,7 +52,7 @@ class DelimitedTest extends AbstractTestCase
         $this->assertRulePasses('sebastian@example.com, alex@example.com, brent@example.com');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_a_maximum_amount_of_emailaddress()
     {
         $this->rule->max(2);
@@ -61,13 +62,13 @@ class DelimitedTest extends AbstractTestCase
         $this->assertRuleFails('sebastian@example.com, alex@example.com, brent@example.com');
     }
 
-    /** @test */
+    #[Test]
     public function it_will_fail_if_not_all_email_addresses_are_unique()
     {
         $this->assertRuleFails('sebastian@example.com, sebastian@example.com');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_allow_duplicates()
     {
         $this->rule->allowDuplicates();
@@ -75,7 +76,7 @@ class DelimitedTest extends AbstractTestCase
         $this->assertRulePasses('sebastian@example.com, sebastian@example.com');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_use_a_custom_separator()
     {
         $this->rule->separatedBy(';');
@@ -84,7 +85,7 @@ class DelimitedTest extends AbstractTestCase
         $this->assertRuleFails('sebastian@example.com, freek@example.com');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_skip_trimming_items()
     {
         $this->rule->doNotTrimItems();
@@ -94,7 +95,7 @@ class DelimitedTest extends AbstractTestCase
         $this->assertRuleFails('sebastian@example.com , freek@example.com');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_accept_a_rule_as_an_array()
     {
         $rule = new Delimited(['email']);
@@ -103,7 +104,7 @@ class DelimitedTest extends AbstractTestCase
         $this->assertFalse($rule->passes('attribute', 'blablabla'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_use_composite_rules()
     {
         $rule = new Delimited('email|max:20');
@@ -114,7 +115,7 @@ class DelimitedTest extends AbstractTestCase
     }
 
 
-    /** @test */
+    #[Test]
     public function it_can_handle_numeric_values_properly()
     {
         $rule = new Delimited('numeric');

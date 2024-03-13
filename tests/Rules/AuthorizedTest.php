@@ -12,6 +12,7 @@ use Php\Support\Laravel\Tests\Database\Factories\TestModelFactory;
 use Php\Support\Laravel\Tests\Database\Factories\UserFactory;
 use Php\Support\Laravel\Tests\TestClasses\Models\TestModel;
 use Php\Support\Laravel\Tests\TestClasses\Policies\TestModelPolicy;
+use PHPUnit\Framework\Attributes\Test;
 
 class AuthorizedTest extends AbstractTestCase
 {
@@ -24,7 +25,7 @@ class AuthorizedTest extends AbstractTestCase
         Gate::policy(TestModel::class, TestModelPolicy::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_will_return_true_if_the_gate_returns_true_for_the_given_ability_name()
     {
         $rule = new Authorized('edit', TestModel::class);
@@ -41,7 +42,7 @@ class AuthorizedTest extends AbstractTestCase
         self::assertTrue($rule->passes('attribute', $model->getKey()));
     }
 
-    /** @test */
+    #[Test]
     public function it_will_return_false_if_noone_is_logged_in()
     {
         $rule = new Authorized('edit', TestModel::class);
@@ -56,7 +57,7 @@ class AuthorizedTest extends AbstractTestCase
         self::assertFalse($rule->passes('attribute', $model->getKey()));
     }
 
-    /** @test */
+    #[Test]
     public function it_will_return_false_if_the_model_is_not_found()
     {
         $rule = new Authorized('edit', TestModel::class);
@@ -71,7 +72,7 @@ class AuthorizedTest extends AbstractTestCase
         self::assertFalse($rule->passes('attribute', '2'));
     }
 
-    /** @test */
+    #[Test]
     public function it_will_return_false_if_the_gate_returns_false()
     {
         $rule = new Authorized('edit', TestModel::class);
@@ -84,7 +85,7 @@ class AuthorizedTest extends AbstractTestCase
         self::assertFalse($rule->passes('attribute', '1'));
     }
 
-    /** @test */
+    #[Test]
     public function it_passes_attribute_ability_and_class_name_to_the_validation_message()
     {
         Lang::addLines(

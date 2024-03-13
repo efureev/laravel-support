@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Php\Support\Exceptions\MethodNotAllowedException;
 use Php\Support\Laravel\Tests\AbstractTestCase;
 use Php\Support\Laravel\Traits\Models\AllowToExecute;
+use PHPUnit\Framework\Attributes\Test;
 
 class AllowToExecuteTest extends AbstractTestCase
 {
-
-    /** @test */
+    #[Test]
     public function callBase()
     {
         $class = $this->buildClass();
@@ -25,7 +25,7 @@ class AllowToExecuteTest extends AbstractTestCase
         $class->delete();
     }
 
-    /** @test */
+    #[Test]
     public function callWithDisablePossibility()
     {
         $class = $this->buildClass();
@@ -36,7 +36,7 @@ class AllowToExecuteTest extends AbstractTestCase
         $class->newQuery();
     }
 
-    /** @test */
+    #[Test]
     public function callWithPossibility()
     {
         $class = $this->buildClass();
@@ -47,7 +47,7 @@ class AllowToExecuteTest extends AbstractTestCase
         static::assertNotNull($class);
     }
 
-    /** @test */
+    #[Test]
     public function callFn()
     {
         $class = $this->buildClass();
