@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.0.0](https://github.com/efureev/laravel-support/compare/v1.19.1...v2.0.0) (2024-03-13)
+
+### Features
+
+* Add support Laravel 11 ([c6aab1](https://github.com/efureev/laravel-support/commit/c6aab17f0b62943849e182817d09214eab2626e8))
+
+
+---
+
 ## [1.19.1](https://github.com/efureev/laravel-support/compare/v1.19.0...v1.19.1) (2023-08-04)
 
 ### Bug Fixes
