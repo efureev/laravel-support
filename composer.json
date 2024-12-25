@@ -17,7 +17,7 @@
   ],
   "require": {
     "php": "^8.2",
-    "efureev/support": "^4.27",
+    "efureev/support": "^4.27|^5.0",
     "illuminate/database": "^11.0"
   },
   "require-dev": {
@@ -25,7 +25,7 @@
     "fakerphp/faker": "^1.23",
     "marcocesarato/php-conventional-changelog": "^1.17",
     "orchestra/testbench": "^9.0",
-    "phpunit/phpunit": "^11.0",
+    "phpunit/phpunit": "^11.5",
     "squizlabs/php_codesniffer": "^3.9"
   },
   "autoload": {
