@@ -8,7 +8,7 @@ use Php\Support\Laravel\Tests\TestClasses\Models\SortCustomColumnModel;
 
 class SortableCustomColumnTest extends AbstractTestCase
 {
-    protected $migrations = [
+    protected array $migrations = [
         'sortable/2021_01_21_092141_create_sortable_table_w_custom_col.php',
     ];
 

@@ -10,7 +10,7 @@ use Php\Support\Laravel\Tests\TestClasses\Models\SortEntity;
 
 class SortableTest extends AbstractTestCase
 {
-    protected $migrations = [
+    protected array $migrations = [
         'sortable/2020_02_04_075141_create_sortable_table.php',
     ];
 
