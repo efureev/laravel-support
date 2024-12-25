@@ -130,7 +130,7 @@ abstract class AbstractCasting implements Caster, Jsonable, Arrayable
     abstract public function toArray(): array;
 
     /**
-     * @param  static|array  $value
+     * @param  static|array|null  $value
      *
      * @return string|null
      */

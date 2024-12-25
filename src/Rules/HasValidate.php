@@ -30,7 +30,7 @@ trait HasValidate
         mixed $value,
         string $rules,
         string $attributeName = 'value',
-        string $message = null
+        ?string $message = null
     ): mixed {
         Validator::make(
             [$attributeName => $value],
@@ -64,7 +64,7 @@ trait HasValidate
     protected static function gainIntValue(
         Request $request,
         string $name,
-        int $default = null
+        ?int $default = null
     ): ?int {
         $value = $request->get($name, $default);
         return $value === null ? null : (((int)$value) ?: $default);
@@ -73,7 +73,7 @@ trait HasValidate
     protected static function gainBoolValue(
         Request $request,
         string $name,
-        bool $default = null
+        ?bool $default = null
     ): ?bool {
         $value = $request->get($name, $default);
         return $value === null ? null : isTrue($value);
@@ -82,7 +82,7 @@ trait HasValidate
     protected static function gainStringValue(
         Request $request,
         string $name,
-        string $default = null
+        ?string $default = null
     ): ?string {
         $value = (string)$request->get($name, $default);
         return $value ?: null;

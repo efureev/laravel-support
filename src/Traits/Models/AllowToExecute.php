@@ -48,7 +48,7 @@ trait AllowToExecute
         throw new MethodNotAllowedException($text ?? 'You don\'t allow to execute this method!');
     }
 
-    protected static function addMethodToDisallowMap(string $method, string|\Closure $hint = null): void
+    protected static function addMethodToDisallowMap(string $method, string|\Closure|null $hint = null): void
     {
         static::$disallowMethodsMap[$method] = $hint;
     }

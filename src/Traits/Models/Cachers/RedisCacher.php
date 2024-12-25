@@ -16,14 +16,14 @@ class RedisCacher implements CacherContract
     {
     }
 
-    public function prefixKey(string $key = null, string $prefix = null): string
+    public function prefixKey(?string $key = null, ?string $prefix = null): string
     {
         $prefix ??= class_basename($this->model);
 
         return "app:models:$prefix:$key";
     }
 
-    public function cacheForgetCollection(string $key = null): bool
+    public function cacheForgetCollection(?string $key = null): bool
     {
         return $this->removeByTemplate($this->prefixKey($key ?? 'list:*'));
     }

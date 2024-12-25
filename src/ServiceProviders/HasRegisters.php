@@ -11,7 +11,6 @@ use Illuminate\Support\ServiceProvider;
 
 /**
  * Trait HasRegisters
- * @package Php\Support\Laravel\ServiceProviders
  * @mixin ServiceProvider
  */
 trait HasRegisters
@@ -147,9 +146,9 @@ trait HasRegisters
      */
     protected function registerService(
         string $serviceClass,
-        Closure|string $serviceName = null,
+        Closure|string|null $serviceName = null,
         bool $singleton = false,
-        string $alias = null
+        ?string $alias = null
     ): static {
         if (is_string($serviceName)) {
             if (class_exists($serviceName)) {
@@ -175,7 +174,7 @@ trait HasRegisters
     }
 
 
-    protected function registerInstance(string $abstract, mixed $instance, string $alias = null): static
+    protected function registerInstance(string $abstract, mixed $instance, ?string $alias = null): static
     {
         $this->app->instance($abstract, $instance);
 

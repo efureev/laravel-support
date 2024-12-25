@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Gate;
 
 trait HasPolicies
 {
-    /** @var array <Model::class => Policy::class> $policies */
+    /** @var array<class-string,class-string> Model::class => Policy::class> */
     protected static array $policies = [];
 
     protected function registerPolicies(): static
@@ -17,9 +17,7 @@ trait HasPolicies
     }
 
     /**
-     * @param array <Model::class => Policy::class>  $policies
-     *
-     * @return $this
+     * @param array<class-string,class-string> $policies Model::class => Policy::class
      */
     protected function registerPoliciesForce(array $policies): static
     {

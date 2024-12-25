@@ -72,7 +72,7 @@ trait HasPathHelpers
      *
      * @return string|null
      */
-    public static function getConfigPath(string $path = null): ?string
+    public static function getConfigPath(?string $path = null): ?string
     {
         if (!$cPath = static::packagePath('config')) {
             return null;
@@ -81,7 +81,7 @@ trait HasPathHelpers
         return $cPath . ($path ? '/' . trim($path, '/') : '');
     }
 
-    public static function getRoutesPath(string $path = null): ?string
+    public static function getRoutesPath(?string $path = null): ?string
     {
         if (!$cPath = static::packagePath('routes')) {
             return null;
@@ -90,7 +90,7 @@ trait HasPathHelpers
         return $cPath . ($path ? '/' . trim($path, '/') : '');
     }
 
-    public static function getResourcesPath(string $path = null): ?string
+    public static function getResourcesPath(?string $path = null): ?string
     {
         if (!$cPath = static::packagePath('resources')) {
             return null;

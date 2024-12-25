@@ -14,7 +14,7 @@ use Illuminate\Support\ServiceProvider;
  */
 trait HasCommands
 {
-    /** @var array <Command::class> $commands */
+    /** @var class-string[] */
     protected static array $commands = [];
 
     protected function registerCommands(): static
@@ -23,9 +23,7 @@ trait HasCommands
     }
 
     /**
-     * @param array <Command::class>  $policies
-     *
-     * @return $this
+     * @param class-string[] $commands
      */
     protected function registerCommandsForce(array $commands): static
     {
