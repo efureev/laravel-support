@@ -2,6 +2,7 @@
 
 namespace Php\Support\Laravel\Tests\Sorting\Database;
 
+use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
 use Php\Support\Laravel\Sorting\Database\Sortable;
 use Php\Support\Laravel\Tests\AbstractTestCase;
@@ -13,7 +14,10 @@ class SortableTest extends AbstractTestCase
 
     public function testColumnSortingPosition_addColumnWithNeedleAttributes(): void
     {
-        $table = new Blueprint('test');
+        /** @var Connection $conn */
+        $conn = $this->app->get('db.connection');
+
+        $table = new Blueprint($conn, 'test');
 
         static::columnSortingPosition($table);
 
@@ -28,7 +32,10 @@ class SortableTest extends AbstractTestCase
 
     public function testColumnSortingPosition_withCustomColumnName(): void
     {
-        $table = new Blueprint('test2');
+        /** @var Connection $conn */
+        $conn = $this->app->get('db.connection');
+
+        $table = new Blueprint($conn, 'test2');
 
         static::columnSortingPosition($table, SortCustomColumnModel::getSortingColumnName());
 
