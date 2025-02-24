@@ -1,8 +1,15 @@
-<!--- BEGIN HEADER -->
+ <!--- BEGIN HEADER -->
 # Changelog
 
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
+
+## [3.0.0](https://github.com/efureev/laravel-support/compare/v2.1.0...v3.0.0) (2025-02-24)
+
+### Features
+
+* Add Laravel 12 support
+
 
 ## [1.19.0](https://github.com/efureev/laravel-support/compare/v1.18.1...v1.19.0) (2023-08-04)
 
