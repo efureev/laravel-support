@@ -10,14 +10,7 @@ All notable changes to this project will be documented in this file.
 
 * Update to Laravel 12 ([65e065](https://github.com/efureev/laravel-support/commit/65e0659df86693b1abaf4bcdd799c9af803cacc6), [b3ad52](https://github.com/efureev/laravel-support/commit/b3ad525d331cb85ad122c2f9f3e69377eff62050))
 
-
 ---
-
-## [3.0.0](https://github.com/efureev/laravel-support/compare/v2.1.0...v3.0.0) (2025-02-24)
-
-### Features
-
-* Add support Laravel 12
 
 
 ## [2.0.0](https://github.com/efureev/laravel-support/compare/v1.19.1...v2.0.0) (2024-03-13)
