@@ -1,25 +1,22 @@
 # Content
 
 - [Global][global]
-- [Caster][caster]
 - [Pagination][pagination]
 - [Traits][traits]
 - [Repository][repository]
-- [Http][http]
 - [Sortable][sortable]
 - [Service Providers][sp]
+- [Upgrade to PHP 8.4 / Laravel 13][upgrade]
 
 [global]:./global.md
 
-[caster]:./caster.md
+[upgrade]:./upgrade-php84-laravel13.md
 
 [pagination]:./pagination.md
 
 [traits]:./traits.md
 
 [repository]:./repository.md
-
-[http]:./http.md
 
 [sortable]:./sortable.md
 

@@ -6,6 +6,7 @@ namespace Php\Support\Laravel\Tests\Rules;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Validator;
 use Php\Support\Laravel\Rules\Authorized;
 use Php\Support\Laravel\Tests\AbstractTestCase;
 use Php\Support\Laravel\Tests\Database\Factories\TestModelFactory;
@@ -39,7 +40,7 @@ class AuthorizedTest extends AbstractTestCase
 
         $this->actingAs($user);
 
-        self::assertTrue($rule->passes('attribute', $model->getKey()));
+        self::assertTrue(Validator::make(['attribute' => $model->getKey()], ['attribute' => $rule])->passes());
     }
 
     #[Test]
@@ -54,7 +55,7 @@ class AuthorizedTest extends AbstractTestCase
             ]
         );
 
-        self::assertFalse($rule->passes('attribute', $model->getKey()));
+        self::assertFalse(Validator::make(['attribute' => $model->getKey()], ['attribute' => $rule])->passes());
     }
 
     #[Test]
@@ -62,14 +63,7 @@ class AuthorizedTest extends AbstractTestCase
     {
         $rule = new Authorized('edit', TestModel::class);
 
-        /*$user  = UserFactory::new()->create();
-        $model = TestModelFactory::new()->create(
-            [
-                'user_id' => $user->getKey(),
-            ]
-        );*/
-
-        self::assertFalse($rule->passes('attribute', '2'));
+        self::assertFalse(Validator::make(['attribute' => '2'], ['attribute' => $rule])->passes());
     }
 
     #[Test]
@@ -77,12 +71,7 @@ class AuthorizedTest extends AbstractTestCase
     {
         $rule = new Authorized('edit', TestModel::class);
 
-        /* $user  = UserFactory::new()->create();
-         $model = TestModelFactory::new()->create(
-             ['user_id' => 2]
-         );*/
-
-        self::assertFalse($rule->passes('attribute', '1'));
+        self::assertFalse(Validator::make(['attribute' => '1'], ['attribute' => $rule])->passes());
     }
 
     #[Test]
@@ -96,8 +85,9 @@ class AuthorizedTest extends AbstractTestCase
 
         $rule = new Authorized('edit', TestModel::class);
 
-        $rule->passes('name_field', 'John Doe');
+        $validator = Validator::make(['name_field' => 'John Doe'], ['name_field' => $rule]);
 
-        self::assertEquals('name_field edit and TestModel', $rule->message());
+        self::assertFalse($validator->passes());
+        self::assertEquals('name_field edit and TestModel', $validator->errors()->first('name_field'));
     }
 }

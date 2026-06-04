@@ -1,0 +1,31 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: testing
+      DB_USERNAME: fureev
+      DB_PASSWORD: password
+
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: testing
+      POSTGRES_USER: fureev
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fureev -d testing"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

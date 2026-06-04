@@ -1,14 +1,13 @@
 # Table of contents
 
-* [Changelog](README.md)
-* [PHP Laravel Support](readme.md)
+* [PHP Laravel Support](README.md)
+* [Changelog](CHANGELOG.md)
 * [docs](docs/README.md)
-  * [Caster](docs/caster.md)
-  * [Global](docs/global.md)
-  * [Http](docs/http.md)
   * [Content](docs/index.md)
+  * [Global](docs/global.md)
   * [Pagination](docs/pagination.md)
   * [Repository](docs/repository.md)
   * [Sortable](docs/sortable.md)
   * [Service Providers](docs/sp.md)
   * [Traits](docs/traits.md)
+  * [Upgrade to PHP 8.4 / Laravel 13](docs/upgrade-php84-laravel13.md)

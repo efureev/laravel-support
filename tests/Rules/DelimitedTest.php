@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel\Tests\Rules;
 
+use Illuminate\Support\Facades\Validator;
 use Php\Support\Laravel\Rules\Delimited;
 use Php\Support\Laravel\Tests\AbstractTestCase;
 use PHPUnit\Framework\Attributes\Test;
@@ -100,8 +101,8 @@ class DelimitedTest extends AbstractTestCase
     {
         $rule = new Delimited(['email']);
 
-        $this->assertTrue($rule->passes('attribute', 'sebastian@example.com, alex@example.com, brent@example.com'));
-        $this->assertFalse($rule->passes('attribute', 'blablabla'));
+        $this->assertTrue(Validator::make(['attribute' => 'sebastian@example.com, alex@example.com, brent@example.com'], ['attribute' => $rule])->passes());
+        $this->assertFalse(Validator::make(['attribute' => 'blablabla'], ['attribute' => $rule])->passes());
     }
 
     #[Test]
@@ -109,9 +110,9 @@ class DelimitedTest extends AbstractTestCase
     {
         $rule = new Delimited('email|max:20');
 
-        $this->assertTrue($rule->passes('attribute', 'short@example.com'));
-        $this->assertFalse($rule->passes('attribute', 'short'));
-        $this->assertFalse($rule->passes('attribute', 'loooooooonnnggg@example.com'));
+        $this->assertTrue(Validator::make(['attribute' => 'short@example.com'], ['attribute' => $rule])->passes());
+        $this->assertFalse(Validator::make(['attribute' => 'short'], ['attribute' => $rule])->passes());
+        $this->assertFalse(Validator::make(['attribute' => 'loooooooonnnggg@example.com'], ['attribute' => $rule])->passes());
     }
 
 
@@ -119,21 +120,21 @@ class DelimitedTest extends AbstractTestCase
     public function it_can_handle_numeric_values_properly()
     {
         $rule = new Delimited('numeric');
-        $this->assertTrue($rule->min(2)->passes('attribute', '0, 1'));
+        $this->assertTrue(Validator::make(['attribute' => '0, 1'], ['attribute' => $rule->min(2)])->passes());
     }
 
-    protected function assertRulePasses(string $value)
+    protected function assertRulePasses($value)
     {
         $this->assertTrue($this->rulePasses($value));
     }
 
-    protected function assertRuleFails(string $value)
+    protected function assertRuleFails($value)
     {
         $this->assertFalse($this->rulePasses($value));
     }
 
-    public function rulePasses(string $value): bool
+    public function rulePasses($value): bool
     {
-        return $this->rule->passes('attribute', $value);
+        return Validator::make(['attribute' => $value], ['attribute' => $this->rule])->passes();
     }
 }

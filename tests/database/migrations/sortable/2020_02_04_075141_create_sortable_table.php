@@ -5,11 +5,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Php\Support\Laravel\Sorting\Database\Sortable;
 use Php\Support\Laravel\Tests\TestClasses\Models\SortEntity;
-use Php\Support\Laravel\Traits\Database\UUID;
 
 class CreateSortableTable extends Migration
 {
-    use Sortable, UUID;
+    use Sortable;
 
     /**
      * Run the migrations.

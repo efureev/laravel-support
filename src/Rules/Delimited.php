@@ -4,34 +4,37 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-class Delimited implements Rule
+class Delimited implements ValidationRule
 {
-    /** @var string|array|Rule */
-    protected $rule;
+    /**
+     * Run the validation rule even when the attribute is empty/absent,
+     * so that the "min" constraint can reject empty values.
+     */
+    public bool $implicit = true;
 
-    protected $minimum;
+    protected ?int $minimum = null;
 
-    protected $maximum;
+    protected ?int $maximum = null;
 
-    protected $allowDuplicates = false;
+    protected bool $allowDuplicates = false;
 
-    protected $message = '';
+    protected string $separatedBy = ',';
 
-    protected $separatedBy = ',';
+    protected bool $trimItems = true;
 
-    /** @var bool */
-    protected $trimItems = true;
+    protected string $validationMessageWord = 'item';
 
-    /** @var string */
-    protected $validationMessageWord = 'item';
-
-    public function __construct($rule)
-    {
-        $this->rule = $rule;
+    /**
+     * @param string|array|ValidationRule $rule
+     */
+    public function __construct(
+        protected string|array|ValidationRule $rule
+    ) {
     }
 
     /**
@@ -86,13 +89,13 @@ class Delimited implements Rule
         return $this;
     }
 
-    public function passes($attribute, $value)
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if ($this->trimItems) {
-            $value = trim($value);
+            $value = trim((string)$value);
         }
 
-        $items = collect(explode($this->separatedBy, $value))
+        $items = collect(explode($this->separatedBy, (string)$value))
             ->filter(
                 static function ($item) {
                     return (string)$item !== '';
@@ -100,29 +103,33 @@ class Delimited implements Rule
             );
 
         if (($this->minimum !== null) && $items->count() < $this->minimum) {
-            $this->message = __(
-                'laravelSupport::messages.delimited.min',
-                [
-                    'minimum' => $this->minimum,
-                    'actual'  => $items->count(),
-                    'item'    => Str::plural($this->validationMessageWord, $items->count()),
-                ]
+            $fail(
+                __(
+                    'laravelSupport::messages.delimited.min',
+                    [
+                        'minimum' => $this->minimum,
+                        'actual'  => $items->count(),
+                        'item'    => Str::plural($this->validationMessageWord, $items->count()),
+                    ]
+                )
             );
 
-            return false;
+            return;
         }
 
         if (($this->maximum !== null) && $items->count() > $this->maximum) {
-            $this->message = __(
-                'laravelSupport::messages.delimited.max',
-                [
-                    'maximum' => $this->maximum,
-                    'actual'  => $items->count(),
-                    'item'    => Str::plural($this->validationMessageWord, $items->count()),
-                ]
+            $fail(
+                __(
+                    'laravelSupport::messages.delimited.max',
+                    [
+                        'maximum' => $this->maximum,
+                        'actual'  => $items->count(),
+                        'item'    => Str::plural($this->validationMessageWord, $items->count()),
+                    ]
+                )
             );
 
-            return false;
+            return;
         }
 
         if ($this->trimItems) {
@@ -137,30 +144,21 @@ class Delimited implements Rule
             [
                 $isValid,
                 $validationMessage,
-            ] = $this->validate($attribute, $item);
+            ] = $this->validateItem($attribute, $item);
 
             if (!$isValid) {
-                $this->message = $validationMessage;
+                $fail($validationMessage);
 
-                return false;
+                return;
             }
         }
 
         if (!$this->allowDuplicates && $items->unique()->count() !== $items->count()) {
-            $this->message = __('laravelSupport::messages.delimited.unique');
-
-            return false;
+            $fail(__('laravelSupport::messages.delimited.unique'));
         }
-
-        return true;
     }
 
-    public function message()
-    {
-        return $this->message;
-    }
-
-    protected function validate(string $attribute, string $item): array
+    protected function validateItem(string $attribute, string $item): array
     {
         $attribute = Str::after($attribute, '.');
 
