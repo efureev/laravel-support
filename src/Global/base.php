@@ -1,23 +1,8 @@
 <?php
 
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-
-if (!function_exists('user')) {
-    /**
-     * Returns the current user authenticated, or `null`
-     *
-     * @param string|null $guard
-     *
-     * @return null|Authenticatable
-     */
-    function user(?string $guard = null): ?Authenticatable
-    {
-        return app('auth')->guard($guard)->user();
-    }
-}
 
 if (!function_exists('toCollect')) {
     /**

@@ -94,7 +94,7 @@ trait HasModelEntityCache
         return static::resolveStoreDriver()->forgetByKey($key);
     }
 
-    protected static function cacheForgetCollection(string $key = null): bool
+    protected static function cacheForgetCollection(?string $key = null): bool
     {
         return static::resolveStoreDriver()->cacheForgetCollection($key);
     }
@@ -104,7 +104,7 @@ trait HasModelEntityCache
         return 'id';
     }
 
-    protected static function cachePrefixKey(string $key = null, string $prefix = null): string
+    protected static function cachePrefixKey(?string $key = null, ?string $prefix = null): string
     {
         return static::resolveStoreDriver()->prefixKey($key, $prefix);
     }

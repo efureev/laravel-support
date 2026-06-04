@@ -4,57 +4,47 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Auth;
 
 /**
  * Class Authorized
  * @package Php\Support\Laravel\Rules
  */
-class Authorized implements Rule
+class Authorized implements ValidationRule
 {
-    /** @var string */
-    protected $ability;
-
-    /** @var array */
-    protected $arguments;
-
-    /** @var string */
-    protected $className;
-
-    /** @var string */
-    protected $attribute;
-
-    public function __construct(string $ability, string $className)
-    {
-        $this->ability = $ability;
-
-        $this->className = $className;
+    public function __construct(
+        protected readonly string $ability,
+        protected readonly string $className,
+    ) {
     }
 
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $this->attribute = $attribute;
-
         if (!$user = Auth::user()) {
-            return false;
+            $fail($this->getErrorMessage($attribute));
+            return;
         }
 
         if (!$model = $this->className::find($value)) {
-            return false;
+            $fail($this->getErrorMessage($attribute));
+            return;
         }
 
-        return $user->can($this->ability, $model);
+        if (!$user->can($this->ability, $model)) {
+            $fail($this->getErrorMessage($attribute));
+        }
     }
 
-    public function message(): string
+    protected function getErrorMessage(string $attribute): string
     {
         $classBasename = class_basename($this->className);
 
         return __(
             'laravelSupport::messages.authorized',
             [
-                'attribute' => $this->attribute,
+                'attribute' => $attribute,
                 'ability'   => $this->ability,
                 'className' => $classBasename,
             ]

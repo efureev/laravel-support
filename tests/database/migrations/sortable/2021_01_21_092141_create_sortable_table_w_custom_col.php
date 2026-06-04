@@ -4,12 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Php\Support\Laravel\Sorting\Database\Sortable;
+use Illuminate\Support\Facades\DB;
 use Php\Support\Laravel\Tests\TestClasses\Models\SortCustomColumnModel;
-use Php\Support\Laravel\Traits\Database\UUID;
 
 class CreateSortableTableWCustomCol extends Migration
 {
-    use Sortable, UUID;
+    use Sortable;
 
     /**
      * Run the migrations.
@@ -21,7 +21,7 @@ class CreateSortableTableWCustomCol extends Migration
         Schema::create(
             'sort_entities_custom_col',
             static function (Blueprint $table) {
-                static::columnUUID($table)->primary();
+                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
                 static::columnSortingPosition($table, SortCustomColumnModel::getSortingColumnName());
                 $table->string('title')->nullable();
             }

@@ -6,8 +6,7 @@ namespace Php\Support\Laravel\Tests\TestClasses\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Php\Support\Laravel\Caster\HasCasts;
-use Php\Support\Laravel\Caster\PgArray;
+use Php\Support\Laravel\Tests\TestClasses\Casts\PostgresArrayCast;
 use Php\Support\Laravel\Traits\Models\PostgresArray;
 
 /**
@@ -23,7 +22,6 @@ use Php\Support\Laravel\Traits\Models\PostgresArray;
  */
 class PgArrayModel extends Model
 {
-    use HasCasts;
     use PostgresArray;
 
     public $timestamps = false;
@@ -37,8 +35,8 @@ class PgArrayModel extends Model
     ];
 
     protected $casts = [
-        'tags' => PgArray::class,
-        //        'tag_ids' => PgArray::class,
+        'tags'    => PostgresArrayCast::class,
+        'tag_ids' => PostgresArrayCast::class,
     ];
 
     public function scopeByTag(Builder $query, string $value)
