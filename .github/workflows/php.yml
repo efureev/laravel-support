@@ -53,9 +53,9 @@ jobs:
       postgres:
         image: postgres:18
         env:
-          POSTGRES_USER: fureev
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: testing
+          POSTGRES_USER: forge
+          POSTGRES_PASSWORD: forge
+          POSTGRES_DB: forge
         ports:
           - 5432:5432
         options: >-
@@ -113,9 +113,9 @@ jobs:
         env:
           DB_HOST: localhost
           DB_PORT: ${{ job.services.postgres.ports[5432] }}
-          DB_DATABASE: testing
-          DB_USERNAME: fureev
-          DB_PASSWORD: password
+          DB_DATABASE: forge
+          DB_USERNAME: forge
+          DB_PASSWORD: forge
 
   release:
     name: Create Release
