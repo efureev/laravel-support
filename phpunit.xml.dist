@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" bootstrap="vendor/autoload.php"
+         colors="true" processIsolation="false" executionOrder="random" resolveDependencies="true" stopOnFailure="false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/13.0/phpunit.xsd" cacheDirectory=".phpunit.cache"
+         backupStaticProperties="false">
+    <coverage>
+        <report>
+            <clover outputFile="./clover.xml"/>
+            <html outputDirectory="./storage/coverage/html"/>
+            <text outputFile="php://stdout" showUncoveredFiles="false"/>
+            <xml outputDirectory="./storage/coverage/coverage-xml"/>
+        </report>
+    </coverage>
+    <testsuites>
+        <testsuite name="Main">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
+    <logging>
+        <junit outputFile="./storage/coverage/junit.xml"/>
+    </logging>
+    <source>
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </source>
+    <php>
+        <server name="DB_CONNECTION" value="pgsql"/>
+        <server name="APP_ENV" value="testing"/>
+        <server name="APP_KEY" value="base64:VM+W1TpjK5cVtw1wHOPcu+e8mHiVYDuvgUJSLf+1QLA="/>
+        <!-- DB connection defaults (forge / forge / forge). Real environment variables
+             (docker-compose for local runs, the job env in GitHub Actions) take precedence,
+             because force="false" keeps any value already present in the environment. -->
+        <env name="DB_HOST" value="localhost" force="false"/>
+        <env name="DB_PORT" value="5432" force="false"/>
+        <env name="DB_DATABASE" value="forge" force="false"/>
+        <env name="DB_USERNAME" value="forge" force="false"/>
+        <env name="DB_PASSWORD" value="forge" force="false"/>
+    </php>
+</phpunit>
