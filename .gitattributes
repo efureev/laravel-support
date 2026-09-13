@@ -12,7 +12,6 @@
 /.gitignore            export-ignore
 /.idea                 export-ignore
 /.phpcs.xml            export-ignore
-/AUDIT.md              export-ignore
 /CONTRIBUTING.md       export-ignore
 /SUMMARY.md            export-ignore
 /docker-compose.yml    export-ignore
