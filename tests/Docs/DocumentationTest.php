@@ -203,6 +203,30 @@ class DocumentationTest extends TestCase
         }
     }
 
+    /**
+     * SUMMARY.md is the table of contents a rendered site is built from, so a page missing from
+     * it is a page nobody can reach — the site loses it silently while the file still exists in
+     * the repository. Fail here instead.
+     */
+    #[Test]
+    public function the_table_of_contents_lists_every_page(): void
+    {
+        $summary = (string)file_get_contents(self::repoRoot() . '/SUMMARY.md');
+        $missing = [];
+
+        foreach (glob(self::docsDir() . '/*.md') ?: [] as $page) {
+            $name = basename($page);
+
+            if (!str_contains($summary, "docs/$name")) {
+                $missing[] = "docs/$name";
+            }
+        }
+
+        sort($missing);
+
+        self::assertSame([], $missing, 'These pages are unreachable from SUMMARY.md.');
+    }
+
     #[Test]
     public function the_table_of_contents_lists_only_pages_that_exist(): void
     {
