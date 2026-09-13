@@ -71,4 +71,10 @@ git archive --format=tar HEAD | tar -t | awk -F/ '{print $1}' | sort -u
 ```
 
 Only `src/`, `resources/`, `composer.json`, `README.md`, `CHANGELOG.md` and `LICENSE` should
-appear.
+appear — `tests/Packaging/PackagingTest.php` asserts exactly that, so a new top-level file has
+to be either added to the shipped set or `export-ignore`d before the suite goes green again.
+
+That test also checks the `require` list: every symbol `src/` imports must be satisfiable by the
+declared dependencies. `illuminate/redis` is the single exception — it stays a `suggest`, and a
+separate check pins that the two Redis connection classes appear in a docblock only, so a
+consumer who never uses a Redis cache store does not pay for it.
