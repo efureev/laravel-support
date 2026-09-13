@@ -7,7 +7,7 @@ namespace Php\Support\Laravel\Tests\Functional;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Php\Support\Exceptions\UnknownMethodException;
+use Php\Support\Laravel\Exceptions\UnknownMethodException;
 use Php\Support\Laravel\Tests\Database\Seeders\BaseTableSeeder;
 use Php\Support\Laravel\Tests\TestClasses\HasCustomModel;
 use Php\Support\Laravel\Tests\TestClasses\HasModel;
@@ -23,7 +23,6 @@ class ModelableTest extends AbstractFunctionalTestCase
         static::assertInstanceOf(BaseModel::class, $instance::getModelInstance());
         static::assertInstanceOf(BaseModel::class, $instance->model());
 
-        //        static::assertInstanceOf(BaseModel::class, $instance->modelKeyValue());
         static::assertInstanceOf(Builder::class, $instance->newQueryWithoutScopes());
 
         $model1 = $instance->findModelQuery(1);
@@ -31,7 +30,6 @@ class ModelableTest extends AbstractFunctionalTestCase
 
         $model2 = $instance->findModelOrFail(2);
         static::assertInstanceOf(BaseModel::class, $model2);
-        //        static::assertEquals('id', $instance->modelKeyName());
 
         $model2 = $instance->findModelOrFail([1, 2, 3]);
         static::assertInstanceOf(BaseModel::class, $model2);
@@ -74,10 +72,13 @@ class ModelableTest extends AbstractFunctionalTestCase
     public function testMethodIsMissed(): void
     {
         $instance = new HasModel();
+
         $this->expectException(UnknownMethodException::class);
-        $q = $instance->findModelQuery();
-        static::assertInstanceOf(Builder::class, $q);
-        static::assertInstanceOf(HasModel::class, $q->getModel());
+        $this->expectExceptionMessage(
+            'Unknown method: ' . HasModel::class . '::modelKeyValueGainer'
+        );
+
+        $instance->findModelQuery();
     }
 
     /**
@@ -87,7 +88,7 @@ class ModelableTest extends AbstractFunctionalTestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations/2020_08_12_075141_create_base_table.php');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations/2020_08_12_075141_create_base_table.php');
 
         $this->seed(BaseTableSeeder::class);
     }

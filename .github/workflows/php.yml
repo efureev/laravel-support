@@ -2,40 +2,58 @@ name: PHP Laravel Package
 
 on: [ push, pull_request ]
 
+permissions:
+  contents: read
+
+env:
+  PHP_VERSION: '8.5'
+
 jobs:
   lint:
-    name: Coding Standards (PHPCS)
+    name: Coding standards (PHPCS)
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
       - uses: actions/checkout@v6
 
-      - name: Use PHP 8.4
+      - name: Use PHP ${{ env.PHP_VERSION }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: ${{ env.PHP_VERSION }}
           extensions: mbstring
           coverage: none
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
       - name: Install Composer dependencies
-        run: composer update --prefer-dist --no-interaction
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: highest
 
       - name: Run PHPCS
         run: composer phpcs
+
+  static-analysis:
+    name: Static analysis (PHPStan)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, redis
+          coverage: none
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: highest
+
+      - name: Run PHPStan
+        run: composer phpstan
 
   testing:
     name: Test on PHP ${{ matrix.php }} with ${{ matrix.setup }} dependencies
@@ -46,8 +64,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        setup: [ 'basic', 'lowest', 'stable' ]
-        php: [ '8.4', '8.5' ]
+        setup: [ 'lowest', 'highest' ]
+        php: [ '8.5' ]
 
     services:
       postgres:
@@ -64,74 +82,138 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+      redis:
+        image: redis:8
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v6
 
       - name: Use PHP ${{ matrix.php }}
-        uses: shivammathur/setup-php@v2 # Action page: <https://github.com/shivammathur/setup-php>
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, pdo_pgsql, pgsql
+          extensions: mbstring, pdo_pgsql, pgsql, redis
           coverage: none
 
-      - name: Get Composer Cache Directory # Docs: <https://github.com/actions/cache/blob/master/examples.md#php---composer>
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
       - name: Validate composer.json
-        run: composer validate
+        run: composer validate --strict
 
-      - name: Install [LOWEST] Composer dependencies
-        if: matrix.setup == 'lowest'
-        run: composer update --prefer-dist --no-interaction --prefer-lowest
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: ${{ matrix.setup }}
 
-      - name: Install [BASIC] Composer dependencies
-        if: matrix.setup == 'basic'
-        run: composer update --prefer-dist --no-interaction
+      - name: Show the versions under test
+        run: composer info | grep -E 'illuminate/|laravel/framework|phpunit/phpunit|predis/predis'
 
-      - name: Install [STABLE] Composer dependencies
-        if: matrix.setup == 'stable'
-        run: composer update --prefer-dist --no-interaction --prefer-stable
-
-      - name: Show most important packages' versions
-        run: composer info | grep -e efureev -e laravel/framework -e phpunit/phpunit
-
-      # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-      # Docs: https://getcomposer.org/doc/articles/scripts.md
-
-      - name: Run test suite
-        run: composer test
+      - name: Run the test suite
+        run: composer phpunit
         env:
           DB_HOST: localhost
           DB_PORT: ${{ job.services.postgres.ports[5432] }}
           DB_DATABASE: forge
           DB_USERNAME: forge
           DB_PASSWORD: forge
+          REDIS_HOST: localhost
+          REDIS_PORT: ${{ job.services.redis.ports[6379] }}
+
+      # The RedisCacher bug that shipped for years was client-specific: the `eval` argument
+      # order differs between phpredis and predis. Run the Redis suite against both.
+      - name: Run the Redis suite against predis
+        run: ./vendor/bin/phpunit --no-coverage --colors=always tests/Traits/Models/Cachers
+        env:
+          DB_HOST: localhost
+          DB_PORT: ${{ job.services.postgres.ports[5432] }}
+          DB_DATABASE: forge
+          DB_USERNAME: forge
+          DB_PASSWORD: forge
+          REDIS_HOST: localhost
+          REDIS_PORT: ${{ job.services.redis.ports[6379] }}
+          REDIS_CLIENT: predis
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: forge
+          POSTGRES_PASSWORD: forge
+          POSTGRES_DB: forge
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:8
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, pdo_pgsql, pgsql, redis
+          coverage: pcov
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: highest
+
+      - name: Run the suite with coverage and enforce the floor
+        run: ./vendor/bin/phpunit --coverage-clover=storage/coverage/clover.xml --colors=always
+        env:
+          DB_HOST: localhost
+          DB_PORT: ${{ job.services.postgres.ports[5432] }}
+          DB_DATABASE: forge
+          DB_USERNAME: forge
+          DB_PASSWORD: forge
+          REDIS_HOST: localhost
+          REDIS_PORT: ${{ job.services.redis.ports[6379] }}
+
+      - name: Check the coverage floor
+        run: php .github/bin/coverage-gate.php storage/coverage/clover.xml 90
 
   release:
-    name: Create Release
-    needs: [ testing ]
+    name: Create release
+    needs: [ lint, static-analysis, testing, coverage ]
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/v') && endsWith(github.ref, '.0') }}
+    permissions:
+      contents: write
+    if: startsWith(github.ref, 'refs/tags/v')
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-      - name: Create Release
+      - name: Create release
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
+          body_path: CHANGELOG.md
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(github.ref_name, '-') }}

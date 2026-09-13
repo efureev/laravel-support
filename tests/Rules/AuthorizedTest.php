@@ -21,18 +21,18 @@ class AuthorizedTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         Gate::policy(TestModel::class, TestModelPolicy::class);
     }
 
     #[Test]
-    public function it_will_return_true_if_the_gate_returns_true_for_the_given_ability_name()
+    public function it_will_return_true_if_the_gate_returns_true_for_the_given_ability_name(): void
     {
         $rule = new Authorized('edit', TestModel::class);
 
-        $user  = UserFactory::new()->create();
-        $model = TestModelFactory::new()->create(
+        $user  = UserFactory::new()->createOne();
+        $model = TestModelFactory::new()->createOne(
             [
                 'user_id' => $user->getKey(),
             ]
@@ -44,12 +44,12 @@ class AuthorizedTest extends AbstractTestCase
     }
 
     #[Test]
-    public function it_will_return_false_if_noone_is_logged_in()
+    public function it_will_return_false_if_noone_is_logged_in(): void
     {
         $rule = new Authorized('edit', TestModel::class);
 
-        $user  = UserFactory::new()->create();
-        $model = TestModelFactory::new()->create(
+        $user  = UserFactory::new()->createOne();
+        $model = TestModelFactory::new()->createOne(
             [
                 'user_id' => $user->getKey(),
             ]
@@ -59,7 +59,7 @@ class AuthorizedTest extends AbstractTestCase
     }
 
     #[Test]
-    public function it_will_return_false_if_the_model_is_not_found()
+    public function it_will_return_false_if_the_model_is_not_found(): void
     {
         $rule = new Authorized('edit', TestModel::class);
 
@@ -67,15 +67,30 @@ class AuthorizedTest extends AbstractTestCase
     }
 
     #[Test]
-    public function it_will_return_false_if_the_gate_returns_false()
+    public function it_will_return_false_if_the_gate_returns_false(): void
     {
         $rule = new Authorized('edit', TestModel::class);
 
-        self::assertFalse(Validator::make(['attribute' => '1'], ['attribute' => $rule])->passes());
+        // The model must exist and somebody must be logged in, otherwise this exercises the
+        // "not found" / "not logged in" branches instead of the gate.
+        $owner = UserFactory::new()->createOne();
+        $other = UserFactory::new()->createOne();
+        $model = TestModelFactory::new()->createOne(['user_id' => $owner->getKey()]);
+
+        $this->actingAs($other);
+
+        self::assertTrue(
+            Gate::forUser($owner)->allows('edit', $model),
+            'Precondition: the owner is allowed, so a denial below really comes from the gate.'
+        );
+
+        self::assertFalse(
+            Validator::make(['attribute' => $model->getKey()], ['attribute' => $rule])->passes()
+        );
     }
 
     #[Test]
-    public function it_passes_attribute_ability_and_class_name_to_the_validation_message()
+    public function it_passes_attribute_ability_and_class_name_to_the_validation_message(): void
     {
         Lang::addLines(
             ['messages.authorized' => ':attribute :ability and :className'],

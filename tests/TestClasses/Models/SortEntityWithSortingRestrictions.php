@@ -6,9 +6,20 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Php\Support\Laravel\Sorting\Model\Sortable;
 
+/**
+ * @property string $model_type
+ * @property string $model_id
+ * @property string|null $title
+ */
 class SortEntityWithSortingRestrictions extends Model
 {
     use Sortable;
+
+    protected $fillable = [
+        'title',
+        'model_type',
+        'model_id',
+    ];
 
     protected $table = 'sort_entities_with_sorting_restrictions';
     /**
@@ -17,9 +28,11 @@ class SortEntityWithSortingRestrictions extends Model
     public $timestamps = false;
 
     /**
-     * @var string
+     * `'uuid'` is not a valid $keyType — Laravel 13 raises InvalidCastException for it.
+     * The column is filled by Postgres `gen_random_uuid()` and read back via
+     * `INSERT ... RETURNING id`, so `$incrementing` stays at its default.
      */
-    protected $keyType = 'uuid';
+    protected $keyType = 'string';
 
 
     /**
@@ -31,9 +44,9 @@ class SortEntityWithSortingRestrictions extends Model
     }
 
     /**
-     * @param Builder $query
+     * @param Builder<static> $query
      *
-     * @return Builder
+     * @return Builder<static>
      */
     protected function forSortingRestrictions(Builder $query): Builder
     {

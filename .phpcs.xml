@@ -3,6 +3,7 @@
     <description>The PSR2 coding standard.</description>
     <rule ref="PSR12"/>
     <file>src/</file>
+    <file>tests/</file>
     <exclude-pattern>vendor</exclude-pattern>
     <exclude-pattern>resources</exclude-pattern>
     <exclude-pattern>database</exclude-pattern>
@@ -110,5 +111,20 @@
     <!-- The testing bootstrap file uses string concats to stop IDEs seeing the class aliases -->
     <rule ref="Generic.Strings.UnnecessaryStringConcat">
         <exclude-pattern>tests/bootstrap.php</exclude-pattern>
+    </rule>
+
+    <!--
+        Test-only conventions. Both are deliberate choices about how tests read, not defects.
+        Test methods are named as sentences (it_rejects_an_empty_separator), which is the
+        documented PHPUnit style and far more legible in testdox output than camelCase.
+        A test file keeps its fixtures (models, providers, doubles) next to the test that uses
+        them, so the whole scenario is readable in one place.
+        Production code under src/ is held to PSR-12 in full.
+    -->
+    <rule ref="PSR1.Methods.CamelCapsMethodName">
+        <exclude-pattern>tests/*</exclude-pattern>
+    </rule>
+    <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
+        <exclude-pattern>tests/*</exclude-pattern>
     </rule>
 </ruleset>

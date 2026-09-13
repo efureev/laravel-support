@@ -16,7 +16,21 @@ abstract class AbstractTestCase extends TestCase
 {
     use InteractsWithDatabase;
 
+    /** @var string[] */
     protected array $migrations = [];
+
+    /**
+     * Read a connection setting from the real environment.
+     *
+     * `env()` is the wrong tool outside `config/`: it returns null once the config is cached.
+     * Here the values come straight from docker-compose / the CI job env.
+     */
+    protected static function envValue(string $name, string $default): string
+    {
+        $value = getenv($name);
+
+        return $value === false || $value === '' ? $default : $value;
+    }
 
     /**
      * Define environment setup.
@@ -33,12 +47,12 @@ abstract class AbstractTestCase extends TestCase
             'database.connections.testing',
             [
                 'driver'         => 'pgsql',
-                'url'            => env('DATABASE_URL'),
-                'host'           => env('DB_HOST', 'localhost'),
-                'port'           => env('DB_PORT', '5432'),
-                'database'       => env('DB_DATABASE', 'forge'),
-                'username'       => env('DB_USERNAME', 'forge'),
-                'password'       => env('DB_PASSWORD', 'forge'),
+                'url'            => getenv('DATABASE_URL') ?: null,
+                'host'           => self::envValue('DB_HOST', 'localhost'),
+                'port'           => self::envValue('DB_PORT', '5432'),
+                'database'       => self::envValue('DB_DATABASE', 'forge'),
+                'username'       => self::envValue('DB_USERNAME', 'forge'),
+                'password'       => self::envValue('DB_PASSWORD', 'forge'),
                 'charset'        => 'utf8',
                 'prefix'         => '',
                 'prefix_indexes' => true,
@@ -58,6 +72,9 @@ abstract class AbstractTestCase extends TestCase
         );
     }
 
+    /**
+     * @return array<int, class-string>
+     */
     protected function getPackageProviders($app): array
     {
         return [
@@ -94,12 +111,11 @@ abstract class AbstractTestCase extends TestCase
         }
     }
 
+    /**
+     * @param class-string $class
+     */
     protected static function getProtectedMethod(string $class, string $name): \ReflectionMethod
     {
-        $class  = new \ReflectionClass($class);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-
-        return $method;
+        return (new \ReflectionClass($class))->getMethod($name);
     }
 }

@@ -8,6 +8,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       DB_CONNECTION: pgsql
       DB_HOST: db
@@ -15,6 +17,8 @@ services:
       DB_DATABASE: forge
       DB_USERNAME: forge
       DB_PASSWORD: forge
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
 
   db:
     image: postgres:18-alpine
@@ -22,10 +26,18 @@ services:
       POSTGRES_DB: forge
       POSTGRES_USER: forge
       POSTGRES_PASSWORD: forge
-    ports:
-      - "5432:5432"
+    # No host port: the app container reaches these over the compose network, and publishing
+    # them makes `composer test:docker` fail whenever something else already holds the port.
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U forge -d forge"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:8-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 5s
       retries: 5

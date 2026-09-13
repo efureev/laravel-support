@@ -12,18 +12,18 @@ use Illuminate\Foundation\Auth\User;
  * @package Php\Support\Laravel\Tests\Models
  * @property boolean $enabled
  * @property string $title
- * @property array $config
+ * @property array<string, mixed> $config
  * @property string $str
  * @property string $str_empty
  * @property int $int
  * @property User $user
- * @mixin Builder
+ * @mixin Builder<TestModel>
  */
 class TestModel extends Model
 {
     public $timestamps = false;
     protected $keyType = 'string';
-    protected $table = 'test_table';
+    protected $table   = 'test_table';
 
     protected $fillable = [
         'config',
@@ -41,6 +41,9 @@ class TestModel extends Model
         'int'       => 'int',
     ];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

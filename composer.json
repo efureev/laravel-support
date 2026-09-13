@@ -16,17 +16,26 @@
     }
   ],
   "require": {
-    "php": ">=8.4",
-    "efureev/support": "^5.2",
-    "illuminate/database": "^13.0"
+    "php": ">=8.5",
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "illuminate/cache": "^13.0",
+    "illuminate/console": "^13.0",
+    "illuminate/contracts": "^13.0",
+    "illuminate/database": "^13.0",
+    "illuminate/http": "^13.0",
+    "illuminate/support": "^13.0",
+    "illuminate/validation": "^13.0"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "^2.52.0",
     "fakerphp/faker": "^1.23",
+    "larastan/larastan": "^3.12",
     "marcocesarato/php-conventional-changelog": "^1.17",
     "orchestra/testbench": "^11.1",
     "phpstan/phpstan": "^2.2",
     "phpunit/phpunit": "^13.0",
+    "predis/predis": "^3.2",
     "squizlabs/php_codesniffer": "^3.9"
   },
   "autoload": {
@@ -40,9 +49,9 @@
   "autoload-dev": {
     "psr-4": {
       "Php\\Support\\Laravel\\Tests\\": "tests/",
+      "Php\\Support\\Laravel\\Tests\\TestClasses\\ServiceProviders\\": "tests/TestClasses/ServiceProviders/src/",
       "Php\\Support\\Laravel\\Tests\\Database\\Factories\\": "tests/database/factories",
-      "Php\\Support\\Laravel\\Tests\\Database\\Seeders\\": "tests/database/seeders",
-      "Php\\Support\\Laravel\\Tests\\TestClasses\\ServiceProviders\\": "tests/TestClasses/ServiceProviders/src/"
+      "Php\\Support\\Laravel\\Tests\\Database\\Seeders\\": "tests/database/seeders"
     }
   },
   "config": {
@@ -85,12 +94,22 @@
     ],
     "test": [
       "@phpcs",
+      "@phpstan",
       "@phpunit"
     ],
     "test:docker": "docker compose up --build --abort-on-container-exit --exit-code-from app",
     "test-cover": [
       "@phpcs",
+      "@phpstan",
       "@phpunit-cover"
     ]
+  },
+  "suggest": {
+    "ext-pdo_pgsql": "Required by the PostgresArray query scopes and cast",
+    "illuminate/redis": "Required by RedisCacher for pattern-based cache invalidation"
+  },
+  "support": {
+    "issues": "https://github.com/efureev/laravel-support/issues",
+    "source": "https://github.com/efureev/laravel-support"
   }
 }

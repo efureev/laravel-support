@@ -1,0 +1,27 @@
+# Composer installs the GitHub zipball, so `export-ignore` is what keeps files out of a
+# consumer's vendor/ directory. `archive.exclude` in composer.json does NOT apply to that path.
+#
+# Verify with:  git archive --format=tar HEAD | tar -t
+
+/.changelog            export-ignore
+/.docker               export-ignore
+/.dockerignore         export-ignore
+/.git-hooks            export-ignore
+/.github               export-ignore
+/.gitattributes        export-ignore
+/.gitignore            export-ignore
+/.idea                 export-ignore
+/.phpcs.xml            export-ignore
+/AUDIT.md              export-ignore
+/CONTRIBUTING.md       export-ignore
+/SUMMARY.md            export-ignore
+/docker-compose.yml    export-ignore
+/docs                  export-ignore
+/phpstan.neon          export-ignore
+/phpunit.xml.dist      export-ignore
+/tests                 export-ignore
+
+# Keep line endings stable for the files that do ship.
+*.php                  text eol=lf
+*.md                   text eol=lf
+*.json                 text eol=lf

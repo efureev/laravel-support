@@ -5,35 +5,45 @@ declare(strict_types=1);
 namespace Php\Support\Laravel\Pagination;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\PaginatedResourceResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 /**
- * Class PaginatedResourceArray
- * @package Sitesoft\Alice\Modules\Mediateca
+ * Renders a paginated resource collection as a plain array, so it can be nested inside another
+ * resource instead of becoming the HTTP response body.
  *
- * Modify paginator-resource in an array
+ * ```php
+ * class FolderResource extends JsonResource
+ * {
+ *     public function toArray($request): array
+ *     {
+ *         return [
+ *             'id'    => $this->id,
+ *             'files' => (new PaginatedResourceArray(
+ *                 new FileCollection($this->files()->paginate())
+ *             ))->toArray($request),
+ *         ];
+ *     }
+ * }
+ * ```
+ *
+ * Extends {@see PaginatedResourceResponse} rather than reimplementing it, so `links` / `meta`,
+ * the `$wrap` / `$forceWrapping` rules and the resource's own `paginationInformation()` hook all
+ * behave exactly as they do in a normal paginated response.
+ *
+ * @see https://laravel.com/docs/13.x/eloquent-resources#pagination
  */
-class PaginatedResourceArray
+class PaginatedResourceArray extends PaginatedResourceResponse
 {
-    /** @var ResourceCollection|mixed */
-    protected $resource;
-
-    /**
-     * @param ResourceCollection|mixed $resource
-     */
-    public function __construct($resource)
+    public function __construct(ResourceCollection $resource)
     {
-        $this->resource = $resource;
+        parent::__construct($resource);
     }
 
     /**
-     * Create an array that represents the object.
+     * The array a `PaginatedResourceResponse` would have encoded as JSON.
      *
-     * @param Request $request
-     *
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
@@ -45,115 +55,5 @@ class PaginatedResourceArray
                 $this->resource->additional
             )
         );
-    }
-
-    /**
-     * Add the pagination information to the response.
-     *
-     * @param Request $request
-     *
-     * @return array
-     */
-    protected function paginationInformation($request): array
-    {
-        $paginated = $this->resource->resource->toArray($request);
-
-        return [
-            'links' => $this->paginationLinks($paginated),
-            'meta'  => $this->meta($paginated),
-        ];
-    }
-
-    /**
-     * Get the pagination links for the response.
-     *
-     * @param array $paginated
-     *
-     * @return array
-     */
-    protected function paginationLinks($paginated): array
-    {
-        return [
-            'first' => $paginated['first_page_url'] ?? null,
-            'last'  => $paginated['last_page_url'] ?? null,
-            'prev'  => $paginated['prev_page_url'] ?? null,
-            'next'  => $paginated['next_page_url'] ?? null,
-        ];
-    }
-
-    /**
-     * Gather the meta data for the response.
-     *
-     * @param array $paginated
-     *
-     * @return array
-     */
-    protected function meta($paginated): array
-    {
-        return Arr::except(
-            $paginated,
-            [
-                'data',
-                'first_page_url',
-                'last_page_url',
-                'prev_page_url',
-                'next_page_url',
-            ]
-        );
-    }
-
-    /**
-     * Wrap the given data if necessary.
-     *
-     * @param $data
-     * @param array $with
-     * @param array $additional
-     *
-     * @return array
-     */
-    protected function wrap($data, $with = [], $additional = []): array
-    {
-        if ($data instanceof Collection) {
-            $data = $data->all();
-        }
-
-        if ($this->haveDefaultWrapperAndDataIsUnwrapped($data)) {
-            $data = [$this->wrapper() => $data];
-        } elseif ($this->haveAdditionalInformationAndDataIsUnwrapped($data, $with, $additional)) {
-            $data = [($this->wrapper() ?? 'data') => $data];
-        }
-
-        return array_merge_recursive($data, $with, $additional);
-    }
-
-    /**
-     * @param $data
-     *
-     * @return bool
-     */
-    protected function haveDefaultWrapperAndDataIsUnwrapped($data): bool
-    {
-        return $this->wrapper() && !array_key_exists($this->wrapper(), $data);
-    }
-
-    /**
-     * Determine if "with" data has been added and our data is unwrapped.
-     *
-     * @param array $data
-     * @param array $with
-     * @param array $additional
-     *
-     * @return bool
-     */
-    protected function haveAdditionalInformationAndDataIsUnwrapped($data, $with, $additional): bool
-    {
-        return (!empty($with) || !empty($additional)) &&
-            (!$this->wrapper() ||
-                !array_key_exists($this->wrapper(), $data));
-    }
-
-    protected function wrapper(): ?string
-    {
-        return $this->resource::$wrap;
     }
 }

@@ -1,0 +1,10 @@
+# The image runs `composer install` itself, so shipping the host's vendor/ only makes the
+# build context large and can mask a broken dependency set.
+.git
+.idea
+vendor
+storage
+.phpunit.cache
+clover.xml
+node_modules
+.DS_Store

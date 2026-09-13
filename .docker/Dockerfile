@@ -1,4 +1,4 @@
-FROM php:8.4-cli-alpine
+FROM php:8.5-cli-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
@@ -16,10 +16,10 @@ RUN docker-php-ext-install \
     zip \
     intl
 
-# Install pcov for code coverage
+# Install pcov (coverage) and redis (RedisCacher functional tests)
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
-    && pecl install pcov \
-    && docker-php-ext-enable pcov \
+    && pecl install pcov redis \
+    && docker-php-ext-enable pcov redis \
     && apk del .build-deps
 
 # Install Composer

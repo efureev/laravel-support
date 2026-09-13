@@ -4,9 +4,22 @@ declare(strict_types=1);
 
 namespace Php\Support\Laravel\Traits\Models\Cachers;
 
+use Illuminate\Contracts\Cache\Store;
+
+/**
+ * No-op cacher used when the active store cannot delete keys by pattern.
+ *
+ * Key prefixing still works, so {@see \Php\Support\Laravel\Traits\Models\HasModelEntityCache::remember()}
+ * behaves normally; only pattern-based collection invalidation is a no-op.
+ */
 class DummyCacher implements CacherContract
 {
-    public function __construct(private readonly string $model)
+    /**
+     * `$store` is accepted and ignored so every cacher shares one constructor shape.
+     *
+     * @param class-string $model
+     */
+    public function __construct(private readonly string $model, protected readonly ?Store $store = null)
     {
     }
 

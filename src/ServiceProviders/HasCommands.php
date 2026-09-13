@@ -7,8 +7,9 @@ namespace Php\Support\Laravel\ServiceProviders;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Trait HasCommands
- * @package Php\Support\Laravel\ServiceProviders
+ * Console command registration for a package service provider.
+ *
+ * @see https://laravel.com/docs/13.x/packages#commands
  *
  * @mixin ServiceProvider
  */

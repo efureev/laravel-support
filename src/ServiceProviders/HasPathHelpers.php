@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Php\Support\Laravel\ServiceProviders;
 
 use Illuminate\Support\Arr;
-use Php\Support\Helpers\Json;
 
 trait HasPathHelpers
 {
@@ -52,11 +51,11 @@ trait HasPathHelpers
     /**
      * Package's seeders path
      *
-     * @param string $path
+     * @param string|null $path
      *
      * @return string|null
      */
-    public static function getDatabaseSeedersPath(string $path): ?string
+    public static function getDatabaseSeedersPath(?string $path = null): ?string
     {
         if (!$cPath = static::packagePath('database/seeders')) {
             return null;
@@ -132,16 +131,32 @@ trait HasPathHelpers
         );
     }
 
+    /**
+     * Read a dot-notation `$key` out of a JSON file.
+     *
+     * Returns `null` for a missing, unreadable or malformed file rather than throwing —
+     * a package without a `version.json` is normal, not an error.
+     */
     protected static function getVersionFromFile(?string $filePath, string $key = 'version'): ?string
     {
-        if (!$filePath || !file_exists($filePath)) {
+        if ($filePath === null || !is_file($filePath)) {
             return null;
         }
 
-        if (!$composerData = Json::decode(file_get_contents($filePath))) {
+        $contents = @file_get_contents($filePath);
+
+        if ($contents === false) {
             return null;
         }
 
-        return Arr::get($composerData, $key);
+        $data = json_decode($contents, true);
+
+        if (!is_array($data)) {
+            return null;
+        }
+
+        $value = Arr::get($data, $key);
+
+        return is_scalar($value) ? (string)$value : null;
     }
 }

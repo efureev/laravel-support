@@ -5,7 +5,7 @@
          backupStaticProperties="false">
     <coverage>
         <report>
-            <clover outputFile="./clover.xml"/>
+            <clover outputFile="./storage/coverage/clover.xml"/>
             <html outputDirectory="./storage/coverage/html"/>
             <text outputFile="php://stdout" showUncoveredFiles="false"/>
             <xml outputDirectory="./storage/coverage/coverage-xml"/>

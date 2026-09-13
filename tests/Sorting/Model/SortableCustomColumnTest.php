@@ -8,14 +8,13 @@ use Php\Support\Laravel\Tests\TestClasses\Models\SortCustomColumnModel;
 
 class SortableCustomColumnTest extends AbstractTestCase
 {
-    protected array $migrations = [
-        'sortable/2021_01_21_092141_create_sortable_table_w_custom_col.php',
-    ];
+    /** @var string[] */
+    protected array $migrations = ['sortable/2021_01_21_092141_create_sortable_table_w_custom_col.php'];
 
     public function testInsertZeroSortingPosition_incrementSortingPosition(): void
     {
         /** @var SortCustomColumnModel $model */
-        $model = SortCustomColumnModel::make(['title' => 'test'])
+        $model = (new SortCustomColumnModel(['title' => 'test']))
             ->setSortingPosition(0);
 
 
@@ -34,15 +33,15 @@ class SortableCustomColumnTest extends AbstractTestCase
         $model = SortCustomColumnModel::create(['title' => 'test']);
         $this->assertEquals(2, $model->refresh()->sortingPosition());
 
-        $model = SortCustomColumnModel::make(['title' => 'test']);
+        $model = (new SortCustomColumnModel(['title' => 'test']));
         $model->save();
         $this->assertEquals(3, $model->refresh()->sortingPosition());
 
-        $model = SortCustomColumnModel::make(['title' => 'test'])->setSortingPosition(0);
+        $model = (new SortCustomColumnModel(['title' => 'test']))->setSortingPosition(0);
         $model->save();
         $this->assertEquals(4, $model->refresh()->sortingPosition());
 
-        $model = SortCustomColumnModel::make(['title' => 'test'])->setSortingPosition(-2);
+        $model = (new SortCustomColumnModel(['title' => 'test']))->setSortingPosition(-2);
         $model->save();
         $this->assertEquals(5, $model->refresh()->sortingPosition());
     }
@@ -66,7 +65,7 @@ class SortableCustomColumnTest extends AbstractTestCase
         bool $ordering = true,
         bool $orderingReverse = false
     ): void {
-        $table = (new SortCustomColumnModel)->getTable();
+        $table = (new SortCustomColumnModel())->getTable();
         $spCol = SortCustomColumnModel::getSortingColumnName();
 
         for ($i = 1; $i <= $count; $i++) {

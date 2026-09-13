@@ -1,8 +1,17 @@
+includes:
+  - vendor/larastan/larastan/extension.neon
+
 parameters:
-  level: '2'
+  # Level 6 is the highest that holds with ZERO ignoreErrors and zero @phpstan-ignore comments.
+  #
+  # Level 7 leaves exactly six errors, all the same one: Laravel 13 types `whereRaw()` and
+  # `Illuminate\Database\Query\Expression` as `literal-string` to make dynamic SQL visible.
+  # `Traits\Models\PostgresArray` and `Sorting\Model\Sortable` exist precisely to build SQL
+  # around a caller-supplied column name, which no amount of typing can turn into a literal.
+  # Both validate the identifier and quote it through the connection grammar instead — see
+  # PostgresArray::wrapSortableColumn(). Raising the level would mean suppressions, which is
+  # worse than recording the ceiling here.
+  level: 6
   paths:
     - src
-#    - tests
-#  ignoreErrors:
-#    -
-#      identifier: trait.unused
+    - tests

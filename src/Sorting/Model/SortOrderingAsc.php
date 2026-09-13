@@ -7,17 +7,39 @@ namespace Php\Support\Laravel\Sorting\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use InvalidArgumentException;
 
+/**
+ * Global scope ordering a {@see Sortable} model by its sorting column, ascending.
+ *
+ * ```php
+ * protected static function booted(): void
+ * {
+ *     static::addGlobalScope(new SortOrderingAsc());
+ * }
+ * ```
+ *
+ * @see https://laravel.com/docs/13.x/eloquent#global-scopes
+ *
+ * @implements Scope<Model>
+ */
 class SortOrderingAsc implements Scope
 {
     /**
-     * @param Builder $builder
-     * @param Model|Sortable $model
+     * @param Builder<covariant Model> $builder
      *
-     * @return void
+     * @throws InvalidArgumentException when the model does not use the Sortable trait
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->orderBy($model->qualifyColumn($model::getSortingColumnName()));
+        // The Scope contract fixes this signature to any Model, so the sorting column has to be
+        // checked at runtime. Failing loudly beats ordering by a column that does not exist.
+        if (!method_exists($model, 'getSortingColumnName')) {
+            throw new InvalidArgumentException(
+                sprintf('%s requires the %s trait on %s.', static::class, Sortable::class, $model::class)
+            );
+        }
+
+        $builder->orderBy($model->qualifyColumn($model->getSortingColumnName()));
     }
 }

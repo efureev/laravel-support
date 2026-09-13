@@ -1,3 +1,6 @@
 <?php
 
-return [];
+return [
+    'name'    => 'example',
+    'enabled' => true,
+];

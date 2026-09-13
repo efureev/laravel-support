@@ -11,6 +11,9 @@ class HasModel
 {
     use ModelQueryable;
 
+    /**
+     * @return class-string<BaseModel>
+     */
     public static function modelClass(): string
     {
         return BaseModel::class;

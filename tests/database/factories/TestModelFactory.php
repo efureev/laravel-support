@@ -5,14 +5,15 @@ namespace Php\Support\Laravel\Tests\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Php\Support\Laravel\Tests\TestClasses\Models\TestModel;
 
+/**
+ * @extends Factory<TestModel>
+ */
 class TestModelFactory extends Factory
 {
     protected $model = TestModel::class;
 
     /**
-     * Define the model's default state.
-     *
-     * @return array
+     * @return array<string, mixed>
      */
     public function definition(): array
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Php\Support\Laravel\Sorting\Model;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -7,20 +9,39 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 
 /**
- * Trait Sortable
+ * Keeps an Eloquent model in a hand-ordered stack (drag-and-drop friendly).
  *
- * Use it in the Eloquent Model class to add sorting to it
+ * A row saved with a position of `null`, `0` or less lands at the end of the stack; a row saved
+ * with a position already taken pushes the rest down; moving an existing row shifts only the
+ * rows between its old and new place. Override
+ * {@see self::getDefaultSortingRestrictionsSql()} and {@see self::forSortingRestrictions()} to
+ * keep several independent stacks in one table.
  *
- * @method Sortable sortingPositionGreaterThen(int $value, bool $andSelf = true)
- * @method Sortable sortingPositionLessThen(int $value, bool $andSelf = true)
- * @method Sortable sortingPositionOrderByDesc()
- * @method Sortable sortingPositionOrderByAsc()
+ * ```php
+ * class Slide extends Model
+ * {
+ *     use Sortable;
+ * }
+ *
+ * $slide->setSortingPosition(2)->save();
+ * Slide::sortingPositionOrderByAsc()->get();
+ * ```
+ *
+ * @see \Php\Support\Laravel\Sorting\Database\Sortable::columnSortingPosition()
+ *
+ * @method static Builder<static> sortingPositionGreaterThen(int $value, bool $andSelf = true)
+ * @method static Builder<static> sortingPositionLessThen(int $value, bool $andSelf = true)
+ * @method static Builder<static> sortingPositionBetween(int $from, int $to)
+ * @method static Builder<static> sortingPositionOrderByDesc()
+ * @method static Builder<static> sortingPositionOrderByAsc()
  *
  * @mixin Model
- * @mixin Builder
  */
 trait Sortable
 {
+    /** Column holding the position; override per model to rename it. */
+    protected static ?string $sortingColumnName = null;
+
     /**
      * Call it in boot method of your Eloquent model
      *
@@ -29,13 +50,13 @@ trait Sortable
     protected static function bootSortable(): void
     {
         static::saving(
-            static function (Model $model) {
+            static function (self $model): void {
                 $model->onSavingSortingPosition();
             }
         );
 
         static::saved(
-            static function (self $model) {
+            static function (self $model): void {
                 $model->onSavedSortingPosition();
             }
         );
@@ -49,6 +70,11 @@ trait Sortable
         */
     }
 
+    /**
+     * @param Builder<static> $builder
+     *
+     * @return Builder<static>
+     */
     protected static function sortingOrderingFn(Builder $builder): Builder
     {
         if ($direction = static::sortingOrderingDirection()) {
@@ -58,6 +84,9 @@ trait Sortable
         return $builder;
     }
 
+    /**
+     * @return 'asc'|'desc'|null null disables the automatic ordering
+     */
     protected static function sortingOrderingDirection(): ?string
     {
         return 'desc';
@@ -98,23 +127,38 @@ trait Sortable
         return $this->{static::getSortingColumnName()} ?? 0;
     }
 
+    /**
+     * Queue a move to the head of the stack. Everything else shifts down by one on save.
+     */
     public function setFirstForSortingPosition(): self
     {
         return $this->setSortingPosition(1);
     }
 
-    public function onSavingSortingPosition()
+    /**
+     * Queue a move to the end of the stack — the counterpart of
+     * {@see self::setFirstForSortingPosition()}.
+     *
+     * A non-positive position already means "end of the stack", so this is the readable spelling
+     * of that rule rather than new behaviour.
+     */
+    public function setLastForSortingPosition(): self
+    {
+        return $this->setSortingPosition(0);
+    }
+
+    public function onSavingSortingPosition(): void
     {
         $this->normalizeSortingPosition();
         $this->reorderingSortingPosition();
     }
 
-    public function onSavedSortingPosition()
+    public function onSavedSortingPosition(): void
     {
         $this->refreshSortingPosition();
     }
 
-    public function refreshSortingPosition()
+    public function refreshSortingPosition(): void
     {
         if ($this->{static::getSortingColumnName()} instanceof Expression) {
             $this->{static::getSortingColumnName()} = $this->setKeysForSelectQuery(
@@ -185,7 +229,7 @@ SQL;
         }
     }
 
-    private function incrementInReorder($new, $old): void
+    private function incrementInReorder(int $new, int $old): void
     {
         $column = static::getSortingColumnName();
         $query  = $this->forSortingRestrictions($this->newQuery())
@@ -198,7 +242,7 @@ SQL;
         $query->increment($column);
     }
 
-    private function decrementInReorder($new, $old): void
+    private function decrementInReorder(int $new, int $old): void
     {
         $column = static::getSortingColumnName();
         $query  = $this->forSortingRestrictions($this->newQuery())
@@ -216,26 +260,73 @@ SQL;
         return '';
     }
 
+    /**
+     * @param Builder<static> $query
+     *
+     * @return Builder<static>
+     */
     public function scopeSortingPositionGreaterThen(Builder $query, int $value, bool $andSelf = true): Builder
     {
         return $query->where(static::getSortingColumnName(), $andSelf ? '>=' : '>', $value);
     }
 
+    /**
+     * @param Builder<static> $query
+     *
+     * @return Builder<static>
+     */
     public function scopeSortingPositionLessThen(Builder $query, int $value, bool $andSelf = true): Builder
     {
         return $query->where(static::getSortingColumnName(), $andSelf ? '<=' : '<', $value);
     }
 
+    /**
+     * Rows whose position lies between `$from` and `$to`, inclusive. The bounds may arrive in
+     * either order.
+     *
+     * @param Builder<static> $query
+     *
+     * @return Builder<static>
+     */
+    public function scopeSortingPositionBetween(Builder $query, int $from, int $to): Builder
+    {
+        return $query->whereBetween(
+            static::getSortingColumnName(),
+            $from <= $to ? [
+                $from,
+                $to,
+            ] : [
+                $to,
+                $from,
+            ]
+        );
+    }
+
+    /**
+     * @param Builder<static> $query
+     *
+     * @return Builder<static>
+     */
     public function scopeSortingPositionOrderByDesc(Builder $query): Builder
     {
         return $query->orderByDesc(static::getSortingColumnName());
     }
 
+    /**
+     * @param Builder<static> $query
+     *
+     * @return Builder<static>
+     */
     public function scopeSortingPositionOrderByAsc(Builder $query): Builder
     {
         return $query->orderBy(static::getSortingColumnName());
     }
 
+    /**
+     * @param Builder<static> $query
+     *
+     * @return Builder<static>
+     */
     protected function forSortingRestrictions(Builder $query): Builder
     {
         return $query;

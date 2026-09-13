@@ -14,5 +14,5 @@ class SortCustomColumnModel extends SortEntity
 
     protected $table = 'sort_entities_custom_col';
 
-    protected static $sortingColumnName = 'sp';
+    protected static ?string $sortingColumnName = 'sp';
 }

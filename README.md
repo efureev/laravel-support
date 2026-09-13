@@ -1,17 +1,18 @@
 # PHP Laravel Support
 
-![](https://img.shields.io/badge/php->=8.4-blue.svg)
+![](https://img.shields.io/badge/php->=8.5-blue.svg)
 ![](https://img.shields.io/badge/Laravel->=13.0-red.svg)
 [![PHP Laravel Package](https://github.com/efureev/laravel-support/actions/workflows/php.yml/badge.svg)](https://github.com/efureev/laravel-support/actions/workflows/php.yml)
 [![Latest Stable Version](https://poser.pugx.org/efureev/laravel-support/v/stable?format=flat)](https://packagist.org/packages/efureev/laravel-support)
 [![Total Downloads](https://poser.pugx.org/efureev/laravel-support/downloads)](https://packagist.org/packages/efureev/laravel-support)
 [![License](https://poser.pugx.org/efureev/laravel-support/license)](https://packagist.org/packages/efureev/laravel-support)
 
-A collection of helpers, traits, validation rules and service-provider utilities for modern Laravel applications.
+Validation rules, Eloquent traits and service-provider scaffolding for Laravel packages and
+applications. No dependencies beyond the Illuminate components it actually uses.
 
 ## Requirements
 
-* PHP `>= 8.4`
+* PHP `>= 8.5`
 * Laravel `>= 13.0`
 
 ## Install
@@ -20,78 +21,58 @@ A collection of helpers, traits, validation rules and service-provider utilities
 composer require efureev/laravel-support
 ```
 
-The package is auto-discovered, no manual provider registration is required.
-
-## Features
-
-The full documentation lives in [`/docs`](docs/index.md). Below is a short overview.
-
-### Validation rules — `Php\Support\Laravel\Rules`
-
-* `Delimited` — validates a delimited string (e.g. comma-separated emails), with `min`/`max`, custom separator,
-  duplicate control and trimming options.
-* `Authorized` — validates that the current user is authorized (`can`) to use a given model by its key.
-* `HasValidate` — helper trait that adds reusable `validate`/`validateValue` helpers.
-
-### Eloquent traits — `Php\Support\Laravel\Traits`
-
-* `Traits\Models\PostgresArray` — query scopes for searching inside native PostgreSQL arrays
-  (`wherePgArrayContains`, `wherePgArrayContainsAny`, `wherePgArrayContainsOnly`, `wherePgArrayOverlapWith`).
-  See `\Php\Support\Laravel\Tests\TestClasses\Models\PgArrayModel::scopeByTag`.
-* `Traits\Models\HasModelEntityCache` — cache layer for model entities (with pluggable cachers).
-* `Traits\Models\AllowToExecute` — guard helpers for model actions.
-* `Traits\Models\WrapQuery` — query-wrapping helpers.
-* `Traits\Modelable` / `Traits\ModelQueryable` — bind an Eloquent model into a request/class.
-* `Traits\Requests\RequestModelable` — model resolution from requests.
-* `Traits\Resources\HasMergeAdditional` — merge additional data into API resources.
-
-### Sorting — `Php\Support\Laravel\Sorting`
-
-* `Sorting\Model\Sortable` — model trait to make records sortable (works with drag'n'drop).
-* `Sorting\Database\Sortable` — migration helpers (`columnSortingPosition`).
-
-See [docs/sortable.md](docs/sortable.md).
-
-### Service providers — `Php\Support\Laravel\ServiceProviders`
-
-`AbstractServiceProvider` aggregates a set of helper traits: `HasCommands`, `HasPolicies`,
-`HasPathHelpers`, `HasRegisters`, `HasBooting`. See [docs/sp.md](docs/sp.md).
-
-### Pagination & Repositories
-
-* `Pagination\PaginatedResourceArray` — nested paginated resource collections. See [docs/pagination.md](docs/pagination.md).
-* `Repositories\AbstractRepository` — base Eloquent repository. See [docs/repository.md](docs/repository.md).
-
-### Global helpers — `src/Global/base.php`
-
-Autoloaded functions: `toCollect()`, `objectToArray()`. See [docs/global.md](docs/global.md).
-
-## Test
-
-### Local
+Auto-discovered — no manual provider registration. To override the shipped messages:
 
 ```bash
-composer test       # PHPCS + PHPUnit
-composer test-cover # with coverage
+php artisan vendor:publish --tag=laravel-support-lang
 ```
 
-### Docker
+## What is in it
 
-Runs the full test gate (PHPCS + PHPUnit) against PostgreSQL 18 inside containers.
-No local PostgreSQL installation is required.
+Full reference in [`docs/`](docs/index.md); the sharp edges are collected in
+[docs/pitfalls.md](docs/pitfalls.md).
+
+| | |
+|---|---|
+| [Validation rules](docs/rules.md) | `Delimited` validates each item of a delimited string; `Authorized` checks a gate against the model a key points at; `HasValidate` adds one-off validation and typed request reads |
+| [PostgreSQL arrays](docs/postgres-array.md) | a cast and four query scopes for native `text[]` / `integer[]` columns, plus the literal encoder underneath |
+| [Sortable](docs/sortable.md) | hand-ordered model stacks (drag-and-drop friendly), with a migration helper and optional global scopes |
+| [Service providers](docs/service-providers.md) | `AbstractServiceProvider` with runtime-aware boot hooks and helpers for configs, routes, translations, views, policies, commands and bindings |
+| [Model cache](docs/model-cache.md) | per-model caching with automatic invalidation and a pluggable cacher |
+| [Model traits](docs/model-traits.md) | bind a model into a request or service, resolve it from input, forbid selected methods |
+| [Resources & pagination](docs/resources.md) | nest a paginated resource collection inside another resource; make `additional()` merge |
+| [Repository](docs/repository.md) | a thin Eloquent repository base |
+| [Global helpers](docs/global.md) | `toCollect()`, `objectToArray()` |
+
+## Upgrading
+
+5.0 raises the PHP floor to 8.5, drops the `efureev/support` dependency and moves three exception
+classes. See [docs/upgrade-5.0.md](docs/upgrade-5.0.md).
+
+## Tests
+
+The suite runs against a real PostgreSQL, and the Redis cacher against a real Redis — both bugs
+those cover were invisible to anything less.
 
 ```bash
-composer test:docker
-# or
-docker compose up --build --abort-on-container-exit --exit-code-from app
+composer test         # PHPCS + PHPStan + PHPUnit
+composer test-cover   # the same, with coverage
+composer test:docker  # the full gate in containers, no local services needed
 ```
+
+Redis tests skip themselves when no server is reachable; `composer test:docker` and CI both
+provide one.
 
 ## Development
 
-This is a library, so `composer.lock` is intentionally **not** committed and `"lock": false` is set in
-`composer.json`. Every CI run (and local `composer update`) resolves the latest matching dependency versions,
-which surfaces incompatibilities with new Laravel/PHP releases early. Pin versions in the consuming application,
-not here.
+This is a library, so `composer.lock` is intentionally **not** committed and `"lock": false` is
+set in `composer.json`. Every CI run resolves the latest matching dependency versions, which
+surfaces incompatibilities with new Laravel/PHP releases early. Pin versions in the consuming
+application, not here.
+
+`.gitattributes` keeps tests, docs, CI and Docker out of the Composer archive — only `src/`,
+`resources/`, `composer.json`, `README.md`, `CHANGELOG.md` and `LICENSE` reach a consumer's
+`vendor/`. Verify with `git archive --format=tar HEAD | tar -t`.
 
 ## Changelog
 

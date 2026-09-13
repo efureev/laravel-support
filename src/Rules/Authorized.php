@@ -9,8 +9,17 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Class Authorized
- * @package Php\Support\Laravel\Rules
+ * Passes when the authenticated user is allowed to `$ability` the model whose key is the
+ * validated value.
+ *
+ * Fails — with the same message either way — when nobody is logged in, the model does not
+ * exist, or the gate denies the ability.
+ *
+ * ```php
+ * 'post_id' => ['required', new Authorized('update', Post::class)],
+ * ```
+ *
+ * @see https://laravel.com/docs/13.x/authorization#via-the-user-model
  */
 class Authorized implements ValidationRule
 {

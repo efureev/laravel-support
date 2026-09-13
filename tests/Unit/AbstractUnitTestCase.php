@@ -8,22 +8,11 @@ use Orchestra\Testbench\TestCase;
 
 abstract class AbstractUnitTestCase extends TestCase
 {
-
     /**
-     * @return void
+     * @param class-string $class
      */
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
-
     protected static function getProtectedMethod(string $class, string $name): \ReflectionMethod
     {
-        $class  = new \ReflectionClass($class);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-
-        return $method;
+        return (new \ReflectionClass($class))->getMethod($name);
     }
 }

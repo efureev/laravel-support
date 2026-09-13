@@ -6,7 +6,7 @@ namespace Php\Support\Laravel\Tests\TestClasses\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Php\Support\Laravel\Tests\TestClasses\Casts\PostgresArrayCast;
+use Php\Support\Laravel\Casts\PostgresArrayCast;
 use Php\Support\Laravel\Traits\Models\PostgresArray;
 
 /**
@@ -14,11 +14,11 @@ use Php\Support\Laravel\Traits\Models\PostgresArray;
  * @package Php\Support\Laravel\Tests\Models
  *
  * @property string $title
- * @property array $tags
- * @property array $tag_ids
+ * @property array<int, mixed> $tags
+ * @property array<int, mixed> $tag_ids
  * @method PgArrayModel byTag(string $tag)
  *
- * @mixin Builder
+ * @mixin Builder<PgArrayModel>
  */
 class PgArrayModel extends Model
 {
@@ -39,7 +39,10 @@ class PgArrayModel extends Model
         'tag_ids' => PostgresArrayCast::class,
     ];
 
-    public function scopeByTag(Builder $query, string $value)
+    /**
+     * @param Builder<static> $query
+     */
+    public function scopeByTag(Builder $query, string $value): void
     {
         $this->scopeWherePgArrayContains($query, 'tags', $value);
     }

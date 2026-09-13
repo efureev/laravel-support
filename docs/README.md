@@ -1,14 +1,11 @@
 # Documentation
 
-Documentation for the `efureev/laravel-support` package.
+Reference and recipes for `efureev/laravel-support`.
 
-## Contents
+Start at the [reference index](index.md). If you are upgrading, read
+[Upgrading to 5.0](upgrade-5.0.md) first — 5.0 drops the `efureev/support` dependency and moves
+three exception classes.
 
-* [Content (index)](index.md)
-* [Global helpers](global.md)
-* [Pagination](pagination.md)
-* [Repository](repository.md)
-* [Sortable](sortable.md)
-* [Service Providers](sp.md)
-* [Traits](traits.md)
-* [Upgrade to PHP 8.4 / Laravel 13](upgrade-php84-laravel13.md)
+Every code block on these pages is checked by `tests/Docs/DocumentationTest.php`: the symbols
+have to exist with the signatures shown, and every internal link has to resolve. A rename that
+is not carried into the docs fails the build.

@@ -3,6 +3,8 @@
 namespace Php\Support\Laravel\Tests\Sorting\Model;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Php\Support\Laravel\Sorting\Model\Sortable;
 use Php\Support\Laravel\Sorting\Model\SortOrderingAsc;
 use Php\Support\Laravel\Sorting\Model\SortOrderingDesc;
 use Php\Support\Laravel\Tests\AbstractTestCase;
@@ -10,16 +12,15 @@ use Php\Support\Laravel\Tests\TestClasses\Models\SortEntity;
 
 class SortableTest extends AbstractTestCase
 {
-    protected array $migrations = [
-        'sortable/2020_02_04_075141_create_sortable_table.php',
-    ];
+    /** @var string[] */
+    protected array $migrations = ['sortable/2020_02_04_075141_create_sortable_table.php'];
 
     protected static function fillSimpleRawData(
         int $count = 4,
         bool $ordering = true,
         bool $orderingReverse = false
     ): void {
-        $table = (new SortEntity)->getTable();
+        $table = (new SortEntity())->getTable();
         $spCol = SortEntity::getSortingColumnName();
 
         for ($i = 1; $i <= $count; $i++) {
@@ -38,7 +39,7 @@ class SortableTest extends AbstractTestCase
 
     protected static function wipeData(): void
     {
-        $table = (new SortEntity)->getTable();
+        $table = (new SortEntity())->getTable();
         DB::delete("delete from $table");
 
         static::assertCount(0, SortEntity::all());
@@ -53,15 +54,15 @@ class SortableTest extends AbstractTestCase
         $model = SortEntity::create(['title' => 'test']);
         $this->assertEquals(2, $model->refresh()->sortingPosition());
 
-        $model = SortEntity::make(['title' => 'test']);
+        $model = (new SortEntity(['title' => 'test']));
         $model->save();
         $this->assertEquals(3, $model->refresh()->sortingPosition());
 
-        $model = SortEntity::make(['title' => 'test'])->setSortingPosition(0);
+        $model = (new SortEntity(['title' => 'test']))->setSortingPosition(0);
         $model->save();
         $this->assertEquals(4, $model->refresh()->sortingPosition());
 
-        $model = SortEntity::make(['title' => 'test'])->setSortingPosition(-2);
+        $model = (new SortEntity(['title' => 'test']))->setSortingPosition(-2);
         $model->save();
         $this->assertEquals(5, $model->refresh()->sortingPosition());
     }
@@ -87,7 +88,7 @@ class SortableTest extends AbstractTestCase
         $this->assertEquals(1, $model1->refresh()->sortingPosition());
 
         /** @var SortEntity $model2 */
-        $model2 = SortEntity::make(['title' => 'test4'])->setSortingPosition(4);
+        $model2 = (new SortEntity(['title' => 'test4']))->setSortingPosition(4);
         $model2->save();
         $this->assertEquals(4, $model2->refresh()->sortingPosition());
 
@@ -119,7 +120,7 @@ class SortableTest extends AbstractTestCase
         $this->assertEquals(5, $model->refresh()->sortingPosition());
 
         /** @var SortEntity $model */
-        $model = SortEntity::make(['title' => 'new_2'])->setSortingPosition(0);
+        $model = (new SortEntity(['title' => 'new_2']))->setSortingPosition(0);
         $model->save();
         $this->assertEquals(6, $model->refresh()->sortingPosition());
     }
@@ -132,12 +133,12 @@ class SortableTest extends AbstractTestCase
         static::fillSimpleRawData();
 
         /** @var SortEntity $model */
-        $model = SortEntity::make(['title' => 'new_1'])->setSortingPosition(8);
+        $model = (new SortEntity(['title' => 'new_1']))->setSortingPosition(8);
         $model->save();
         $this->assertEquals(8, $model->refresh()->sortingPosition());
 
         /** @var SortEntity $model */
-        $model = SortEntity::make(['title' => 'new_2'])->setSortingPosition(19);
+        $model = (new SortEntity(['title' => 'new_2']))->setSortingPosition(19);
         $model->save();
         $this->assertEquals(19, $model->refresh()->sortingPosition());
     }
@@ -155,10 +156,10 @@ class SortableTest extends AbstractTestCase
         }
     }
 
-    private function addToStack_AddNewWithSortingPosition_base($position): void
+    private function addToStack_AddNewWithSortingPosition_base(int $position): void
     {
         /** @var SortEntity $model */
-        $model = SortEntity::make(['title' => "expected_$position"])->setSortingPosition($position);
+        $model = (new SortEntity(['title' => "expected_$position"]))->setSortingPosition($position);
 
         $expectedModels = SortEntity::sortingPositionGreaterThen($position)
             ->pluck(SortEntity::getSortingColumnName(), 'id')
@@ -194,10 +195,10 @@ class SortableTest extends AbstractTestCase
         }
     }
 
-    private function addToStack_AddNewWithSortingPosition_baseZero($position): void
+    private function addToStack_AddNewWithSortingPosition_baseZero(int $position): void
     {
         /** @var SortEntity $model */
-        $model = SortEntity::make(['title' => 'expected_1'])->setSortingPosition($position);
+        $model = (new SortEntity(['title' => 'expected_1']))->setSortingPosition($position);
 
         $expectedModels = SortEntity::sortingPositionGreaterThen(1)
             ->pluck(SortEntity::getSortingColumnName(), 'id')
@@ -221,7 +222,7 @@ class SortableTest extends AbstractTestCase
         static::fillSimpleRawData();
 
         /** @var SortEntity $model */
-        $model = SortEntity::make(['title' => 'expected_max'])->setFirstForSortingPosition();
+        $model = (new SortEntity(['title' => 'expected_max']))->setFirstForSortingPosition();
 
         $expectedModels = SortEntity::sortingPositionGreaterThen(1)
             ->pluck(SortEntity::getSortingColumnName(), 'id')
@@ -307,6 +308,62 @@ class SortableTest extends AbstractTestCase
         $this->assertEquals(5, $model5->refresh()->sortingPosition());
     }
 
+    public function testSetLastForSortingPositionMovesToTheEnd(): void
+    {
+        static::fillSimpleRawData(4);
+
+        /** @var SortEntity $model */
+        $model = (new SortEntity(['title' => 'last']))->setLastForSortingPosition();
+        $model->save();
+
+        static::assertEquals(5, $model->refresh()->sortingPosition());
+    }
+
+    public function testMovingAnExistingRowToTheEndLeavesAGapBehindIt(): void
+    {
+        static::fillSimpleRawData(4);
+
+        /** @var SortEntity $first */
+        $first = SortEntity::sortingPositionOrderByAsc()->firstOrFail();
+        static::assertEquals(1, $first->sortingPosition());
+
+        $first->setLastForSortingPosition()->save();
+
+        // "End of the stack" is max(other rows) + 1, and nothing compacts the vacated slot:
+        // four rows end up at 2, 3, 4, 5 rather than 1..4. Documented in docs/pitfalls.md.
+        static::assertEquals(5, $first->refresh()->sortingPosition());
+        static::assertEquals(
+            [
+                2,
+                3,
+                4,
+                5,
+            ],
+            SortEntity::sortingPositionOrderByAsc()
+                ->pluck(SortEntity::getSortingColumnName())
+                ->all()
+        );
+    }
+
+    public function testSortingPositionBetween(): void
+    {
+        static::fillSimpleRawData(5);
+
+        static::assertCount(3, SortEntity::sortingPositionBetween(2, 4)->get());
+        static::assertCount(1, SortEntity::sortingPositionBetween(3, 3)->get());
+        static::assertCount(5, SortEntity::sortingPositionBetween(0, 99)->get());
+    }
+
+    public function testSortingPositionBetweenAcceptsItsBoundsInEitherOrder(): void
+    {
+        static::fillSimpleRawData(5);
+
+        static::assertEquals(
+            SortEntity::sortingPositionBetween(2, 4)->pluck('id')->all(),
+            SortEntity::sortingPositionBetween(4, 2)->pluck('id')->all()
+        );
+    }
+
     public function testOrderingBySortingPosition(): void
     {
         static::fillSimpleRawData(10);
@@ -322,6 +379,23 @@ class SortableTest extends AbstractTestCase
         foreach ($models as $key => $sp) {
             //            static::assertEquals($id, $count - $sp + 1);
             static::assertEquals($key + 1, $sp);
+        }
+    }
+
+    public function testSortOrderingScopesRejectAModelWithoutTheTrait(): void
+    {
+        // The Scope contract accepts any Model, so the trait's absence can only be caught at
+        // runtime. Ordering by a column that does not exist would be a silent SQL error.
+        foreach ([new SortOrderingAsc(), new SortOrderingDesc()] as $scope) {
+            $model = new UnsortableEntity();
+
+            try {
+                $scope->apply($model->newQuery(), $model);
+                static::fail($scope::class . ' accepted a model without the Sortable trait.');
+            } catch (\InvalidArgumentException $e) {
+                static::assertStringContainsString(Sortable::class, $e->getMessage());
+                static::assertStringContainsString(UnsortableEntity::class, $e->getMessage());
+            }
         }
     }
 
@@ -395,4 +469,9 @@ class SortableTest extends AbstractTestCase
             static::assertEquals($key + 1, $sp);
         }
     }
+}
+
+class UnsortableEntity extends Model
+{
+    protected $table = 'sort_entities';
 }

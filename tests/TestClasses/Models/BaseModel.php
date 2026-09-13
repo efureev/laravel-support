@@ -5,20 +5,19 @@ namespace Php\Support\Laravel\Tests\TestClasses\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User;
-use Php\Support\Laravel\Tests\TestClasses\Entity\Params;
 
 /**
  * Class TestModel
  * @package Php\Support\Laravel\Tests\Models
  * @property boolean $enabled
  * @property string $title
- * @property Params $params
- * @property array $config
+ * @property string $name
+ * @property array<string, mixed> $config
  * @property string $str
  * @property string $str_empty
  * @property int $int
  * @property User $user
- * @mixin Builder
+ * @mixin Builder<BaseModel>
  */
 class BaseModel extends Model
 {
@@ -26,4 +25,5 @@ class BaseModel extends Model
 
     protected $table = 'base_table';
 
+    protected $fillable = ['name'];
 }

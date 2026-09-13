@@ -8,6 +8,7 @@ use Closure;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use RuntimeException;
 
 /**
  * Trait HasRegisters
@@ -17,6 +18,11 @@ trait HasRegisters
 {
     use HasPathHelpers;
 
+    /**
+     * @param string|array<array-key, string> $event
+     *
+     * @see https://laravel.com/docs/13.x/events#manually-registering-events
+     */
     protected function onEvent(string|array $event, Closure|string $callback): static
     {
         Event::listen($event, $callback);
@@ -28,10 +34,12 @@ trait HasRegisters
     /**
      * Load configs
      *
-     * @param array|string $configs
+     * @param array<array-key, string>|string $configs
      * @param bool $needReplace
      *
      * @return $this
+     *
+     * @throws RuntimeException when the config file does not exist
      *
      * @example 1
      *  It'll load config file from `config/language.php` into app config key `language`.
@@ -55,6 +63,16 @@ trait HasRegisters
 
             $configPath = static::getConfigPath("$configFile.php");
 
+            if ($configPath === null || !is_file($configPath)) {
+                throw new RuntimeException(
+                    sprintf(
+                        'Config file "%s.php" not found in %s',
+                        $configFile,
+                        static::getConfigPath() ?? '<no config dir>'
+                    )
+                );
+            }
+
             $needReplace ? Config::set($configKey, require $configPath) : $this->mergeConfigFrom(
                 $configPath,
                 $configKey
@@ -67,9 +85,11 @@ trait HasRegisters
     /**
      * Register package's routes
      *
-     * @param array|string $routes
+     * @param array<array-key, string>|string $routes
      *
      * @return $this
+     *
+     * @throws RuntimeException when the route file does not exist
      *
      * @example
      *  $this->registerRoutes('api-front')
@@ -78,7 +98,15 @@ trait HasRegisters
     protected function registerRoutes(array|string $routes): static
     {
         foreach ((array)$routes as $route) {
-            $this->loadRoutesFrom(static::getRoutesPath("$route.php"));
+            $routePath = static::getRoutesPath("$route.php");
+
+            if ($routePath === null || !is_file($routePath)) {
+                throw new RuntimeException(
+                    sprintf('Route file "%s.php" not found in %s', $route, static::getRoutesPath() ?? '<no routes dir>')
+                );
+            }
+
+            $this->loadRoutesFrom($routePath);
         }
 
         return $this;
@@ -199,7 +227,7 @@ trait HasRegisters
 
     protected function registerMigrations(): static
     {
-        if ($this->runMigration && ($path = self::getMigrationsPath())) {
+        if ($this->runMigration && ($path = static::getMigrationsPath())) {
             $this->loadMigrationsFrom($path);
         }
 

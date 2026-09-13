@@ -7,12 +7,14 @@ namespace Php\Support\Laravel\ServiceProviders;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Class AbstractAliceServiceProvider
- * @package Sitesoft\Alice\Essentials\Supplies
+ * Base service provider for a package: aggregates the naming, policy, command, booting and
+ * registration helpers, and dispatches `boot()` to the runtime-specific hook.
  *
- * @method bootPackageForServer()
- * @method bootPackageForConsole()
- * @method bootPackageForTesting()
+ * Boot order is `beforeBoot()` -> `bootPackageForServer|Console|Testing()` -> `afterBoot()`,
+ * and the whole chain is skipped when {@see HasBooting::availableToBoot()} returns false.
+ *
+ * @see https://laravel.com/docs/13.x/packages
+ * @see \Php\Support\Laravel\ServiceProviders\HasBooting
  */
 abstract class AbstractServiceProvider extends ServiceProvider
 {
@@ -35,7 +37,7 @@ abstract class AbstractServiceProvider extends ServiceProvider
         $this->afterBoot();
     }
 
-    public function callBootingCallbacks()
+    public function callBootingCallbacks(): void
     {
         if (!$this->resolveAvailableToBoot()) {
             return;
@@ -44,7 +46,7 @@ abstract class AbstractServiceProvider extends ServiceProvider
         parent::callBootingCallbacks();
     }
 
-    public function callBootedCallbacks()
+    public function callBootedCallbacks(): void
     {
         if (!$this->resolveAvailableToBoot()) {
             return;

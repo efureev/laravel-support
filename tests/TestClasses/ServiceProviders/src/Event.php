@@ -4,5 +4,4 @@ namespace Php\Support\Laravel\Tests\TestClasses\ServiceProviders;
 
 class Event
 {
-
 }

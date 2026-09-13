@@ -4,6 +4,97 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [5.0.0](https://github.com/efureev/laravel-support/compare/v4.0.0...v5.0.0) (2026-09-13)
+
+### ⚠ BREAKING CHANGES
+
+* Require PHP >= 8.5
+* Drop the `efureev/support` dependency. `InvalidParamException`, `UnknownMethodException` and
+  `MethodNotAllowedException` now live under `Php\Support\Laravel\Exceptions\`. Each keeps its
+  SPL parent, so `catch (\LogicException)`, `catch (\BadMethodCallException)` and
+  `catch (\RuntimeException)` are unaffected — catches on the old FQCNs are not.
+* Remove `Traits\Models\WrapQuery` (two lines, no users; `Builder::tap()` covers it)
+* Remove `Test\CreateHttpRequests` (a verbatim copy of the framework's private test plumbing)
+* Declare the Illuminate components the package actually uses instead of `illuminate/database`
+  alone, plus `ext-json` and `ext-mbstring`
+
+### Bug Fixes
+
+* `Delimited`: substitute `:min` / `:max` in the shipped messages — the rule passed
+  `minimum` / `maximum` while the language files expected `:min` / `:max`, so users saw the raw
+  placeholder
+* `Delimited`: stop counting whitespace-only items towards `min` / `max`
+* `Delimited`: pluralise the message noun from the boundary rather than the actual count
+* `Delimited`: reject an empty separator instead of failing inside `explode()`
+* `PostgresArray` scopes: validate and quote the column name — it was interpolated into raw SQL
+  unescaped, so a crafted name could close the expression
+* `PostgresArray` scopes: reject a set where a single element is expected, instead of letting the
+  driver fail with an unrelated message
+* `RedisCacher::cacheForgetCollection()`: call `eval` through the connection rather than the raw
+  client (phpredis and predis take opposite argument orders, so it raised a `TypeError` on the
+  default client), keep the whole key table in Lua instead of binding only its first entry, and
+  include the cache prefix in the `KEYS` pattern
+* `HasModelEntityCache`: instantiate `cache.resolver.class` instead of calling it as a function,
+  and reject a class that does not implement `CacherContract`
+* `HasModelEntityCache::cacheForgetCollection()`: honour the disabled flag, like its per-entity
+  counterpart already did
+* `ServiceProvider`: publish translations to `$app->langPath()` — `resource_path('lang/…')` is
+  not where Laravel 9+ reads them — under the `laravel-support-lang` tag
+* `HasBooting::bootMethod()`: memoise per instance; a `static` local in an inherited method is
+  shared with every subclass since PHP 8.1, so the first provider decided for all the others
+* `AbstractRepository::findModel()`: accept integer keys, which the default Eloquent key type
+  uses, and preserve the looked-up id on `ModelNotFoundException`
+* `RequestModelable`: read the unqualified key name — a dot in `$request->input()` means nested
+  access, so the table-qualified name never resolved anything
+* `HasRegisters`: report a missing config or route file by name instead of passing `null` into
+  the framework
+* `SortOrderingAsc` / `SortOrderingDesc`: reject a model without the `Sortable` trait instead of
+  ordering by a column that does not exist
+* PostgreSQL array decoding: treat a single quote as an ordinary character. `array_out` quotes
+  with double quotes only, so `decode("{safe,o'brien}")` used to swallow the second element and
+  return `['safe']`. A hand-written `{'x','y'}` now decodes to `["'x'", "'y'"]`
+
+### Features
+
+* Add `Casts\PostgresArrayCast` — the cast that makes the PostgreSQL array scopes usable, until
+  now only a test fixture
+* Add `Helpers\PostgresArray` (`encode()`, `decode()`, `toIndexedArray()`), replacing the
+  dropped dependency
+* Add `HasModelEntityCache::enableCache()`, `withoutCache()`, `forget()` and
+  `flushResolvedCacher()` — the missing halves of `disableCache()` and `remember()`
+* Add `AllowToExecute::removeMethodFromAllowList()` and `removeMethodFromDisallowMap()`; make
+  `isAllowToExecute()` public and the allow-list helpers chainable
+* Add `Modelable::modelInputKeyName()` for sources that name the key differently from the column
+* `HasPathHelpers::getDatabaseSeedersPath()` takes an optional argument, like its siblings
+* Add `PostgresArray::pgArrayAppend()` and `pgArrayRemove()` — the write half of the four read
+  scopes, applied in one statement across every matching row
+* Add `Sortable::setLastForSortingPosition()` and the `sortingPositionBetween()` scope
+* Add `Delimited::maxItemLength()` and its `item_length` translation
+* Add `HasValidate::gainFloatValue()` and `gainArrayValue()`
+* `Delimited`'s fluent setters return `static`, so subclasses keep their type
+
+### Tests & tooling
+
+* Rewrite `Pagination\PaginatedResourceArray` to extend `PaginatedResourceResponse` instead of
+  copying it; a test compares the output against the framework's own on every run
+* Raise line coverage from 49% to 93%, with a CI floor at 90%
+* Run PHPStan in CI (it never ran before) at level 6 over `src` **and** `tests`, with Larastan
+  and zero suppressions
+* Extend PHPCS to `tests/`
+* Add Redis to CI and `docker-compose`, and run the cacher suite against both phpredis and predis
+* Add `.gitattributes` so tests, docs, CI and Docker stay out of the Composer archive
+* Delete test fixtures left referencing the `Caster\HasCasts` removed in 4.0, and cover the
+  sorting-restrictions branch they had left untested
+
+### Documentation
+
+* Rewrite `docs/` as a reference with signatures, recipes and links to the Laravel documentation
+* Add a collected pitfalls page and an upgrade guide (4.0 claimed one that was never committed)
+* Gate the documentation in CI: every symbol it names must exist with the signature shown, and
+  every internal link must resolve
+
+---
+
 ## [4.0.0](https://github.com/efureev/laravel-support/compare/v3.0.0...v4.0.0) (2026-06-04)
 
 ### ⚠ BREAKING CHANGES

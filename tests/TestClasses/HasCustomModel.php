@@ -13,7 +13,7 @@ class HasCustomModel extends HasModel
         };
     }
 
-    private function input($key)
+    private function input(string $key): int
     {
         return 2;
     }

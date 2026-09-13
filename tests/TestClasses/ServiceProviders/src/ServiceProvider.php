@@ -10,21 +10,17 @@ class ServiceProvider extends AbstractServiceProvider
 {
     public const PACKAGE_NS = 'example';
 
-    protected static array $policies = [
-        // Model::class      => ModelPolicy::class,
-    ];
+    /** @var array<class-string, class-string> */
+    protected static array $policies = [];
 
-    protected static array $commands = [
-        // Command::class,
-        // Command2::class,
-    ];
+    /** @var class-string[] */
+    protected static array $commands = [];
 
     public function register(): void
     {
         // $this
         //   ->registerService(Service::class, self::PACKAGE_NS)
         //   ->registerService(Service2::class, self::PACKAGE_NS."2", true);
-
     }
 
     protected function beforeBoot(): void
@@ -52,12 +48,7 @@ class ServiceProvider extends AbstractServiceProvider
                 Event::class,
                 fn(Event $event) => $event
             )
-            ->publishes(
-                [
-                    // self::getTranslationsPath() => resource_path('lang/vendor/' . self::PACKAGE_NS),
-                ],
-                [self::PACKAGE_NS]
-            );
+            ->publishes([], [self::PACKAGE_NS]);
     }
 
     protected static function packageSourcePath(): string
