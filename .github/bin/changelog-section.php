@@ -8,13 +8,24 @@ declare(strict_types=1);
  * Release notes should describe the release, not repeat every version ever shipped. Passing
  * CHANGELOG.md straight to the release action put all 40-odd versions into the v5.0.0 notes.
  *
- * Usage: php .github/bin/changelog-section.php CHANGELOG.md v5.0.0
+ * Usage: php .github/bin/changelog-section.php CHANGELOG.md v5.0.0 [--raw]
+ *
+ * Paragraphs and list items are unwrapped into single lines. CHANGELOG.md is hard-wrapped for
+ * readability as a file, and GitHub renders a file's single newlines as spaces — but in *release
+ * notes* it renders them as <br>, so the wrapping leaks through and breaks sentences mid-way.
+ * Pass --raw to keep the source line breaks.
  *
  * Exits non-zero when the version has no section, so a release never publishes empty notes.
  */
 
-$file = $argv[1] ?? 'CHANGELOG.md';
-$version = ltrim($argv[2] ?? '', 'v');
+$arguments = array_values(array_filter(
+    array_slice($argv, 1),
+    static fn(string $argument): bool => $argument !== '--raw'
+));
+
+$raw = in_array('--raw', $argv, true);
+$file = $arguments[0] ?? 'CHANGELOG.md';
+$version = ltrim($arguments[1] ?? '', 'v');
 
 if ($version === '') {
     fwrite(STDERR, "Usage: changelog-section.php <changelog> <version>\n");
@@ -74,4 +85,67 @@ if ($section === []) {
     exit(1);
 }
 
-echo implode("\n", $section), "\n";
+echo implode("\n", $raw ? $section : unwrap($section)), "\n";
+
+/**
+ * Join the continuation lines of each paragraph and list item back onto one line.
+ *
+ * A line starts a new block when it is blank, a heading, a list item, a blockquote, a table row,
+ * a rule, or a fence; anything else continues the block above it. Fenced code is copied through
+ * untouched.
+ *
+ * @param string[] $lines
+ *
+ * @return string[]
+ */
+function unwrap(array $lines): array
+{
+    $result = [];
+    $buffer = '';
+    $inFence = false;
+
+    $flush = static function () use (&$result, &$buffer): void {
+        if ($buffer !== '') {
+            $result[] = $buffer;
+            $buffer = '';
+        }
+    };
+
+    foreach ($lines as $line) {
+        if (preg_match('/^\s*```/', $line) === 1) {
+            $flush();
+            $result[] = $line;
+            $inFence = !$inFence;
+
+            continue;
+        }
+
+        if ($inFence) {
+            $result[] = $line;
+
+            continue;
+        }
+
+        if (trim($line) === '') {
+            $flush();
+            $result[] = '';
+
+            continue;
+        }
+
+        $startsBlock = preg_match('/^\s*(#{1,6}\s|[*+-]\s|\d+[.)]\s|>|\||-{3,}$|={3,}$)/', $line) === 1;
+
+        if ($startsBlock) {
+            $flush();
+            $buffer = rtrim($line);
+
+            continue;
+        }
+
+        $buffer = $buffer === '' ? rtrim($line) : $buffer . ' ' . trim($line);
+    }
+
+    $flush();
+
+    return $result;
+}

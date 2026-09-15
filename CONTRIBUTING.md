@@ -64,6 +64,12 @@ publish before pushing it:
 php .github/bin/changelog-section.php CHANGELOG.md v5.0.0
 ```
 
+The script also unwraps paragraphs and list items onto single lines. GitHub renders a single
+newline as a space when it renders a *file*, but as a `<br>` in *release notes* — so the hard
+wrapping that keeps CHANGELOG.md readable in an editor breaks sentences mid-way once it reaches
+a release. Keep wrapping the file; the extractor undoes it. Pass `--raw` to see the section
+verbatim.
+
 Write the changelog entry before tagging. Most of this file's older entries are heading-only,
 because conventional-changelog emitted one per tag regardless of whether any notable commit
 belonged to it; new entries are written by hand.

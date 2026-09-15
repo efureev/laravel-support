@@ -25,13 +25,14 @@ class ChangelogSectionTest extends TestCase
     /**
      * @return array{int, string, string} exit code, stdout, stderr
      */
-    private static function extract(string $changelog, string $version): array
+    private static function extract(string $changelog, string $version, string ...$flags): array
     {
         $command = sprintf(
-            'php %s %s %s',
+            'php %s %s %s %s',
             escapeshellarg(self::repoRoot() . '/.github/bin/changelog-section.php'),
             escapeshellarg($changelog),
-            escapeshellarg($version)
+            escapeshellarg($version),
+            implode(' ', array_map(escapeshellarg(...), $flags))
         );
 
         $descriptors = [
@@ -211,6 +212,75 @@ class ChangelogSectionTest extends TestCase
         self::assertSame(1, $status);
         self::assertSame('', trim($notes));
         self::assertStringContainsString('is empty', $stderr);
+    }
+
+    /**
+     * GitHub renders a single newline as <br> in release notes, though not in a rendered file.
+     * CHANGELOG.md is hard-wrapped for readability, so without unwrapping the notes break
+     * sentences mid-way — which is exactly how the first v5.0.0 notes looked.
+     */
+    #[Test]
+    public function paragraphs_and_list_items_are_unwrapped(): void
+    {
+        [,
+            $unwrapped,
+        ] = self::extract(self::changelog(), 'v5.0.0');
+        [,
+            $verbatim,
+        ] = self::extract(self::changelog(), 'v5.0.0', '--raw');
+
+        self::assertNotSame($verbatim, $unwrapped, 'Nothing was unwrapped.');
+        self::assertLessThan(
+            substr_count($verbatim, "\n"),
+            substr_count($unwrapped, "\n"),
+            'Unwrapping must reduce the line count.'
+        );
+
+        // A bullet that is hard-wrapped in the file has to arrive as one line.
+        $bullet = 'Drop the `efureev/support` dependency.';
+        $line   = '';
+
+        foreach (explode("\n", $unwrapped) as $candidate) {
+            if (str_contains($candidate, $bullet)) {
+                $line = $candidate;
+
+                break;
+            }
+        }
+
+        self::assertNotSame('', $line, "Could not find the bullet starting: $bullet");
+        self::assertStringContainsString('catches on the old FQCNs are not.', $line);
+    }
+
+    #[Test]
+    public function unwrapping_keeps_every_list_item_separate(): void
+    {
+        [,
+            $unwrapped,
+        ] = self::extract(self::changelog(), 'v5.0.0');
+        [,
+            $verbatim,
+        ] = self::extract(self::changelog(), 'v5.0.0', '--raw');
+
+        $count = static fn(string $text): int => preg_match_all('/^\* /m', $text) ?: 0;
+
+        self::assertSame(
+            $count($verbatim),
+            $count($unwrapped),
+            'Unwrapping must not merge or drop list items.'
+        );
+    }
+
+    #[Test]
+    public function unwrapping_keeps_headings_and_blank_lines(): void
+    {
+        [,
+            $unwrapped,
+        ] = self::extract(self::changelog(), 'v5.0.0');
+
+        self::assertStringContainsString('### ⚠ BREAKING CHANGES', $unwrapped);
+        self::assertStringContainsString('### Bug Fixes', $unwrapped);
+        self::assertStringContainsString("\n\n", $unwrapped, 'Paragraph breaks must survive.');
     }
 
     #[Test]
