@@ -53,6 +53,21 @@ a helper that computes the expected value the same way.
 
 Rename something without updating the docs and the build fails.
 
+## Releases
+
+The release job builds its notes from the tagged version's section of `CHANGELOG.md`, not from
+the whole file — `.github/bin/changelog-section.php` does the extraction and exits non-zero when
+the version has no section, so a tag can never publish empty notes. Check what a tag would
+publish before pushing it:
+
+```bash
+php .github/bin/changelog-section.php CHANGELOG.md v5.0.0
+```
+
+Write the changelog entry before tagging. Most of this file's older entries are heading-only,
+because conventional-changelog emitted one per tag regardless of whether any notable commit
+belonged to it; new entries are written by hand.
+
 ## The pre-commit hook
 
 `.git-hooks/pre-commit` runs PHPCS over the staged PHP files. Enable it once per clone:

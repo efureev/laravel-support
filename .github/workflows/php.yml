@@ -207,6 +207,27 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      # The runner image happens to ship a PHP, but pin the one the project targets rather than
+      # depending on whatever version that is.
+      - name: Use PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+
+      # Passing CHANGELOG.md straight to the action put every version ever shipped into the
+      # release notes. Take just this tag's section, and fail the job when there isn't one
+      # rather than publishing empty notes.
+      - name: Build the release notes
+        run: |
+          {
+            php .github/bin/changelog-section.php CHANGELOG.md "${{ github.ref_name }}"
+            printf '\n---\n\n'
+            printf '**Full changelog:** %s/blob/%s/CHANGELOG.md\n' \
+              "${{ github.server_url }}/${{ github.repository }}" "${{ github.ref_name }}"
+          } > "${RUNNER_TEMP}/release-notes.md"
+          cat "${RUNNER_TEMP}/release-notes.md"
+
       - name: Create release
         uses: softprops/action-gh-release@v2
         env:
@@ -214,6 +235,6 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          body_path: CHANGELOG.md
+          body_path: ${{ runner.temp }}/release-notes.md
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
